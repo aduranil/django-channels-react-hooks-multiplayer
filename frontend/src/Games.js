@@ -5,7 +5,7 @@ import {
 import { Gamepad } from 'grommet-icons';
 import { connect } from 'react-redux';
 import { createGame, logoutUser, getGames } from './modules/account';
-import withAuth from './modules/authWrapper';
+import withAuth from './hocs/authWrapper';
 
 const theme = {
   button: {
@@ -18,12 +18,20 @@ const theme = {
 class Games extends React.Component {
   state = {
     roomName: '',
-    showTextInput: '',
   };
 
+  componentDidMount() {
+    return this.props.dispatch(getGames());
+  }
+
   onClick = () => {
-    this.props.dispatch(createGame(this.state.roomName)).then((data) => {
-      this.props.history.push(data);
+    const { dispatch, history } = this.props;
+    const { roomName } = this.state;
+    if (roomName.length === 0) {
+      return alert('You must include a room name');
+    }
+    dispatch(createGame(roomName)).then((data) => {
+      history.push(data);
     });
   };
 
@@ -36,10 +44,6 @@ class Games extends React.Component {
     this.props.dispatch(logoutUser());
     this.props.history.push('/loginorsignup');
   };
-
-  componentDidMount() {
-    return this.props.dispatch(getGames());
-  }
 
   render() {
     const { roomName } = this.state;
@@ -60,6 +64,7 @@ class Games extends React.Component {
           pad="medium"
           elevation="medium"
           background="accent-2"
+          overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
         >
           {games.games
             && games.games.map(game => (

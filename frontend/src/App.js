@@ -16,29 +16,25 @@ const theme = {
   },
 };
 
-class App extends React.Component {
-  render() {
-    return (
-      <Grommet theme={theme}>
-        <Box
-          justify="center"
-          height="100%"
-          align="center"
-          padding={{ top: '20px' }}
-          margin={{ horizontal: 'auto' }}
-          round="xsmall"
-        >
-          <Switch>
-            <Route exact path="/" component={Entrance} />
-            <Route exact path="/games" component={Games} />
-            <Route path="/game/:id" component={Game} />
-            <Route exact path="/loginorsignup" component={LoginOrSignup} />
-            <Route exact path="/signup" component={Signup} />
-          </Switch>
-        </Box>
-      </Grommet>
-    );
-  }
-}
+const App = () => (
+  <Grommet theme={theme}>
+    <Box
+      justify="center"
+      height="100%"
+      align="center"
+      padding={{ top: '20px' }}
+      margin={{ horizontal: 'auto' }}
+      round="xsmall"
+    >
+      <Switch>
+        <Route exact path="/" component={Entrance} />
+        <Route exact path="/games" component={Games} />
+        <Route path="/game/:id" component={Game} />
+        <Route exact path="/loginorsignup" component={LoginOrSignup} />
+        <Route exact path="/signup" component={Signup} />
+      </Switch>
+    </Box>
+  </Grommet>
+);
 
 export default connect()(App);

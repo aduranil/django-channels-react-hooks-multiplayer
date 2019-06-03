@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Text, Box } from 'grommet';
 import { connect } from 'react-redux';
-import WebSocketConnection from './WebSocketConnection';
 import { join } from './modules/websocket';
 import { wsConnect } from './modules/WSClientActions';
+import withAuth from './hocs/authWrapper';
 
 class Game extends React.Component {
   componentDidMount() {
@@ -21,11 +21,9 @@ class Game extends React.Component {
     // }, 3000);
   };
 
-  componentWillReceiveProps(nextProps) {}
-
   render() {
-    console.log(this.props.users);
-    if (this.props.id) {
+    const { id, joinedUser } = this.props;
+    if (id) {
       return (
         <React.Fragment>
           <Box
@@ -37,7 +35,7 @@ class Game extends React.Component {
             elevation="medium"
             background="accent-2"
           >
-            {this.props.joinedUser}
+            {joinedUser}
           </Box>
         </React.Fragment>
       );
@@ -51,4 +49,4 @@ const s2p = (state, ownProps) => ({
   joinedUser: state.socket.user,
   users: state.socket.users,
 });
-export default connect(s2p)(Game);
+export default withAuth(connect(s2p)(Game));

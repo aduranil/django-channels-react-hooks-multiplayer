@@ -1,6 +1,6 @@
-import * as client_actions from './WSClientActions';
-import * as server_actions from './WSServerActions';
-import { join } from './websocket';
+import * as client_actions from '../modules/WSClientActions';
+import * as server_actions from '../modules/WSServerActions';
+import { join } from '../modules/websocket';
 
 const socketMiddleware = (function () {
   let socket = null;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { getCurrentUser } from './account';
+import { getCurrentUser } from '../modules/account';
 
 const withAuth = (WrappedComponent) => {
   class AuthedComponent extends React.Component {
