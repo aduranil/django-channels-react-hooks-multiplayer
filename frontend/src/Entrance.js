@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text } from 'grommet';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Entrance extends React.Component {
@@ -24,6 +25,15 @@ class Entrance extends React.Component {
   }
 }
 
+Entrance.propTypes = {
+  history: PropTypes.object,
+  loggedIn: PropTypes.bool,
+};
+
+Entrance.defaultProps = {
+  history: PropTypes.object,
+  loggedIn: PropTypes.bool,
+};
 const mapStateToProps = state => ({
   loggedIn: state.auth.loggedIn,
 });

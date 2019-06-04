@@ -103,13 +103,13 @@ const s2p = state => ({
 });
 
 Games.propTypes = {
-  history: PropTypes.func,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
   games: PropTypes.arrayOf(PropTypes.object),
 };
 
 Games.defaultProps = {
-  history: PropTypes.func,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
   games: PropTypes.null,
 };

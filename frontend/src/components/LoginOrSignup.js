@@ -4,45 +4,30 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Signup extends React.Component {
-  state = {
-    email: '',
-    password: '',
-    username: '',
-  };
-
-  handleChange = (e) => {
-    const { name } = e.target;
-    const { value } = e.target;
-    if (name === 'email') {
-      this.setState({ username: value });
-    }
-    this.setState((prevstate) => {
-      const newState = { ...prevstate };
-      newState[name] = value;
-      return newState;
-    });
-  };
-
   render() {
-    const { email, password } = this.state;
-    const { handleSubmit } = this.props;
+    const {
+      handleSubmit, email, password, username, fromLoginOrSignup, handleChange,
+    } = this.props;
     return (
       <React.Fragment>
         <Form onSubmit={handleSubmit} color="blue">
-          <FormField
-            label="email"
-            name="email"
-            required
-            value={email}
-            onChange={this.handleChange}
-          />
+          <FormField label="email" name="email" required value={email} onChange={handleChange} />
+          {!fromLoginOrSignup && (
+            <FormField
+              label="username"
+              name="username"
+              required
+              value={username}
+              onChange={handleChange}
+            />
+          )}
           <FormField
             type="password"
             label="password"
             name="password"
             required
             value={password}
-            onChange={this.handleChange}
+            onChange={handleChange}
           />
           <Button type="submit" primary label="Submit" />
         </Form>
@@ -53,9 +38,11 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   handleSubmit: PropTypes.func,
+  fromLoginOrSignup: PropTypes.bool,
 };
 
 Signup.defaultProps = {
   handleSubmit: PropTypes.func,
+  fromLoginOrSignup: PropTypes.bool,
 };
 export default connect()(Signup);

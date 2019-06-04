@@ -1,10 +1,13 @@
-# chat/consumers.py
-from channels.generic.websocket import WebsocketConsumer
+""" All of the websocket actions for the game and chat functionalities"""
 import json
-from .models import Game
 from asgiref.sync import async_to_sync
 
+from channels.generic.websocket import WebsocketConsumer
+from .models import Game
+
+
 class GameConsumer(WebsocketConsumer):
+    """Websocket for inside of the game"""
     def connect(self):
         self.id = self.scope['url_route']['kwargs']['id']
         self.room_group_name = 'game_%s' % self.id
@@ -35,7 +38,6 @@ class GameConsumer(WebsocketConsumer):
                 'username': user.username,
             }
         )
-
 
     def join(self, username):
         self.send(text_data=json.dumps(username))

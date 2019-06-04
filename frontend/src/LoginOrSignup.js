@@ -7,12 +7,27 @@ import { handleLogin } from './modules/account';
 import Login from './components/LoginOrSignup';
 
 class LoginOrSignup extends React.Component {
+  state = {
+    email: '',
+    password: '',
+  };
+
+  handleChange = (e) => {
+    const { name } = e.target;
+    const { value } = e.target;
+    this.setState((prevstate) => {
+      const newState = { ...prevstate };
+      newState[name] = value;
+      return newState;
+    });
+  };
+
   handleSubmit = () => {
-    const { dispatch, history } = this.props;
-    dispatch(handleLogin(this.state)).then(() => history.push('/games'));
+    this.props.dispatch(handleLogin(this.state)).then(() => this.props.history.push('/games'));
   };
 
   render() {
+    const { username, email, password } = this.state;
     return (
       <React.Fragment>
         <Box
@@ -38,7 +53,14 @@ to create your user!
           <Text textAlign="center" color="white" margin={{ left: 'small' }}>
             RETURNING USERS
           </Text>
-          <Login handleSubmit={this.handleSubmit} />
+          <Login
+            fromLoginOrSignup
+            username={username}
+            password={password}
+            email={email}
+            handleChange={this.handleChange}
+            handleSubmit={this.handleSubmit}
+          />
         </Box>
       </React.Fragment>
     );
@@ -46,12 +68,12 @@ to create your user!
 }
 
 LoginOrSignup.propTypes = {
-  history: PropTypes.func,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
 };
 
 LoginOrSignup.defaultProps = {
-  history: PropTypes.func,
+  history: PropTypes.object,
   dispatch: PropTypes.func,
 };
 export default connect()(LoginOrSignup);
