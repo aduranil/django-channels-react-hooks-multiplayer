@@ -101596,7 +101596,7 @@ var s2p = function s2p(state) {
 Games.propTypes = {
   history: _propTypes.default.object,
   dispatch: _propTypes.default.func,
-  games: _propTypes.default.arrayOf(_propTypes.default.object)
+  games: _propTypes.default.object
 };
 Games.defaultProps = {
   history: _propTypes.default.object,
