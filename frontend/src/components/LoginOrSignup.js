@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, FormField, Button } from 'grommet';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Signup extends React.Component {
@@ -24,9 +25,10 @@ class Signup extends React.Component {
 
   render() {
     const { email, password } = this.state;
+    const { handleSubmit } = this.props;
     return (
       <React.Fragment>
-        <Form onSubmit={this.props.handleSubmit} color="blue">
+        <Form onSubmit={handleSubmit} color="blue">
           <FormField
             label="email"
             name="email"
@@ -49,4 +51,11 @@ class Signup extends React.Component {
   }
 }
 
+Signup.propTypes = {
+  handleSubmit: PropTypes.func,
+};
+
+Signup.defaultProps = {
+  handleSubmit: PropTypes.func,
+};
 export default connect()(Signup);

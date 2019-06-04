@@ -68885,6 +68885,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _grommet = require("grommet");
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _reactRedux = require("react-redux");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -68962,8 +68964,9 @@ function (_React$Component) {
       var _this$state = this.state,
           email = _this$state.email,
           password = _this$state.password;
+      var handleSubmit = this.props.handleSubmit;
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_grommet.Form, {
-        onSubmit: this.props.handleSubmit,
+        onSubmit: handleSubmit,
         color: "blue"
       }, _react.default.createElement(_grommet.FormField, {
         label: "email",
@@ -68989,10 +68992,17 @@ function (_React$Component) {
   return Signup;
 }(_react.default.Component);
 
+Signup.propTypes = {
+  handleSubmit: _propTypes.default.func
+};
+Signup.defaultProps = {
+  handleSubmit: _propTypes.default.func
+};
+
 var _default = (0, _reactRedux.connect)()(Signup);
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js"}],"src/LoginOrSignup.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","react-redux":"node_modules/react-redux/es/index.js"}],"src/LoginOrSignup.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -69007,6 +69017,8 @@ var _grommet = require("grommet");
 var _reactRouterDom = require("react-router-dom");
 
 var _reactRedux = require("react-redux");
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _account = require("./modules/account");
 
@@ -69106,10 +69118,19 @@ function (_React$Component) {
   return LoginOrSignup;
 }(_react.default.Component);
 
+LoginOrSignup.propTypes = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func
+};
+LoginOrSignup.defaultProps = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func
+};
+
 var _default = (0, _reactRedux.connect)()(LoginOrSignup);
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"src/images/Door.png":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-redux":"node_modules/react-redux/es/index.js","prop-types":"node_modules/prop-types/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"src/images/Door.png":[function(require,module,exports) {
 module.exports = "/Door.3c1dccc9.png";
 },{}],"src/Entrance.js":[function(require,module,exports) {
 "use strict";
@@ -69206,6 +69227,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _grommet = require("grommet");
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _reactRedux = require("react-redux");
 
 var _account = require("./modules/account");
@@ -69288,10 +69311,19 @@ function (_React$Component) {
   return Signup;
 }(_react.default.Component);
 
+Signup.propTypes = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func
+};
+Signup.defaultProps = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func
+};
+
 var _default = (0, _reactRedux.connect)()(Signup);
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"node_modules/grommet-icons/es6/utils.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"node_modules/grommet-icons/es6/utils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -101344,6 +101376,8 @@ var _react = _interopRequireDefault(require("react"));
 
 var _grommet = require("grommet");
 
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
 var _grommetIcons = require("grommet-icons");
 
 var _reactRedux = require("react-redux");
@@ -101414,21 +101448,23 @@ function (_React$Component) {
         return alert('You must include a room name');
       }
 
-      dispatch((0, _account.createGame)(roomName)).then(function (data) {
+      return dispatch((0, _account.createGame)(roomName)).then(function (data) {
         history.push(data);
       });
     });
 
     _defineProperty(_assertThisInitialized(_this), "onJoin", function (e) {
       e.preventDefault();
-
-      _this.props.history.push("/game/".concat(e.target.value));
+      var history = _this.props.history;
+      history.push("/game/".concat(e.target.value));
     });
 
     _defineProperty(_assertThisInitialized(_this), "onLogout", function () {
-      _this.props.dispatch((0, _account.logoutUser)());
-
-      _this.props.history.push('/loginorsignup');
+      var _this$props2 = _this.props,
+          dispatch = _this$props2.dispatch,
+          history = _this$props2.history;
+      dispatch((0, _account.logoutUser)());
+      history.push('/loginorsignup');
     });
 
     return _this;
@@ -101437,7 +101473,8 @@ function (_React$Component) {
   _createClass(Games, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      return this.props.dispatch((0, _account.getGames)());
+      var dispatch = this.props.dispatch;
+      return dispatch((0, _account.getGames)());
     }
   }, {
     key: "render",
@@ -101518,10 +101555,21 @@ var s2p = function s2p(state) {
   };
 };
 
+Games.propTypes = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func,
+  games: _propTypes.default.arrayOf(_propTypes.default.object)
+};
+Games.defaultProps = {
+  history: _propTypes.default.func,
+  dispatch: _propTypes.default.func,
+  games: _propTypes.default.null
+};
+
 var _default = (0, _authWrapper.default)((0, _reactRedux.connect)(s2p)(Games));
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","grommet-icons":"node_modules/grommet-icons/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/Game.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","grommet-icons":"node_modules/grommet-icons/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/Game.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -101533,9 +101581,9 @@ var _react = _interopRequireDefault(require("react"));
 
 var _grommet = require("grommet");
 
-var _reactRedux = require("react-redux");
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
-var _websocket = require("./modules/websocket");
+var _reactRedux = require("react-redux");
 
 var _WSClientActions = require("./modules/WSClientActions");
 
@@ -101584,12 +101632,9 @@ function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "connectAndJoin", function () {
       var _this$props = _this.props,
           id = _this$props.id,
-          dispatch = _this$props.dispatch,
-          username = _this$props.username;
+          dispatch = _this$props.dispatch;
       var host = "ws://127.0.0.1:8000/ws/game/".concat(id, "?token=").concat(localStorage.getItem('token'));
-      dispatch((0, _WSClientActions.wsConnect)(host)); // setTimeout(() => {
-      //   dispatch(join(username, id));
-      // }, 3000);
+      dispatch((0, _WSClientActions.wsConnect)(host));
     });
 
     return _this;
@@ -101598,7 +101643,9 @@ function (_React$Component) {
   _createClass(Game, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      if (this.props.id) {
+      var id = this.props.id;
+
+      if (id) {
         this.connectAndJoin();
       }
     }
@@ -101620,11 +101667,24 @@ function (_React$Component) {
           background: "accent-2"
         }, joinedUser));
       }
+
+      return "".concat(_react.default.createElement(_grommet.Text, null, " LOADING "));
     }
   }]);
 
   return Game;
 }(_react.default.Component);
+
+Game.propTypes = {
+  id: _propTypes.default.number,
+  dispatch: _propTypes.default.func,
+  joinedUser: _propTypes.default.string
+};
+Game.defaultProps = {
+  id: _propTypes.default.number,
+  dispatch: _propTypes.default.func,
+  joinedUser: _propTypes.default.string
+};
 
 var s2p = function s2p(state, ownProps) {
   return {
@@ -101639,7 +101699,7 @@ var s2p = function s2p(state, ownProps) {
 var _default = (0, _authWrapper.default)((0, _reactRedux.connect)(s2p)(Game));
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/websocket":"src/modules/websocket.js","./modules/WSClientActions":"src/modules/WSClientActions.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/WSClientActions":"src/modules/WSClientActions.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

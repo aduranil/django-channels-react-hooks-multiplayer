@@ -2,6 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { handleLogin } from './modules/account';
 import Login from './components/LoginOrSignup';
 
@@ -44,4 +45,13 @@ to create your user!
   }
 }
 
+LoginOrSignup.propTypes = {
+  history: PropTypes.func,
+  dispatch: PropTypes.func,
+};
+
+LoginOrSignup.defaultProps = {
+  history: PropTypes.func,
+  dispatch: PropTypes.func,
+};
 export default connect()(LoginOrSignup);

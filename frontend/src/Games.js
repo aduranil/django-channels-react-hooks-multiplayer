@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, TextInput, Grid, Box, Text, Grommet,
 } from 'grommet';
+import PropTypes from 'prop-types';
 import { Gamepad } from 'grommet-icons';
 import { connect } from 'react-redux';
 import { createGame, logoutUser, getGames } from './modules/account';
@@ -21,7 +22,8 @@ class Games extends React.Component {
   };
 
   componentDidMount() {
-    return this.props.dispatch(getGames());
+    const { dispatch } = this.props;
+    return dispatch(getGames());
   }
 
   onClick = () => {
@@ -30,19 +32,21 @@ class Games extends React.Component {
     if (roomName.length === 0) {
       return alert('You must include a room name');
     }
-    dispatch(createGame(roomName)).then((data) => {
+    return dispatch(createGame(roomName)).then((data) => {
       history.push(data);
     });
   };
 
   onJoin = (e) => {
     e.preventDefault();
-    this.props.history.push(`/game/${e.target.value}`);
+    const { history } = this.props;
+    history.push(`/game/${e.target.value}`);
   };
 
   onLogout = () => {
-    this.props.dispatch(logoutUser());
-    this.props.history.push('/loginorsignup');
+    const { dispatch, history } = this.props;
+    dispatch(logoutUser());
+    history.push('/loginorsignup');
   };
 
   render() {
@@ -97,4 +101,17 @@ class Games extends React.Component {
 const s2p = state => ({
   games: state.games,
 });
+
+Games.propTypes = {
+  history: PropTypes.func,
+  dispatch: PropTypes.func,
+  games: PropTypes.arrayOf(PropTypes.object),
+};
+
+Games.defaultProps = {
+  history: PropTypes.func,
+  dispatch: PropTypes.func,
+  games: PropTypes.null,
+};
+
 export default withAuth(connect(s2p)(Games));
