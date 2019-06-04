@@ -68873,7 +68873,126 @@ Object.keys(_themes).forEach(function (key) {
     }
   });
 });
-},{"./components":"node_modules/grommet/es6/components/index.js","./contexts":"node_modules/grommet/es6/contexts/index.js","./default-props":"node_modules/grommet/es6/default-props.js","./themes":"node_modules/grommet/es6/themes/index.js"}],"src/LoginOrSignup.js":[function(require,module,exports) {
+},{"./components":"node_modules/grommet/es6/components/index.js","./contexts":"node_modules/grommet/es6/contexts/index.js","./default-props":"node_modules/grommet/es6/default-props.js","./themes":"node_modules/grommet/es6/themes/index.js"}],"src/components/LoginOrSignup.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(require("react"));
+
+var _grommet = require("grommet");
+
+var _reactRedux = require("react-redux");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Signup =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Signup, _React$Component);
+
+  function Signup() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, Signup);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Signup)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _defineProperty(_assertThisInitialized(_this), "state", {
+      email: '',
+      password: '',
+      username: ''
+    });
+
+    _defineProperty(_assertThisInitialized(_this), "handleChange", function (e) {
+      var name = e.target.name;
+      var value = e.target.value;
+
+      if (name === 'email') {
+        _this.setState({
+          username: value
+        });
+      }
+
+      _this.setState(function (prevstate) {
+        var newState = _objectSpread({}, prevstate);
+
+        newState[name] = value;
+        return newState;
+      });
+    });
+
+    return _this;
+  }
+
+  _createClass(Signup, [{
+    key: "render",
+    value: function render() {
+      var _this$state = this.state,
+          email = _this$state.email,
+          password = _this$state.password;
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_grommet.Form, {
+        onSubmit: this.props.handleSubmit,
+        color: "blue"
+      }, _react.default.createElement(_grommet.FormField, {
+        label: "email",
+        name: "email",
+        required: true,
+        value: email,
+        onChange: this.handleChange
+      }), _react.default.createElement(_grommet.FormField, {
+        type: "password",
+        label: "password",
+        name: "password",
+        required: true,
+        value: password,
+        onChange: this.handleChange
+      }), _react.default.createElement(_grommet.Button, {
+        type: "submit",
+        primary: true,
+        label: "Submit"
+      })));
+    }
+  }]);
+
+  return Signup;
+}(_react.default.Component);
+
+var _default = (0, _reactRedux.connect)()(Signup);
+
+exports.default = _default;
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js"}],"src/LoginOrSignup.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -68891,11 +69010,11 @@ var _reactRedux = require("react-redux");
 
 var _account = require("./modules/account");
 
+var _LoginOrSignup = _interopRequireDefault(require("./components/LoginOrSignup"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -68933,33 +69052,12 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(LoginOrSignup)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      email: '',
-      password: '',
-      username: ''
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "handleChange", function (e) {
-      var name = e.target.name;
-      var value = e.target.value;
-
-      if (name === 'email') {
-        _this.setState({
-          username: value
-        });
-      }
-
-      _this.setState(function (prevstate) {
-        var newState = _objectSpread({}, prevstate);
-
-        newState[name] = value;
-        return newState;
-      });
-    });
-
     _defineProperty(_assertThisInitialized(_this), "handleSubmit", function () {
-      _this.props.dispatch((0, _account.handleLogin)(_this.state)).then(function () {
-        return _this.props.history.push('/games');
+      var _this$props = _this.props,
+          dispatch = _this$props.dispatch,
+          history = _this$props.history;
+      dispatch((0, _account.handleLogin)(_this.state)).then(function () {
+        return history.push('/games');
       });
     });
 
@@ -68969,9 +69067,6 @@ function (_React$Component) {
   _createClass(LoginOrSignup, [{
     key: "render",
     value: function render() {
-      var _this$state = this.state,
-          email = _this$state.email,
-          password = _this$state.password;
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_grommet.Box, {
         gap: "medium",
         width: "medium",
@@ -69002,27 +69097,9 @@ function (_React$Component) {
         margin: {
           left: 'small'
         }
-      }, "RETURNING USERS"), _react.default.createElement(_grommet.Form, {
-        onSubmit: this.handleSubmit,
-        color: "blue"
-      }, _react.default.createElement(_grommet.FormField, {
-        onChange: this.handleChange,
-        value: email,
-        label: "email",
-        name: "email",
-        required: true
-      }), _react.default.createElement(_grommet.FormField, {
-        onChange: this.handleChange,
-        value: password,
-        name: "password",
-        type: "password",
-        label: "password",
-        required: true
-      }), _react.default.createElement(_grommet.Button, {
-        type: "submit",
-        primary: true,
-        label: "Submit"
-      }))));
+      }, "RETURNING USERS"), _react.default.createElement(_LoginOrSignup.default, {
+        handleSubmit: this.handleSubmit
+      })));
     }
   }]);
 
@@ -69032,7 +69109,7 @@ function (_React$Component) {
 var _default = (0, _reactRedux.connect)()(LoginOrSignup);
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js"}],"src/images/Door.png":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-router-dom":"node_modules/react-router-dom/esm/react-router-dom.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"src/images/Door.png":[function(require,module,exports) {
 module.exports = "/Door.3c1dccc9.png";
 },{}],"src/Entrance.js":[function(require,module,exports) {
 "use strict";
@@ -69133,11 +69210,11 @@ var _reactRedux = require("react-redux");
 
 var _account = require("./modules/account");
 
+var _LoginOrSignup = _interopRequireDefault(require("./components/LoginOrSignup"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -69175,33 +69252,12 @@ function (_React$Component) {
 
     _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Signup)).call.apply(_getPrototypeOf2, [this].concat(args)));
 
-    _defineProperty(_assertThisInitialized(_this), "state", {
-      email: '',
-      password: '',
-      username: ''
-    });
-
-    _defineProperty(_assertThisInitialized(_this), "handleChange", function (e) {
-      var name = e.target.name;
-      var value = e.target.value;
-
-      if (name === 'email') {
-        _this.setState({
-          username: value
-        });
-      }
-
-      _this.setState(function (prevstate) {
-        var newState = _objectSpread({}, prevstate);
-
-        newState[name] = value;
-        return newState;
-      });
-    });
-
     _defineProperty(_assertThisInitialized(_this), "handleSubmit", function () {
-      _this.props.dispatch((0, _account.handleSignup)(_this.state)).then(function () {
-        return _this.props.history.push('/games');
+      var _this$props = _this.props,
+          dispatch = _this$props.dispatch,
+          history = _this$props.history;
+      dispatch((0, _account.handleSignup)(_this.state)).then(function () {
+        return history.push('/games');
       });
     });
 
@@ -69211,9 +69267,6 @@ function (_React$Component) {
   _createClass(Signup, [{
     key: "render",
     value: function render() {
-      var _this$state = this.state,
-          email = _this$state.email,
-          password = _this$state.password;
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_grommet.Box, {
         margin: "medium",
         width: "medium",
@@ -69226,27 +69279,9 @@ function (_React$Component) {
         margin: {
           left: 'small'
         }
-      }, "NEW USERS"), _react.default.createElement(_grommet.Form, {
-        onSubmit: this.handleSubmit,
-        color: "blue"
-      }, _react.default.createElement(_grommet.FormField, {
-        label: "email",
-        name: "email",
-        required: true,
-        value: email,
-        onChange: this.handleChange
-      }), _react.default.createElement(_grommet.FormField, {
-        type: "password",
-        label: "password",
-        name: "password",
-        required: true,
-        value: password,
-        onChange: this.handleChange
-      }), _react.default.createElement(_grommet.Button, {
-        type: "submit",
-        primary: true,
-        label: "Submit"
-      }))));
+      }, "NEW USERS"), _react.default.createElement(_LoginOrSignup.default, {
+        handleSubmit: this.handleSubmit
+      })));
     }
   }]);
 
@@ -69256,7 +69291,7 @@ function (_React$Component) {
 var _default = (0, _reactRedux.connect)()(Signup);
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js"}],"node_modules/grommet-icons/es6/utils.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./components/LoginOrSignup":"src/components/LoginOrSignup.js"}],"node_modules/grommet-icons/es6/utils.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
