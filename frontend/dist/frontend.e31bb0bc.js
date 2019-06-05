@@ -31795,7 +31795,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.gameReducer = exports.authReducer = exports.getGames = exports.createGame = exports.logoutUser = exports.handleSignup = exports.handleLogin = exports.getCurrentUser = void 0;
+exports.authReducer = exports.logoutUser = exports.handleSignup = exports.handleLogin = exports.getCurrentUser = void 0;
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 
@@ -31835,7 +31835,7 @@ function status(res) {
 
 var handleLogin = function handleLogin(data) {
   return function (dispatch) {
-    return fetch('http://localhost:8000/app/login/', {
+    return fetch("".concat(API_ROOT, "/app/login/"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31863,7 +31863,7 @@ exports.handleLogin = handleLogin;
 
 var handleSignup = function handleSignup(jsonData) {
   return function (dispatch) {
-    return fetch('http://localhost:8000/app/users/', {
+    return fetch("".concat(API_ROOT, "/app/users/"), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -31894,46 +31894,6 @@ var logoutUser = function logoutUser() {
 };
 
 exports.logoutUser = logoutUser;
-
-var createGame = function createGame(roomName) {
-  return function (dispatch) {
-    return fetch('http://localhost:8000/app/game/', {
-      method: 'POST',
-      headers: headers,
-      body: JSON.stringify({
-        room_name: roomName
-      })
-    }).then(function (res) {
-      return res.json();
-    }).then(function (json) {
-      dispatch({
-        type: 'SET_GAME',
-        data: json
-      });
-      return "/game/".concat(json.id);
-    });
-  };
-};
-
-exports.createGame = createGame;
-
-var getGames = function getGames() {
-  return function (dispatch) {
-    return fetch('http://localhost:8000/app/games', {
-      method: 'GET',
-      headers: headers
-    }).then(function (res) {
-      return res.json();
-    }).then(function (json) {
-      dispatch({
-        type: 'SHOW_GAMES',
-        data: json
-      });
-    });
-  };
-};
-
-exports.getGames = getGames;
 var initialState = {};
 
 var authReducer = function authReducer() {
@@ -31964,6 +31924,63 @@ var authReducer = function authReducer() {
 };
 
 exports.authReducer = authReducer;
+},{}],"src/modules/game.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.gameReducer = exports.getGames = exports.createGame = void 0;
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var headers = {
+  'Content-Type': 'application/json',
+  Authorization: "Token ".concat(localStorage.getItem('token'))
+};
+var API_ROOT = 'http://localhost:8000';
+
+var createGame = function createGame(roomName) {
+  return function (dispatch) {
+    return fetch("".concat(API_ROOT, "/app/game/"), {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify({
+        room_name: roomName
+      })
+    }).then(function (res) {
+      return res.json();
+    }).then(function (json) {
+      dispatch({
+        type: 'SET_GAME',
+        data: json
+      });
+      return "/game/".concat(json.id);
+    });
+  };
+};
+
+exports.createGame = createGame;
+
+var getGames = function getGames() {
+  return function (dispatch) {
+    return fetch("".concat(API_ROOT, "/app/games"), {
+      method: 'GET',
+      headers: headers
+    }).then(function (res) {
+      return res.json();
+    }).then(function (json) {
+      dispatch({
+        type: 'SHOW_GAMES',
+        data: json
+      });
+    });
+  };
+};
+
+exports.getGames = getGames;
 var gameInitialState = {
   games: null
 };
@@ -32165,18 +32182,20 @@ var _redux = require("redux");
 
 var _account = require("./account");
 
+var _game = require("./game");
+
 var _websocket = _interopRequireDefault(require("./websocket"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var rootReducer = (0, _redux.combineReducers)({
   auth: _account.authReducer,
-  games: _account.gameReducer,
+  games: _game.gameReducer,
   socket: _websocket.default
 });
 var _default = rootReducer;
 exports.default = _default;
-},{"redux":"node_modules/redux/es/redux.js","./account":"src/modules/account.js","./websocket":"src/modules/websocket.js"}],"src/middleware/middleware.js":[function(require,module,exports) {
+},{"redux":"node_modules/redux/es/redux.js","./account":"src/modules/account.js","./game":"src/modules/game.js","./websocket":"src/modules/websocket.js"}],"src/middleware/middleware.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -101558,7 +101577,8 @@ function (_React$Component) {
           onClick: _this2.onJoin,
           value: game.id,
           margin: {
-            right: '5px'
+            right: '5px',
+            bottom: '5px'
           },
           label: "join"
         }), _react.default.createElement(_grommet.Text, null, game.room_name)));

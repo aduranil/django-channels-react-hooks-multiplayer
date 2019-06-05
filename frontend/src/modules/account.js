@@ -19,7 +19,7 @@ function status(res) {
   return res;
 }
 
-export const handleLogin = data => dispatch => fetch('http://localhost:8000/app/login/', {
+export const handleLogin = data => dispatch => fetch(`${API_ROOT}/app/login/`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const handleLogin = data => dispatch => fetch('http://localhost:8000/app/
   })
   .catch(() => dispatch({ type: 'SET_ERROR', data: 'User not found' }));
 
-export const handleSignup = jsonData => dispatch => fetch('http://localhost:8000/app/users/', {
+export const handleSignup = jsonData => dispatch => fetch(`${API_ROOT}/app/users/`, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
@@ -54,26 +54,6 @@ export const logoutUser = () => (dispatch) => {
   return dispatch({ type: 'LOGOUT_USER' });
 };
 
-export const createGame = roomName => dispatch => fetch('http://localhost:8000/app/game/', {
-  method: 'POST',
-  headers,
-  body: JSON.stringify({ room_name: roomName }),
-})
-  .then(res => res.json())
-  .then((json) => {
-    dispatch({ type: 'SET_GAME', data: json });
-    return `/game/${json.id}`;
-  });
-
-export const getGames = () => dispatch => fetch('http://localhost:8000/app/games', {
-  method: 'GET',
-  headers,
-})
-  .then(res => res.json())
-  .then((json) => {
-    dispatch({ type: 'SHOW_GAMES', data: json });
-  });
-
 const initialState = {};
 
 export const authReducer = (state = { ...initialState }, action) => {
@@ -84,19 +64,6 @@ export const authReducer = (state = { ...initialState }, action) => {
       return { ...state, loggedIn: false, username: null };
     case 'SET_ERROR':
       return { ...state, errorMessage: action.data };
-    default:
-      return state;
-  }
-};
-
-const gameInitialState = { games: null };
-
-export const gameReducer = (state = { ...gameInitialState }, action) => {
-  switch (action.type) {
-    case 'SET_GAME':
-      return { ...state, roomName: action.data.room_name };
-    case 'SHOW_GAMES':
-      return { ...state, games: action.data };
     default:
       return state;
   }

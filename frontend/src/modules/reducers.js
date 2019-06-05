@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
-import { authReducer, gameReducer } from './account';
+import { authReducer } from './account';
+import { gameReducer } from './game';
 import socketReducer from './websocket';
 
 const rootReducer = combineReducers({

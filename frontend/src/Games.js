@@ -77,7 +77,7 @@ class Games extends React.Component {
                   <Button
                     onClick={this.onJoin}
                     value={game.id}
-                    margin={{ right: '5px' }}
+                    margin={{ right: '5px', bottom: '5px' }}
                     label="join"
                   />
                   <Text>{game.room_name}</Text>
