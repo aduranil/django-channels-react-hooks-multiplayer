@@ -1,5 +1,4 @@
-import * as client_actions from '../modules/WSClientActions';
-import * as server_actions from '../modules/WSServerActions';
+import * as actions from '../modules/websocket';
 import { join } from '../modules/websocket';
 
 const socketMiddleware = (function () {
@@ -11,14 +10,14 @@ const socketMiddleware = (function () {
   const onOpen = (ws, store, host) => (event) => {
     // Authenticate with Backend... somehow...
     console.log('websocket open');
-    store.dispatch(client_actions.wsConnected(host));
+    store.dispatch(actions.wsConnected(host));
   };
 
   /**
    * Handler for when the WebSocket closes
    */
   const onClose = (ws, store) => (event) => {
-    store.dispatch(client_actions.wsDisconnected(event.host));
+    store.dispatch(actions.wsDisconnected(event.host));
   };
 
   /**
@@ -28,8 +27,8 @@ const socketMiddleware = (function () {
     const payload = JSON.parse(event.data);
 
     switch (payload.type) {
-      case server_actions.WS_HEALTH:
-        store.dispatch(server_actions.wsHealth(status));
+      case actions.WS_HEALTH:
+        store.dispatch(actions.wsHealth(status));
         break;
       case 'join':
         store.dispatch(join(payload.username));
@@ -45,7 +44,7 @@ const socketMiddleware = (function () {
    */
   return store => next => (action) => {
     switch (action.type) {
-      case client_actions.WS_CONNECT:
+      case actions.WS_CONNECT:
         if (socket !== null) {
           socket.close();
         }
@@ -54,7 +53,7 @@ const socketMiddleware = (function () {
         next(action);
 
         // Tell the store that we're busy connecting...
-        store.dispatch(client_actions.wsConnecting(action.host));
+        store.dispatch(actions.wsConnecting(action.host));
 
         // Attempt to connect to the remote host...
         socket = new WebSocket(action.host);
@@ -66,14 +65,14 @@ const socketMiddleware = (function () {
 
         break;
 
-      case client_actions.WS_DISCONNECT:
+      case actions.WS_DISCONNECT:
         if (socket !== null) {
           socket.close();
         }
         socket = null;
 
         // Tell the store that we've been disconnected...
-        store.dispatch(client_actions.wsDisconnected(action.host));
+        store.dispatch(actions.wsDisconnected(action.host));
 
         break;
 

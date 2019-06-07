@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { wsConnect } from './modules/WSClientActions';
-import { wsHealth } from './modules/WSServerActions';
+import { wsConnect, wsHealth } from './modules/websocket';
 
 class WebSocketConnection extends Component {
   constructor(props) {

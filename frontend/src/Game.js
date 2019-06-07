@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { wsConnect } from './modules/WSClientActions';
+import { wsConnect } from './modules/websocket';
 import withAuth from './hocs/authWrapper';
 
 class Game extends React.Component {
@@ -43,13 +43,13 @@ class Game extends React.Component {
 }
 
 Game.propTypes = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   dispatch: PropTypes.func,
   joinedUser: PropTypes.string,
 };
 
 Game.defaultProps = {
-  id: PropTypes.number,
+  id: PropTypes.string,
   dispatch: PropTypes.func,
   joinedUser: PropTypes.string,
 };

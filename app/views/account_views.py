@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from app.serializers import UserSerializer
 
 from django.contrib.auth.models import User
-
+from django.db import IntegrityError
 
 class LoginUser(ObtainAuthToken):
     authentication_classes = (TokenAuthentication,)
@@ -44,12 +44,15 @@ class CreateUser(ObtainAuthToken):
     """
 
     def post(self, request, format='json'):
-        import pdb; pdb.set_trace()
-        serializer = UserSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            if user:
-                token = Token.objects.create(user=user)
-                response = serializer.data
-                response['token'] = token.key
-                return Response(response, status=status.HTTP_201_CREATED)
+        try:
+            serializer = UserSerializer(data=request.data)
+            if serializer.is_valid():
+                user = serializer.save()
+                if user:
+                    token = Token.objects.create(user=user)
+                    response = serializer.data
+                    response['token'] = token.key
+                    return Response(response, status=status.HTTP_201_CREATED)
+        except IntegrityError as e:
+            import pdb; pdb.set_trace()
+            return Response({'data': ''}, status=400)

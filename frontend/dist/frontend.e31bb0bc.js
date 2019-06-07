@@ -32006,13 +32006,28 @@ var gameReducer = function gameReducer() {
 };
 
 exports.gameReducer = gameReducer;
-},{}],"src/modules/WSClientActions.js":[function(require,module,exports) {
+},{}],"src/modules/websocket.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.wsDisconnected = exports.wsDisconnect = exports.wsConnected = exports.wsConnecting = exports.wsConnect = exports.WS_DISCONNECTED = exports.WS_DISCONNECT = exports.WS_CONNECTED = exports.WS_CONNECTING = exports.WS_CONNECT = void 0;
+exports.default = exports.wsHealth = exports.join = exports.wsDisconnected = exports.wsDisconnect = exports.wsConnected = exports.wsConnecting = exports.wsConnect = exports.WS_HEALTH = exports.WS_DISCONNECTED = exports.WS_DISCONNECT = exports.WS_CONNECTED = exports.WS_CONNECTING = exports.WS_CONNECT = void 0;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// Set up WebSocket handlers
+// socket.onmessage = onMessage(socket, store);
 var WS_CONNECT = 'WS_CONNECT';
 exports.WS_CONNECT = WS_CONNECT;
 var WS_CONNECTING = 'WS_CONNECTING';
@@ -32023,6 +32038,8 @@ var WS_DISCONNECT = 'WS_DISCONNECT';
 exports.WS_DISCONNECT = WS_DISCONNECT;
 var WS_DISCONNECTED = 'WS_DISCONNECTED';
 exports.WS_DISCONNECTED = WS_DISCONNECTED;
+var WS_HEALTH = 'WS_HEALTH';
+exports.WS_HEALTH = WS_HEALTH;
 
 var wsConnect = function wsConnect(host) {
   return {
@@ -32068,15 +32085,15 @@ var wsDisconnected = function wsDisconnected(host) {
 };
 
 exports.wsDisconnected = wsDisconnected;
-},{}],"src/modules/WSServerActions.js":[function(require,module,exports) {
-"use strict";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.wsHealth = exports.WS_HEALTH = void 0;
-var WS_HEALTH = "WS_HEALTH";
-exports.WS_HEALTH = WS_HEALTH;
+var join = function join(username) {
+  return {
+    type: 'join',
+    username: username
+  };
+};
+
+exports.join = join;
 
 var wsHealth = function wsHealth(status) {
   return {
@@ -32086,42 +32103,6 @@ var wsHealth = function wsHealth(status) {
 };
 
 exports.wsHealth = wsHealth;
-},{}],"src/modules/websocket.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = exports.join = void 0;
-
-var actions = _interopRequireWildcard(require("./WSClientActions"));
-
-var serverActions = _interopRequireWildcard(require("./WSServerActions"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-// Set up WebSocket handlers
-// socket.onmessage = onMessage(socket, store);
-var join = function join(username) {
-  return {
-    type: 'join',
-    username: username
-  };
-};
-
-exports.join = join;
 var socketInitialState = {
   socket: null,
   users: []
@@ -32138,27 +32119,27 @@ var socketReducer = function socketReducer() {
         user: action.username
       });
 
-    case serverActions.WS_HEALTH:
+    case WS_HEALTH:
       return _objectSpread({}, state, {
         status: action.status
       });
 
-    case actions.WS_CONNECT:
+    case WS_CONNECT:
       return _objectSpread({}, state, {
         host: action.host
       });
 
-    case actions.WS_CONNECTING:
+    case WS_CONNECTING:
       return _objectSpread({}, state, {
         host: action.host
       });
 
-    case actions.WS_CONNECTED:
+    case WS_CONNECTED:
       return _objectSpread({}, state, {
         host: action.host
       });
 
-    case actions.WS_DISCONNECTED:
+    case WS_DISCONNECTED:
       return _objectSpread({}, state, {
         host: action.host
       });
@@ -32170,7 +32151,7 @@ var socketReducer = function socketReducer() {
 
 var _default = socketReducer;
 exports.default = _default;
-},{"./WSClientActions":"src/modules/WSClientActions.js","./WSServerActions":"src/modules/WSServerActions.js"}],"src/modules/reducers.js":[function(require,module,exports) {
+},{}],"src/modules/reducers.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -32203,11 +32184,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var client_actions = _interopRequireWildcard(require("../modules/WSClientActions"));
-
-var server_actions = _interopRequireWildcard(require("../modules/WSServerActions"));
-
-var _websocket = require("../modules/websocket");
+var actions = _interopRequireWildcard(require("../modules/websocket"));
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
@@ -32221,7 +32198,7 @@ var socketMiddleware = function () {
     return function (event) {
       // Authenticate with Backend... somehow...
       console.log('websocket open');
-      store.dispatch(client_actions.wsConnected(host));
+      store.dispatch(actions.wsConnected(host));
     };
   };
   /**
@@ -32231,7 +32208,7 @@ var socketMiddleware = function () {
 
   var onClose = function onClose(ws, store) {
     return function (event) {
-      store.dispatch(client_actions.wsDisconnected(event.host));
+      store.dispatch(actions.wsDisconnected(event.host));
     };
   };
   /**
@@ -32244,12 +32221,12 @@ var socketMiddleware = function () {
       var payload = JSON.parse(event.data);
 
       switch (payload.type) {
-        case server_actions.WS_HEALTH:
-          store.dispatch(server_actions.wsHealth(status));
+        case actions.WS_HEALTH:
+          store.dispatch(actions.wsHealth(status));
           break;
 
         case 'join':
-          store.dispatch((0, _websocket.join)(payload.username));
+          store.dispatch((0, actions.join)(payload.username));
           break;
 
         default:
@@ -32267,7 +32244,7 @@ var socketMiddleware = function () {
     return function (next) {
       return function (action) {
         switch (action.type) {
-          case client_actions.WS_CONNECT:
+          case actions.WS_CONNECT:
             if (socket !== null) {
               socket.close();
             } // Pass action along
@@ -32275,7 +32252,7 @@ var socketMiddleware = function () {
 
             next(action); // Tell the store that we're busy connecting...
 
-            store.dispatch(client_actions.wsConnecting(action.host)); // Attempt to connect to the remote host...
+            store.dispatch(actions.wsConnecting(action.host)); // Attempt to connect to the remote host...
 
             socket = new WebSocket(action.host); // Set up WebSocket handlers
 
@@ -32284,14 +32261,14 @@ var socketMiddleware = function () {
             socket.onopen = onOpen(socket, store, action.host);
             break;
 
-          case client_actions.WS_DISCONNECT:
+          case actions.WS_DISCONNECT:
             if (socket !== null) {
               socket.close();
             }
 
             socket = null; // Tell the store that we've been disconnected...
 
-            store.dispatch(client_actions.wsDisconnected(action.host));
+            store.dispatch(actions.wsDisconnected(action.host));
             break;
           // case 'join':
           //   socket.send(JSON.stringify({ command: 'join', username: action.username, id: action.id }));
@@ -32308,7 +32285,7 @@ var socketMiddleware = function () {
 
 var _default = socketMiddleware;
 exports.default = _default;
-},{"../modules/WSClientActions":"src/modules/WSClientActions.js","../modules/WSServerActions":"src/modules/WSServerActions.js","../modules/websocket":"src/modules/websocket.js"}],"node_modules/fbjs/lib/shallowEqual.js":[function(require,module,exports) {
+},{"../modules/websocket":"src/modules/websocket.js"}],"node_modules/fbjs/lib/shallowEqual.js":[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -101441,6 +101418,8 @@ var _reactRedux = require("react-redux");
 
 var _account = require("./modules/account");
 
+var _game = require("./modules/game");
+
 var _authWrapper = _interopRequireDefault(require("./hocs/authWrapper"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -101505,7 +101484,7 @@ function (_React$Component) {
         return alert('You must include a room name');
       }
 
-      return dispatch((0, _account.createGame)(roomName)).then(function (data) {
+      return dispatch((0, _game.createGame)(roomName)).then(function (data) {
         history.push(data);
       });
     });
@@ -101531,7 +101510,7 @@ function (_React$Component) {
     key: "componentDidMount",
     value: function componentDidMount() {
       var dispatch = this.props.dispatch;
-      return dispatch((0, _account.getGames)());
+      return dispatch((0, _game.getGames)());
     }
   }, {
     key: "render",
@@ -101627,7 +101606,7 @@ Games.defaultProps = {
 var _default = (0, _authWrapper.default)((0, _reactRedux.connect)(s2p)(Games));
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","grommet-icons":"node_modules/grommet-icons/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/Game.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","grommet-icons":"node_modules/grommet-icons/es6/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/account":"src/modules/account.js","./modules/game":"src/modules/game.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/Game.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -101643,7 +101622,7 @@ var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _reactRedux = require("react-redux");
 
-var _WSClientActions = require("./modules/WSClientActions");
+var _websocket = require("./modules/websocket");
 
 var _authWrapper = _interopRequireDefault(require("./hocs/authWrapper"));
 
@@ -101692,7 +101671,7 @@ function (_React$Component) {
           id = _this$props.id,
           dispatch = _this$props.dispatch;
       var host = "ws://127.0.0.1:8000/ws/game/".concat(id, "?token=").concat(localStorage.getItem('token'));
-      dispatch((0, _WSClientActions.wsConnect)(host));
+      dispatch((0, _websocket.wsConnect)(host));
     });
 
     return _this;
@@ -101734,12 +101713,12 @@ function (_React$Component) {
 }(_react.default.Component);
 
 Game.propTypes = {
-  id: _propTypes.default.number,
+  id: _propTypes.default.string,
   dispatch: _propTypes.default.func,
   joinedUser: _propTypes.default.string
 };
 Game.defaultProps = {
-  id: _propTypes.default.number,
+  id: _propTypes.default.string,
   dispatch: _propTypes.default.func,
   joinedUser: _propTypes.default.string
 };
@@ -101757,7 +101736,7 @@ var s2p = function s2p(state, ownProps) {
 var _default = (0, _authWrapper.default)((0, _reactRedux.connect)(s2p)(Game));
 
 exports.default = _default;
-},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/WSClientActions":"src/modules/WSClientActions.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/App.js":[function(require,module,exports) {
+},{"react":"node_modules/react/index.js","grommet":"node_modules/grommet/es6/index.js","prop-types":"node_modules/prop-types/index.js","react-redux":"node_modules/react-redux/es/index.js","./modules/websocket":"src/modules/websocket.js","./hocs/authWrapper":"src/hocs/authWrapper.js"}],"src/App.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
