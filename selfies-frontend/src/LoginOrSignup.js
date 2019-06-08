@@ -1,29 +1,31 @@
-import React from 'react';
-import { Box, Text } from 'grommet';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { handleLogin } from './modules/account';
-import Login from './components/LoginOrSignup';
+import React from "react";
+import { Box, Text } from "grommet";
+import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { handleLogin } from "./modules/account";
+import Login from "./components/LoginOrSignup";
 
 class LoginOrSignup extends React.Component {
   state = {
-    email: '',
-    password: '',
+    email: "",
+    password: ""
   };
 
-  handleChange = (e) => {
+  handleChange = e => {
     const { name } = e.target;
     const { value } = e.target;
-    this.setState((prevstate) => {
+    this.setState(prevstate => {
       const newState = { ...prevstate };
       newState[name] = value;
       return newState;
     });
   };
 
-  handleSubmit = () => {
-    this.props.dispatch(handleLogin(this.state)).then(() => this.props.history.push('/games'));
+  handleSubmit = async () => {
+    const { dispatch, history } = this.props;
+    await dispatch(handleLogin(this.state));
+    history.push("/games");
   };
 
   render() {
@@ -38,19 +40,15 @@ class LoginOrSignup extends React.Component {
           round="small"
           margin="15px"
         >
-          <Text textAlign="center" color="white" margin={{ left: 'small' }}>
+          <Text textAlign="center" color="white" margin={{ left: "small" }}>
             NEW USERS
           </Text>
-          <Text margin={{ left: 'small' }}>
-            Click
-            {' '}
-            <Link to="/signup">here</Link>
-            {' '}
-to create your user!
+          <Text margin={{ left: "small" }}>
+            Click <Link to="/signup">here</Link> to create your user!
           </Text>
         </Box>
         <Box width="medium" elevation="medium" pad="medium" round="small">
-          <Text textAlign="center" color="white" margin={{ left: 'small' }}>
+          <Text textAlign="center" color="white" margin={{ left: "small" }}>
             RETURNING USERS
           </Text>
           <Login
@@ -69,11 +67,11 @@ to create your user!
 
 LoginOrSignup.propTypes = {
   history: PropTypes.object,
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func
 };
 
 LoginOrSignup.defaultProps = {
   history: PropTypes.object,
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func
 };
 export default connect()(LoginOrSignup);

@@ -8,13 +8,14 @@ class UserSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField(min_length=4)
 
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            validated_data['username'],
-            validated_data['email'],
-            validated_data['password'],
-        )
-        return user
+    class Meta:
+        model = User
+        fields = ('id', 'username', 'email', 'password')
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True,)
+    password = serializers.CharField(min_length=4)
 
     class Meta:
         model = User
