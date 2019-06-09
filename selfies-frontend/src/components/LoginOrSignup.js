@@ -1,7 +1,7 @@
-import React from "react";
-import { Form, FormField, Button } from "grommet";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import React from 'react';
+import { Form, FormField, Button } from 'grommet';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class Signup extends React.Component {
   render() {
@@ -12,7 +12,7 @@ class Signup extends React.Component {
       username,
       fromLoginOrSignup,
       handleChange,
-      error
+      error,
     } = this.props;
     return (
       <React.Fragment>
@@ -51,15 +51,15 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   handleSubmit: PropTypes.func,
-  fromLoginOrSignup: PropTypes.bool
+  fromLoginOrSignup: PropTypes.bool,
 };
 
 Signup.defaultProps = {
   handleSubmit: PropTypes.func,
-  fromLoginOrSignup: PropTypes.bool
+  fromLoginOrSignup: PropTypes.bool,
 };
 
 const s2p = state => ({
-  error: state.auth.errorMessage
+  error: state.auth.errorMessage,
 });
 export default connect(s2p)(Signup);
