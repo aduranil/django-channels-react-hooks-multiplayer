@@ -1,21 +1,21 @@
-import React from "react";
-import { Text, Box } from "grommet";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import { handleSignup } from "./modules/account";
-import Login from "./components/LoginOrSignup";
+import React from 'react';
+import { Text, Box } from 'grommet';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { handleSignup } from '../modules/account';
+import Login from '../components/LoginOrSignup';
 
 class Signup extends React.Component {
   state = {
-    email: "",
-    password: "",
-    username: ""
+    email: '',
+    password: '',
+    username: '',
   };
 
-  handleChange = e => {
+  handleChange = (e) => {
     const { name } = e.target;
     const { value } = e.target;
-    this.setState(prevstate => {
+    this.setState((prevstate) => {
       const newState = { ...prevstate };
       newState[name] = value;
       return newState;
@@ -25,21 +25,15 @@ class Signup extends React.Component {
   handleSubmit = async () => {
     const { dispatch, history } = this.props;
     await dispatch(handleSignup(this.state));
-    history.push("/games");
+    history.push('/games');
   };
 
   render() {
     const { username, email, password } = this.state;
     return (
       <React.Fragment>
-        <Box
-          margin="medium"
-          width="medium"
-          elevation="medium"
-          pad="medium"
-          round="small"
-        >
-          <Text textAlign="center" color="white" margin={{ left: "small" }}>
+        <Box margin="medium" width="medium" elevation="medium" pad="medium" round="small">
+          <Text textAlign="center" color="white" margin={{ left: 'small' }}>
             NEW USERS
           </Text>
           <Login
@@ -58,11 +52,11 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   history: PropTypes.object,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
 };
 
 Signup.defaultProps = {
   history: PropTypes.object,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
 };
 export default connect()(Signup);

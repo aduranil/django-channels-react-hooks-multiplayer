@@ -2,8 +2,8 @@ import React from 'react';
 import { Box, Text } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { wsConnect } from './modules/websocket';
-import withAuth from './hocs/authWrapper';
+import { wsConnect } from '../modules/websocket';
+import withAuth from '../hocs/authWrapper';
 
 class Game extends React.Component {
   componentDidMount() {

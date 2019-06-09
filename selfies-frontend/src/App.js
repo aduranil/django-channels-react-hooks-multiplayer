@@ -2,11 +2,11 @@ import React from 'react';
 import { Grommet, Box } from 'grommet';
 import { Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
-import LoginOrSignup from './LoginOrSignup';
-import Entrance from './Entrance';
-import Signup from './Signup';
-import Games from './Games';
-import Game from './Game';
+import LoginOrSignup from './pages/LoginOrSignup';
+import Entrance from './pages/Entrance';
+import Signup from './pages/Signup';
+import Games from './pages/Games';
+import Game from './pages/Game';
 
 const theme = {
   global: {

@@ -5,9 +5,9 @@ import {
 import PropTypes from 'prop-types';
 import { Gamepad } from 'grommet-icons';
 import { connect } from 'react-redux';
-import { logoutUser } from './modules/account';
-import { createGame, getGames } from './modules/game';
-import withAuth from './hocs/authWrapper';
+import { logoutUser } from '../modules/account';
+import { createGame, getGames } from '../modules/game';
+import withAuth from '../hocs/authWrapper';
 
 const theme = {
   button: {

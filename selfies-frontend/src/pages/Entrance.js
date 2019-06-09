@@ -18,7 +18,7 @@ class Entrance extends React.Component {
           SELFIES 2020
         </Text>
         <a href="/loginorsignup">
-          <img alt="Door" src={require('./images/Door.png')} />
+          <img alt="Door" src={require('../images/Door.png')} />
         </a>
       </React.Fragment>
     );
