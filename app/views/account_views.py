@@ -42,7 +42,7 @@ class CreateUser(ObtainAuthToken):
     def post(self, request, format='json'):
         try:
             serializer = UserSerializer(data=request.data)
-            if serializer.is_valid():
+            if serializer.is_valid(raise_exception=True):
                 user = serializer.save()
                 if user:
                     token = Token.objects.create(user=user)
@@ -50,4 +50,4 @@ class CreateUser(ObtainAuthToken):
                     response['token'] = token.key
                     return Response(response, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
-            return Response({'data': ''}, status=400)
+            raise serializers.ValidationError()

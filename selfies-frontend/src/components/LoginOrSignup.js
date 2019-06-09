@@ -2,8 +2,13 @@ import React from 'react';
 import { Form, FormField, Button } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { removeError } from '../modules/account';
 
 class Signup extends React.Component {
+  componentWillUnmount() {
+    this.props.dispatch(removeError());
+  }
+
   render() {
     const {
       handleSubmit,

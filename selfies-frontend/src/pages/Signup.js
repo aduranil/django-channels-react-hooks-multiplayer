@@ -24,8 +24,8 @@ class Signup extends React.Component {
 
   handleSubmit = async () => {
     const { dispatch, history } = this.props;
-    await dispatch(handleSignup(this.state));
-    history.push('/games');
+    const response = await dispatch(handleSignup(this.state));
+    if (response) return history.push('/games');
   };
 
   render() {
