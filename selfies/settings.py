@@ -63,6 +63,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
     ),
+    # Authentication backends
+
 }
 
 CORS_ORIGIN_WHITELIST = (

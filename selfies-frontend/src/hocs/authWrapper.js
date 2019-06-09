@@ -1,21 +1,21 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
-import { getCurrentUser } from '../modules/account';
+import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
+import { getCurrentUser } from "../modules/account";
 
-const withAuth = (WrappedComponent) => {
+const withAuth = WrappedComponent => {
   class AuthedComponent extends React.Component {
     state = {
-      authCompleted: this.props.loggedIn,
+      authCompleted: this.props.loggedIn
     };
 
-    componentDidMount() {
-      if (localStorage.getItem('token')) {
-        this.props.dispatch(getCurrentUser());
+    componentDidMount = async () => {
+      if (localStorage.getItem("token")) {
+        await this.props.dispatch(getCurrentUser());
       } else {
         this.setState({ authCompleted: true });
       }
-    }
+    };
 
     componentWillReceiveProps(nextProps) {
       if (nextProps.loggedIn) {
@@ -27,14 +27,18 @@ const withAuth = (WrappedComponent) => {
       const { authCompleted } = this.state;
       const { loggedIn } = this.props;
       if (authCompleted) {
-        return loggedIn ? <WrappedComponent {...this.props} /> : <Redirect to="/loginorsignup" />;
+        return loggedIn ? (
+          <WrappedComponent {...this.props} />
+        ) : (
+          <Redirect to="/loginorsignup" />
+        );
       }
       return <React.Fragment>Loading</React.Fragment>;
     }
   }
 
   const mapStateToProps = state => ({
-    loggedIn: state.auth.loggedIn,
+    loggedIn: state.auth.loggedIn
   });
 
   return connect(mapStateToProps)(AuthedComponent);
