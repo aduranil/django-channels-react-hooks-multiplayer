@@ -24,8 +24,8 @@ class LoginOrSignup extends React.Component {
 
   handleSubmit = async () => {
     const { dispatch, history } = this.props;
-    await dispatch(handleLogin(this.state));
-    history.push('/games');
+    const response = await dispatch(handleLogin(this.state));
+    if (response) return history.push('/games');
   };
 
   render() {
