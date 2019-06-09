@@ -3,7 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 
 from channels.generic.websocket import WebsocketConsumer
-from .models import Game
+from .models import Game, Message
 
 
 class GameConsumer(WebsocketConsumer):
@@ -31,6 +31,7 @@ class GameConsumer(WebsocketConsumer):
         game = Game.objects.get(id=self.id)
         game.users.add(user)
         game.save()
+        message = '{} joined'.format(user.username)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
@@ -44,6 +45,7 @@ class GameConsumer(WebsocketConsumer):
         game = Game.objects.get(id=self.id)
         game.users.remove(user)
         game.save()
+        message = '{} left'.format(user.username)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
