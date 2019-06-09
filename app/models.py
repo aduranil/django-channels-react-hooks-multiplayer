@@ -12,4 +12,6 @@ class Game(models.Model):
         return dict(
             id=self.id,
             game_status=self.game_status,
-            room_name=self.room_name)
+            room_name=self.room_name,
+            users=[{'id': u.id, 'username': u.username} for u in self.users.all()]
+        )

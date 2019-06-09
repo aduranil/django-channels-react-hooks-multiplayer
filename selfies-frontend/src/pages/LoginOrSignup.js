@@ -25,7 +25,7 @@ class LoginOrSignup extends React.Component {
   handleSubmit = async () => {
     const { dispatch, history } = this.props;
     const response = await dispatch(handleLogin(this.state));
-    if (response) return history.push('/games');
+    if (!response) return history.push('/games');
   };
 
   render() {
@@ -74,8 +74,6 @@ LoginOrSignup.propTypes = {
   dispatch: PropTypes.func,
 };
 
-LoginOrSignup.defaultProps = {
-  history: PropTypes.object,
-  dispatch: PropTypes.func,
-};
+LoginOrSignup.defaultProps = LoginOrSignup.propTypes;
+
 export default connect()(LoginOrSignup);

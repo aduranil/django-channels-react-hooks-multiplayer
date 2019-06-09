@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { Gamepad } from 'grommet-icons';
 import { connect } from 'react-redux';
-import { logoutUser } from '../modules/account';
+import Navigation from '../components/Navigation';
 import { createGame, getGames } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
 
@@ -23,8 +23,8 @@ class Games extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    return dispatch(getGames());
+    const { dispatch, loggedIn } = this.props;
+    if (loggedIn) return dispatch(getGames());
   }
 
   onClick = () => {
@@ -44,23 +44,13 @@ class Games extends React.Component {
     history.push(`/game/${e.target.value}`);
   };
 
-  onLogout = () => {
-    const { dispatch, history } = this.props;
-    dispatch(logoutUser());
-    history.push('/loginorsignup');
-  };
-
   render() {
     const { roomName } = this.state;
     const { games } = this.props;
+    console.log(games.games);
     return (
       <React.Fragment>
-        <Grid alignSelf="center" columns={['medium', 'medium']}>
-          <Text alignSelf="start"> SELFIES 2020 </Text>
-          <Grommet theme={theme} style={{ textAlign: 'right' }}>
-            <Button onClick={this.onLogout} label="logout" />
-          </Grommet>
-        </Grid>
+        <Navigation />
         <Box
           round="xsmall"
           height="medium"
@@ -71,7 +61,7 @@ class Games extends React.Component {
           background="accent-2"
           overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
         >
-          {games.games
+          {Array.isArray(games.games)
             && games.games.map(game => (
               <Grid key={game.id} columns={{ count: 2 }}>
                 <Grommet theme={theme}>
@@ -81,7 +71,17 @@ class Games extends React.Component {
                     margin={{ right: '5px', bottom: '5px' }}
                     label="join"
                   />
-                  <Text>{game.room_name}</Text>
+                  <Text>
+                    {game.room_name}
+                    , players:
+                    {' '}
+                  </Text>
+                  {game.users.map(user => (
+                    <Text key={user.username}>
+                      {' '}
+                      {user.username}
+                    </Text>
+                  ))}
                 </Grommet>
               </Grid>
             ))}
@@ -101,6 +101,7 @@ class Games extends React.Component {
 
 const s2p = state => ({
   games: state.games,
+  loggedIn: state.auth.loggedIn,
 });
 
 Games.propTypes = {

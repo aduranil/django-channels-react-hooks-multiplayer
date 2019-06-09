@@ -56,13 +56,15 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  username: PropTypes.string,
+  error: PropTypes.string,
   fromLoginOrSignup: PropTypes.bool,
 };
 
-Signup.defaultProps = {
-  handleSubmit: PropTypes.func,
-  fromLoginOrSignup: PropTypes.bool,
-};
+Signup.defaultProps = Signup.propTypes;
 
 const s2p = state => ({
   error: state.auth.errorMessage,
