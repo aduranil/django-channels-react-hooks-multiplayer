@@ -16,7 +16,7 @@ export const wsDisconnected = host => ({ type: WS_DISCONNECTED, host });
 export const join = username => ({ type: 'join', username });
 export const wsHealth = status => ({ type: WS_HEALTH, status });
 
-const socketInitialState = { socket: null, users: [] };
+const socketInitialState = { socket: null, user: null, users: [] };
 
 const socketReducer = (state = { ...socketInitialState }, action) => {
   switch (action.type) {

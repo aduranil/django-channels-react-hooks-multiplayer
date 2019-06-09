@@ -51,14 +51,17 @@ Game.propTypes = {
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  joinedUser: PropTypes.string,
+  joinedUser: PropTypes.null,
 };
 
-const s2p = (state, ownProps) => ({
-  id: ownProps.match && ownProps.match.params.id,
-  username: state.auth.username,
-  socket: state.socket.host,
-  joinedUser: state.socket.user,
-  users: state.socket.users,
-});
+const s2p = (state, ownProps) => {
+  console.log(state.socket);
+  return {
+    id: ownProps.match && ownProps.match.params.id,
+    username: state.auth.username,
+    socket: state.socket.host,
+    joinedUser: state.socket.user,
+    users: state.socket.users,
+  };
+};
 export default withAuth(connect(s2p)(Game));
