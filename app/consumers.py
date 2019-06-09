@@ -39,9 +39,25 @@ class GameConsumer(WebsocketConsumer):
             }
         )
 
+    def leave_game(self, data):
+        user = self.scope['user']
+        game = Game.objects.get(id=self.id)
+        game.users.remove(user)
+        game.save()
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'leave',
+                'players': [{'id': u.id, 'username': u.username} for u in game.users.all()],
+            }
+        )
+
     def join(self, username):
         self.send(text_data=json.dumps(username))
         print(username)
+
+    def leave(self, username):
+        self.send(text_data=json.dumps(username))
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -59,4 +75,5 @@ class GameConsumer(WebsocketConsumer):
 
     commands = {
         'join': join,
+        'leave_game': leave_game,
     }

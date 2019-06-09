@@ -14,7 +14,7 @@ export const wsConnected = host => ({ type: WS_CONNECTED, host });
 export const wsDisconnect = host => ({ type: WS_DISCONNECT, host });
 export const wsDisconnected = host => ({ type: WS_DISCONNECTED, host });
 export const join = username => ({ type: 'join', username });
-export const wsHealth = status => ({ type: WS_HEALTH, status });
+export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 
 const socketInitialState = { socket: null, user: null, users: [] };
 
@@ -22,6 +22,8 @@ const socketReducer = (state = { ...socketInitialState }, action) => {
   switch (action.type) {
     case 'join':
       return { ...state, users: [...state.users, action.username], user: action.username };
+    case 'LEAVE_GAME':
+      return { ...state, users: [...state.users] };
     case WS_HEALTH:
       return { ...state, status: action.status };
     case WS_CONNECT:

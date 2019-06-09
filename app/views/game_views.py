@@ -2,7 +2,6 @@
 import json
 
 from app.models import Game
-from app.serializers
 from rest_framework.views import APIView
 from rest_framework import permissions, status
 from rest_framework.authentication import TokenAuthentication
@@ -18,11 +17,7 @@ class GameCreateView(APIView):
         user = request.user
         game = Game.objects.create(room_name=request.data['room_name'])
         game.users.add(user)
-        return Response({
-            'id': game.id,
-            'room_name': game.room_name,
-            'player': user.username,
-        }, status=status.HTTP_201_CREATED)
+        return HttpResponse(json.dumps(game.as_json()), content_type="application/json")
 
 
 class GameListView(APIView):
@@ -33,3 +28,12 @@ class GameListView(APIView):
         game_objects = Game.objects.all().filter(game_status='active')
         games = [g.as_json() for g in game_objects]
         return HttpResponse(json.dumps(games), content_type="application/json")
+
+
+class GameGetView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request, id):
+        game = Game.objects.get(id=id)
+        return HttpResponse(json.dumps(game.as_json()), content_type="application/json")

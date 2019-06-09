@@ -1,37 +1,41 @@
-import * as actions from "../modules/websocket";
-import { join } from "../modules/websocket";
+import * as actions from '../modules/websocket';
+import { join, leaveGame } from '../modules/websocket';
+import { updateGamePlayers } from '../modules/game';
 
-const socketMiddleware = (function() {
+const socketMiddleware = (function () {
   let socket = null;
 
   /**
    * Handler for when the WebSocket opens
    */
-  const onOpen = (ws, store, host) => event => {
+  const onOpen = (ws, store, host) => (event) => {
     // Authenticate with Backend... somehow...
-    console.log("websocket open");
+    console.log('websocket open');
     store.dispatch(actions.wsConnected(host));
   };
 
   /**
    * Handler for when the WebSocket closes
    */
-  const onClose = (ws, store) => event => {
+  const onClose = (ws, store) => (event) => {
     store.dispatch(actions.wsDisconnected(event.host));
   };
 
   /**
    * Handler for when a message has been received from the server.
    */
-  const onMessage = (ws, store) => event => {
+  const onMessage = (ws, store) => (event) => {
     const payload = JSON.parse(event.data);
 
     switch (payload.type) {
-      case "join":
+      case 'join':
         store.dispatch(join(payload.username));
         break;
+      case 'leave':
+        store.dispatch(updateGamePlayers(payload.players));
+        break;
       default:
-        console.log("Received unknown server payload", payload);
+        console.log('Received unknown server payload', payload);
         break;
     }
   };
@@ -39,7 +43,7 @@ const socketMiddleware = (function() {
   /**
    * Middleware
    */
-  return store => next => action => {
+  return store => next => (action) => {
     switch (action.type) {
       case actions.WS_CONNECT:
         if (socket !== null) {
@@ -73,14 +77,16 @@ const socketMiddleware = (function() {
 
         break;
 
-      // case 'join':
-      //   socket.send(JSON.stringify({ command: 'join', username: action.username, id: action.id }));
-      //   console.log('sent', action.username, action.id);
-      //   break;
+      case 'LEAVE_GAME':
+        socket.send(
+          JSON.stringify({ command: 'leave_game', username: action.username, id: action.id }),
+        );
+        console.log('sent', action.username, action.id);
+        break;
       default:
         return next(action);
     }
   };
-})();
+}());
 
 export default socketMiddleware;

@@ -47,7 +47,6 @@ class Games extends React.Component {
   render() {
     const { roomName } = this.state;
     const { games } = this.props;
-    console.log(games.games);
     return (
       <React.Fragment>
         <Navigation />
