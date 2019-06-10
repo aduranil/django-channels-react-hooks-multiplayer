@@ -14,16 +14,17 @@ class Game extends React.Component {
     }
   }
 
-  connectAndJoin = () => {
+  connectAndJoin = async () => {
     const { id, dispatch } = this.props;
     const host = `ws://127.0.0.1:8000/ws/game/${id}?token=${localStorage.getItem('token')}`;
-    dispatch(wsConnect(host));
+    await dispatch(wsConnect(host));
     dispatch(getGame(id));
   };
 
   leaveGame = () => {
-    const { id, dispatch } = this.props;
-    return dispatch(leaveGame(id));
+    const { id, dispatch, history } = this.props;
+    dispatch(leaveGame(id));
+    history.push('/games');
   };
 
   render() {
@@ -54,22 +55,21 @@ Game.propTypes = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
   joinedUser: PropTypes.string,
+  history: PropTypes.func,
 };
 
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
   joinedUser: PropTypes.null,
+  history: PropTypes.func,
 };
 
-const s2p = (state, ownProps) => {
-  console.log(state.socket);
-  return {
-    id: ownProps.match && ownProps.match.params.id,
-    username: state.auth.username,
-    socket: state.socket.host,
-    joinedUser: state.socket.user,
-    users: state.socket.users,
-  };
-};
+const s2p = (state, ownProps) => ({
+  id: ownProps.match && ownProps.match.params.id,
+  username: state.auth.username,
+  socket: state.socket.host,
+  joinedUser: state.socket.user,
+  users: state.socket.users,
+});
 export default withAuth(connect(s2p)(Game));

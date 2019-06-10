@@ -28,10 +28,7 @@ const socketMiddleware = (function () {
     const payload = JSON.parse(event.data);
 
     switch (payload.type) {
-      case 'join':
-        store.dispatch(join(payload.username));
-        break;
-      case 'leave':
+      case 'update_game_players':
         store.dispatch(updateGamePlayers(payload.players));
         break;
       default:

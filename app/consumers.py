@@ -32,11 +32,12 @@ class GameConsumer(WebsocketConsumer):
         game.users.add(user)
         game.save()
         message = '{} joined'.format(user.username)
+        Message.objects.create(message=message, game=game, user=user)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'join',
-                'username': user.username,
+                'type': 'update_game_players',
+                'players': [{'id': u.id, 'username': u.username} for u in game.users.all()]
             }
         )
 
@@ -46,20 +47,18 @@ class GameConsumer(WebsocketConsumer):
         game.users.remove(user)
         game.save()
         message = '{} left'.format(user.username)
+        Message.objects.create(message=message, game=game, user=user)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'leave',
+                'type': 'update_game_players',
                 'players': [{'id': u.id, 'username': u.username} for u in game.users.all()],
             }
         )
 
-    def join(self, username):
+    def update_game_players(self, username):
         self.send(text_data=json.dumps(username))
         print(username)
-
-    def leave(self, username):
-        self.send(text_data=json.dumps(username))
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -76,6 +75,6 @@ class GameConsumer(WebsocketConsumer):
     #     }))
 
     commands = {
-        'join': join,
-        'leave_game': leave_game,
+        'update_game_players': update_game_players,
+        'leave_game': leave_game
     }
