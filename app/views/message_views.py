@@ -15,11 +15,11 @@ class MessageCreateView(APIView):
         message = Message.objects.create(room_name=request.data['room_name'])
 
 
-class MessageListView(APIView):
+class MessageGetView(APIView):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def get(self, request):
-        message_objects = Message.objects.all()
-        messages = [m.as_json() for m in message_objects]
-        return HttpResponse(json.dumps(messages), content_type="application/json")
+    def get(self, request, id):
+        """get all the messages for a specific game"""
+        messages = Message.objects.all().filter(game=1)
+        return HttpResponse(json.dumps(messages.as_json()), content_type="application/json")
