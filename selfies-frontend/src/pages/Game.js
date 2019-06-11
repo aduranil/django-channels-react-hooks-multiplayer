@@ -1,10 +1,21 @@
 import React from 'react';
-import { Box, Text, Button } from 'grommet';
+import {
+  Box, Text, Button, Grid, Grommet,
+} from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect, leaveGame } from '../modules/websocket';
 import { getGame } from '../modules/game';
+import { getMessages } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
+
+const theme = {
+  button: {
+    padding: {
+      horizontal: '6px',
+    },
+  },
+};
 
 class Game extends React.Component {
   componentDidMount() {
@@ -19,6 +30,7 @@ class Game extends React.Component {
     const host = `ws://127.0.0.1:8000/ws/game/${id}?token=${localStorage.getItem('token')}`;
     await dispatch(wsConnect(host));
     dispatch(getGame(id));
+    dispatch(getMessages(id));
   };
 
   leaveGame = () => {
@@ -28,7 +40,7 @@ class Game extends React.Component {
   };
 
   render() {
-    const { id, joinedUser } = this.props;
+    const { id, messages } = this.props;
     if (id) {
       return (
         <React.Fragment>
@@ -41,7 +53,19 @@ class Game extends React.Component {
             elevation="medium"
             background="accent-2"
           >
-            {joinedUser}
+            {Array.isArray(messages.messages)
+              && messages.messages.map(message => (
+                <Grid key={message.id} columns={{ count: 2 }}>
+                  <Grommet theme={theme}>
+                    <Text>
+                      {' '}
+                      {message.user.username}
+:
+                      {message.message}
+                    </Text>
+                  </Grommet>
+                </Grid>
+              ))}
           </Box>
           <Button onClick={this.leaveGame} label="leave game" />
         </React.Fragment>
@@ -67,6 +91,7 @@ Game.defaultProps = {
 
 const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
+  messages: state.messages,
   username: state.auth.username,
   socket: state.socket.host,
   joinedUser: state.socket.user,

@@ -1,7 +1,7 @@
 # Create your models here.
 from datetime import datetime
 import json
-
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -32,7 +32,7 @@ class Message(models.Model):
         return dict(
             id=self.id,
             message=self.message,
-            created_at=json.dumps(self.created_at),
+            created_at=json.dumps(self.created_at, cls=DjangoJSONEncoder),
             game={'id': self.game.id, 'username': self.game.room_name},
             user={'id': self.user.id, 'username': self.user.username},
         )
