@@ -27,11 +27,13 @@ class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
+    message_type = models.CharField(max_length=50, default=None)
 
     def as_json(self):
         return dict(
             id=self.id,
             message=self.message,
+            message_type=self.message_type,
             created_at=json.dumps(self.created_at, cls=DjangoJSONEncoder),
             game={'id': self.game.id, 'username': self.game.room_name},
             user={'id': self.user.id, 'username': self.user.username},

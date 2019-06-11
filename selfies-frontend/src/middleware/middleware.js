@@ -1,6 +1,6 @@
 import * as actions from '../modules/websocket';
-import { join, leaveGame } from '../modules/websocket';
 import { updateGamePlayers } from '../modules/game';
+import { newMessage, setMessages } from '../modules/message';
 
 const socketMiddleware = (function () {
   let socket = null;
@@ -30,6 +30,9 @@ const socketMiddleware = (function () {
     switch (payload.type) {
       case 'update_game_players':
         store.dispatch(updateGamePlayers(payload.players));
+        break;
+      case 'get_messages':
+        store.dispatch(setMessages(payload.messages));
         break;
       default:
         console.log('Received unknown server payload', payload);
@@ -79,6 +82,9 @@ const socketMiddleware = (function () {
           JSON.stringify({ command: 'leave_game', username: action.username, id: action.id }),
         );
         console.log('sent', action.username, action.id);
+        break;
+      case 'NEW_MESSAGE':
+        socket.send(JSON.stringify({ command: 'NEW_MESSAGE', message: action.msg }));
         break;
       default:
         return next(action);

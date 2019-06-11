@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  Box, Text, Button, Grid, Grommet,
+  Box, Text, Button, Grid, Grommet, TextArea,
 } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect, leaveGame } from '../modules/websocket';
 import { getGame } from '../modules/game';
-import { getMessages } from '../modules/message';
+import { getMessages, newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 
 const theme = {
@@ -18,6 +18,10 @@ const theme = {
 };
 
 class Game extends React.Component {
+  state = {
+    message: '',
+  };
+
   componentDidMount() {
     const { id } = this.props;
     if (id) {
@@ -39,19 +43,31 @@ class Game extends React.Component {
     history.push('/games');
   };
 
+  handleChange = (e) => {
+    const { value } = e.target;
+    this.setState({ message: value });
+  };
+
+  handleSubmit = () => {
+    const { dispatch } = this.props;
+    const { message } = this.state;
+    dispatch(newMessage(message));
+  };
+
   render() {
     const { id, messages } = this.props;
+    const { message } = this.state;
     if (id) {
       return (
         <React.Fragment>
           <Box
             round="xsmall"
-            height="medium"
             margin="medium"
             width="600px"
             pad="medium"
             elevation="medium"
             background="accent-2"
+            overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
           >
             {Array.isArray(messages.messages)
               && messages.messages.map(message => (
@@ -59,13 +75,20 @@ class Game extends React.Component {
                   <Grommet theme={theme}>
                     <Text>
                       {' '}
-                      {message.user.username}
-:
+                      {message.message_type === 'action' ? null : `${message.user.username}:`}
                       {message.message}
                     </Text>
                   </Grommet>
                 </Grid>
               ))}
+            <Grid gap="small" columns={['450px', 'xsmall']}>
+              <Box>
+                <TextArea onChange={this.handleChange} value={message} />
+              </Box>
+              <Box justify="center" align="center" alignContent="center">
+                <Button onClick={this.handleSubmit} label="send" />
+              </Box>
+            </Grid>
           </Box>
           <Button onClick={this.leaveGame} label="leave game" />
         </React.Fragment>
