@@ -34,7 +34,6 @@ class Game extends React.Component {
     const host = `ws://127.0.0.1:8000/ws/game/${id}?token=${localStorage.getItem('token')}`;
     await dispatch(wsConnect(host));
     dispatch(getGame(id));
-    dispatch(getMessages(id));
   };
 
   leaveGame = () => {
@@ -52,6 +51,7 @@ class Game extends React.Component {
     const { dispatch } = this.props;
     const { message } = this.state;
     dispatch(newMessage(message));
+    this.setState({ message: '' });
   };
 
   render() {

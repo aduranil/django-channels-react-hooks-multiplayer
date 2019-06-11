@@ -30,14 +30,16 @@ class GameConsumer(WebsocketConsumer):
     def join_game(self):
         user = self.scope['user']
         self.game.users.add(user)
-        game.save()
+        self.game.save()
         message = '{} joined'.format(user.username)
-        Message.objects.create(message=message, game=game, user=user, message_type="action")
+        Message.objects.create(message=message, game=self.game, user=user, message_type="action")
+        messages = Message.objects.all().filter(game=self.id).order_by('created_at')
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.id, 'username': u.username} for u in game.users.all()]
+                'players': [{'id': u.id, 'username': u.username} for u in self.game.users.all()],
+                'messages': [m.as_json() for m in messages]
             }
         )
 
