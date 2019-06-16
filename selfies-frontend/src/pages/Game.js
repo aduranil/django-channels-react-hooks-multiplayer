@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect, leaveGame } from '../modules/websocket';
 import { getGame } from '../modules/game';
-import { getMessages, newMessage } from '../modules/message';
+import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 
 const theme = {
@@ -75,7 +75,7 @@ class Game extends React.Component {
                   <Grommet theme={theme}>
                     <Text>
                       {' '}
-                      {message.message_type === 'action' ? null : `${message.user.username}:`}
+                      {message.message_type === 'action' ? null : `${message.user.username}: `}
                       {message.message}
                     </Text>
                   </Grommet>
@@ -101,15 +101,15 @@ class Game extends React.Component {
 Game.propTypes = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  joinedUser: PropTypes.string,
   history: PropTypes.func,
+  messages: PropTypes.object,
 };
 
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  joinedUser: PropTypes.null,
   history: PropTypes.func,
+  messages: PropTypes.object,
 };
 
 const s2p = (state, ownProps) => ({

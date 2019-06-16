@@ -1,13 +1,11 @@
-
 import json
+from rest_framework.views import APIView
+from rest_framework import permissions
+from rest_framework.authentication import TokenAuthentication
+from django.http import HttpResponse
 
 from app.models import Game
-from rest_framework.views import APIView
-from rest_framework import permissions, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.response import Response
 
-from django.http import HttpResponse
 
 class GameCreateView(APIView):
     authentication_classes = (TokenAuthentication,)

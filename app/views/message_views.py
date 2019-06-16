@@ -1,7 +1,8 @@
-from rest_framework.views import APIView
-from rest_framework import permissions, status
-from rest_framework.authentication import TokenAuthentication
 import json
+
+from rest_framework.views import APIView
+from rest_framework import permissions
+from rest_framework.authentication import TokenAuthentication
 from django.http import HttpResponse
 
 from app.models import Message

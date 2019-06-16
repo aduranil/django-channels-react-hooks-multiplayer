@@ -107,12 +107,14 @@ Games.propTypes = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
   games: PropTypes.object,
+  loggedIn: PropTypes.boolean,
 };
 
 Games.defaultProps = {
   history: PropTypes.object,
   dispatch: PropTypes.func,
   games: PropTypes.null,
+  loggedIn: PropTypes.boolean,
 };
 
 export default withAuth(connect(s2p)(Games));
