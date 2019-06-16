@@ -64,7 +64,15 @@ Signup.propTypes = {
   fromLoginOrSignup: PropTypes.bool,
 };
 
-Signup.defaultProps = Signup.propTypes;
+Signup.defaultProps = {
+  handleSubmit: PropTypes.func,
+  handleChange: PropTypes.func,
+  email: PropTypes.string,
+  password: PropTypes.string,
+  username: PropTypes.null,
+  error: PropTypes.null,
+  fromLoginOrSignup: PropTypes.bool,
+};
 
 const s2p = state => ({
   error: state.auth.errorMessage,

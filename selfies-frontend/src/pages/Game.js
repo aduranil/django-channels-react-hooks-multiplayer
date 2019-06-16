@@ -102,14 +102,20 @@ Game.propTypes = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
   history: PropTypes.func,
-  messages: PropTypes.object,
+  messages: PropTypes.shape({
+    id: PropTypes.number,
+    message: PropTypes.string,
+  }),
 };
 
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
   history: PropTypes.func,
-  messages: PropTypes.object,
+  messages: PropTypes.shape({
+    id: PropTypes.number,
+    message: PropTypes.string,
+  }),
 };
 
 const s2p = (state, ownProps) => ({
@@ -117,7 +123,5 @@ const s2p = (state, ownProps) => ({
   messages: state.messages,
   username: state.auth.username,
   socket: state.socket.host,
-  joinedUser: state.socket.user,
-  users: state.socket.users,
 });
 export default withAuth(connect(s2p)(Game));

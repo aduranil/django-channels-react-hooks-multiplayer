@@ -32,7 +32,7 @@ Entrance.propTypes = {
 
 Entrance.defaultProps = {
   history: PropTypes.object,
-  loggedIn: PropTypes.bool,
+  loggedIn: PropTypes.null,
 };
 const mapStateToProps = state => ({
   loggedIn: state.auth.loggedIn,

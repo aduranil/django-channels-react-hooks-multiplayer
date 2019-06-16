@@ -74,6 +74,9 @@ LoginOrSignup.propTypes = {
   dispatch: PropTypes.func,
 };
 
-LoginOrSignup.defaultProps = LoginOrSignup.propTypes;
+LoginOrSignup.defaultProps = {
+  history: PropTypes.object,
+  dispatch: PropTypes.func,
+};
 
 export default connect()(LoginOrSignup);
