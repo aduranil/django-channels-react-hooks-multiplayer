@@ -62,6 +62,23 @@ class Game extends React.Component {
       return (
         <React.Fragment>
           <Box
+            width="600px"
+            height="300px"
+            round="xsmall"
+            pad="medium"
+            elevation="medium"
+            background="accent-2"
+          >
+            {Array.isArray(players)
+              && players.map(player => (
+                <Grid key={player.id} columns="small">
+                  <Box key={player.id}>
+                    <Phone />
+                  </Box>
+                </Grid>
+              ))}
+          </Box>
+          <Box
             round="xsmall"
             width="600px"
             height="300px"
