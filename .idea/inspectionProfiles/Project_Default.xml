@@ -1,0 +1,47 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <value>
+          <list size="34">
+            <item index="0" class="java.lang.String" itemvalue="Automat" />
+            <item index="1" class="java.lang.String" itemvalue="async-timeout" />
+            <item index="2" class="java.lang.String" itemvalue="psycopg2" />
+            <item index="3" class="java.lang.String" itemvalue="Click" />
+            <item index="4" class="java.lang.String" itemvalue="constantly" />
+            <item index="5" class="java.lang.String" itemvalue="redis" />
+            <item index="6" class="java.lang.String" itemvalue="sqlparse" />
+            <item index="7" class="java.lang.String" itemvalue="appdirs" />
+            <item index="8" class="java.lang.String" itemvalue="txaio" />
+            <item index="9" class="java.lang.String" itemvalue="daphne" />
+            <item index="10" class="java.lang.String" itemvalue="djangorestframework" />
+            <item index="11" class="java.lang.String" itemvalue="django-cors-headers" />
+            <item index="12" class="java.lang.String" itemvalue="msgpack-python" />
+            <item index="13" class="java.lang.String" itemvalue="django-webpack-loader" />
+            <item index="14" class="java.lang.String" itemvalue="hyperlink" />
+            <item index="15" class="java.lang.String" itemvalue="six" />
+            <item index="16" class="java.lang.String" itemvalue="djangorestframework-jwt" />
+            <item index="17" class="java.lang.String" itemvalue="black" />
+            <item index="18" class="java.lang.String" itemvalue="asgiref" />
+            <item index="19" class="java.lang.String" itemvalue="PyHamcrest" />
+            <item index="20" class="java.lang.String" itemvalue="zope.interface" />
+            <item index="21" class="java.lang.String" itemvalue="incremental" />
+            <item index="22" class="java.lang.String" itemvalue="toml" />
+            <item index="23" class="java.lang.String" itemvalue="attrs" />
+            <item index="24" class="java.lang.String" itemvalue="channels-redis" />
+            <item index="25" class="java.lang.String" itemvalue="hiredis" />
+            <item index="26" class="java.lang.String" itemvalue="autobahn" />
+            <item index="27" class="java.lang.String" itemvalue="aioredis" />
+            <item index="28" class="java.lang.String" itemvalue="channels" />
+            <item index="29" class="java.lang.String" itemvalue="Django" />
+            <item index="30" class="java.lang.String" itemvalue="pytz" />
+            <item index="31" class="java.lang.String" itemvalue="msgpack" />
+            <item index="32" class="java.lang.String" itemvalue="idna" />
+            <item index="33" class="java.lang.String" itemvalue="Twisted" />
+          </list>
+        </value>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

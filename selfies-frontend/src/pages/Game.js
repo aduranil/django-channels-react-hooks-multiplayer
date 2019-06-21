@@ -8,6 +8,7 @@ import { wsConnect, leaveGame } from '../modules/websocket';
 import { getGame } from '../modules/game';
 import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
+import { Phone } from '../images/iPhone';
 
 const theme = {
   button: {
@@ -55,15 +56,15 @@ class Game extends React.Component {
   };
 
   render() {
-    const { id, messages } = this.props;
+    const { id, messages, players } = this.props;
     const { message } = this.state;
     if (id) {
       return (
         <React.Fragment>
           <Box
             round="xsmall"
-            margin="medium"
             width="600px"
+            height="300px"
             pad="medium"
             elevation="medium"
             background="accent-2"
@@ -81,6 +82,8 @@ class Game extends React.Component {
                   </Grommet>
                 </Grid>
               ))}
+          </Box>
+          <Box round="xsmall" width="600px" pad="medium" elevation="medium" background="accent-2">
             <Grid gap="small" columns={['450px', 'xsmall']}>
               <Box>
                 <TextArea onChange={this.handleChange} value={message} />
@@ -106,6 +109,10 @@ Game.propTypes = {
     id: PropTypes.number,
     message: PropTypes.string,
   }),
+  players: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+  }),
 };
 
 Game.defaultProps = {
@@ -116,12 +123,16 @@ Game.defaultProps = {
     id: PropTypes.number,
     message: PropTypes.string,
   }),
+  players: PropTypes.shape({
+    id: PropTypes.number,
+    username: PropTypes.string,
+  }),
 };
 
 const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
   messages: state.messages,
   username: state.auth.username,
-  socket: state.socket.host,
+  players: state.games.players,
 });
 export default withAuth(connect(s2p)(Game));
