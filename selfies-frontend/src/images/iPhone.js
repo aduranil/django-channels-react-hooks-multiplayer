@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Phone = () => (
-  <svg width="216px" height="432px" viewBox="0 0 216 432">
+  <svg width="108px" height="216px" viewBox="0 0 216 432">
     <g id="Page-1" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
       <g id="Device-Bezels-/-iPhoneXS---Space-Gray" transform="translate(29.000000, 25.000000)">
         <image
