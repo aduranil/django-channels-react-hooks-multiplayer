@@ -6,9 +6,17 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
+class GamePlayer(models.Model):
+    followers = models.IntegerField(default=0)
+    stories = models.IntegerField(default=3)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    started = models.BooleanField(default=False)
+
+
 class Game(models.Model):
     room_name = models.CharField(max_length=50)
     users = models.ManyToManyField(User)
+    game_players = models.ManyToManyField(GamePlayer)
     game_status = models.CharField(max_length=50, default="active")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -18,7 +26,7 @@ class Game(models.Model):
             id=self.id,
             game_status=self.game_status,
             room_name=self.room_name,
-            users=[{'id': u.id, 'username': u.username} for u in self.users.all()]
+            users=[{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories} for u in self.game_players.all()]
         )
 
 

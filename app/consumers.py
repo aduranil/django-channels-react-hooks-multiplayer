@@ -3,7 +3,7 @@ import json
 from asgiref.sync import async_to_sync
 
 from channels.generic.websocket import WebsocketConsumer
-from .models import Game, Message
+from .models import Game, Message, GamePlayer
 
 
 class GameConsumer(WebsocketConsumer):
@@ -29,32 +29,40 @@ class GameConsumer(WebsocketConsumer):
 
     def join_game(self):
         user = self.scope['user']
-        self.game.users.add(user)
-        self.game.save()
-        message = '{} joined'.format(user.username)
-        Message.objects.create(message=message, game=self.game, user=user, message_type="action")
+        game = Game.objects.get(id=self.id)
+        user_in_game = bool([user == u for u in self.game.users.all()])
         messages = Message.objects.all().filter(game=self.id).order_by('created_at')
+        if not user_in_game:
+            self.game.users.add(user)
+            game_player = GamePlayer.objects.create(user=user)
+            self.game.game_players.add(game_player)
+            self.game.save()
+            message = '{} joined'.format(user.username)
+            Message.objects.create(message=message, game=self.game, user=user, message_type="action")
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.id, 'username': u.username} for u in self.game.users.all()],
+                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
                 'messages': [m.as_json() for m in messages]
             }
         )
 
     def leave_game(self, data):
         user = self.scope['user']
-        game = Game.objects.get(id=self.id)
-        game.users.remove(user)
-        game.save()
+        self.game.users.remove(user)
+        for player in self.game.game_players.all():
+            if player.id == user.id:
+                self.game.game_players.remove(player)
+
+        self.game.save()
         message = '{} left'.format(user.username)
-        Message.objects.create(message=message, game=game, user=user, message_type="action")
+        Message.objects.create(message=message, game=self.game, user=user, message_type="action")
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.id, 'username': u.username} for u in game.users.all()],
+                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
             }
         )
 
