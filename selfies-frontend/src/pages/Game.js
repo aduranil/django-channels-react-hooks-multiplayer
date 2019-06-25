@@ -55,6 +55,14 @@ class Game extends React.Component {
     this.setState({ message: '' });
   };
 
+  componentDidUpdate() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+  };
+
   render() {
     const { id, messages, players } = this.props;
     const { message } = this.state;
@@ -82,6 +90,12 @@ class Game extends React.Component {
                   </Grommet>
                 </Grid>
               ))}
+            <div
+              style={{ float: 'left', clear: 'both' }}
+              ref={(el) => {
+                this.messagesEnd = el;
+              }}
+            />
           </Box>
           <Box
             width="800px"
