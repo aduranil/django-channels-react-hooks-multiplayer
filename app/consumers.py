@@ -60,7 +60,7 @@ class GameConsumer(WebsocketConsumer):
 
         # retrieve the updated game
         game = Game.objects.get(id=self.id)
-        if len(game.game_players) == 0:
+        if game.game_players.count() == 0:
             game.delete()
         else:
             message = '{} left'.format(user.username)
