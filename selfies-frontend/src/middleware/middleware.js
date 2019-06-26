@@ -87,6 +87,9 @@ const socketMiddleware = (function () {
       case 'NEW_MESSAGE':
         socket.send(JSON.stringify({ command: 'NEW_MESSAGE', message: action.msg }));
         break;
+      case 'START_ROUND':
+        socket.send(JSON.stringify({ command: 'START_ROUND', id: action.id }));
+        break;
       default:
         return next(action);
     }

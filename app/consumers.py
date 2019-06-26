@@ -43,7 +43,7 @@ class GameConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
+                'players': [{'player_id': u.id, 'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
                 'messages': [m.as_json() for m in messages]
             }
         )
@@ -69,7 +69,7 @@ class GameConsumer(WebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'update_game_players',
-                    'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
+                    'players': [{'player_id': u.id, 'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
                 }
             )
 
@@ -104,9 +104,15 @@ class GameConsumer(WebsocketConsumer):
             }
         )
 
+    def start_round(self, data):
+        user = self.scope['user']
+        game_player = GamePlayer.objects.get(id=data['id'])
+
+
     commands = {
         'update_game_players': update_game_players,
         'leave_game': leave_game,
         'NEW_MESSAGE': new_message,
-        'get_messages': get_messages
+        'get_messages': get_messages,
+        'start_round': start_round,
     }

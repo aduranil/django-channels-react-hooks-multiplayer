@@ -4,6 +4,8 @@ const headers = {
 };
 
 export const updateGamePlayers = json => ({ type: 'UPDATE_GAME_PLAYERS', data: json });
+
+export const startRound = id => ({ type: 'START_ROUND', id });
 const API_ROOT = 'http://localhost:8000';
 
 export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`, {

@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect, leaveGame } from '../modules/websocket';
-import { getGame } from '../modules/game';
+import { getGame, startRound } from '../modules/game';
 import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 import { Phone } from '../images/iPhone';
@@ -28,6 +28,10 @@ class Game extends React.Component {
     if (id) {
       this.connectAndJoin();
     }
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   connectAndJoin = async () => {
@@ -55,12 +59,13 @@ class Game extends React.Component {
     this.setState({ message: '' });
   };
 
-  componentDidUpdate() {
-    this.scrollToBottom();
-  }
-
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  startRound = () => {
+    const { id, dispatch } = this.props;
+    dispatch(startRound(id));
   };
 
   render() {
@@ -118,6 +123,7 @@ class Game extends React.Component {
                 && players.map(player => (
                   <Box key={player.id}>
                     {player.username}
+                    {player.started ? ' !' : ' ?'}
                     <Phone />
                     {' '}
                   </Box>
@@ -136,6 +142,7 @@ class Game extends React.Component {
             </Grid>
           </Box>
           <Button onClick={this.leaveGame} label="leave game" />
+          <Button onClick={this.startRound} label="start game" />
         </React.Fragment>
       );
     }
