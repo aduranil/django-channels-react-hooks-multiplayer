@@ -6,17 +6,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class GamePlayer(models.Model):
-    followers = models.IntegerField(default=0)
-    stories = models.IntegerField(default=3)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    started = models.BooleanField(default=False)
-
-
 class Game(models.Model):
     room_name = models.CharField(max_length=50)
-    users = models.ManyToManyField(User)
-    game_players = models.ManyToManyField(GamePlayer)
     game_status = models.CharField(max_length=50, default="active")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -30,9 +21,21 @@ class Game(models.Model):
         )
 
 
+class GamePlayer(models.Model):
+    followers = models.IntegerField(default=0)
+    stories = models.IntegerField(default=3)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    started = models.BooleanField(default=False)
+    game = models.ForeignKey(Game, related_name="game_players", on_delete=models.CASCADE)
+
+
 class Message(models.Model):
-    game = models.ForeignKey(Game, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    game = models.ForeignKey(Game, related_name="messages", on_delete=models.CASCADE)
+    game_player = models.ForeignKey(GamePlayer, related_name="messages", on_delete=models.CASCADE, blank=True, null=True)
     message = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     message_type = models.CharField(max_length=50, default=None)
@@ -43,6 +46,6 @@ class Message(models.Model):
             message=self.message,
             message_type=self.message_type,
             created_at=json.dumps(self.created_at, cls=DjangoJSONEncoder),
-            game={'id': self.game.id, 'username': self.game.room_name},
-            user={'id': self.user.id, 'username': self.user.username},
+            game={'id': self.game.id, 'room_name': self.game.room_name},
+            user={'id': self.game_player.user.id, 'username': self.game_player.user.username},
         )
