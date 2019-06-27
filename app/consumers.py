@@ -99,13 +99,21 @@ class GameConsumer(WebsocketConsumer):
 
     def start_round(self, data):
         user = self.scope['user']
-        game_player = GamePlayer.objects.get(id=data['id'])
-
+        game_player = GamePlayer.objects.get(user=user)
+        game_player.started = True
+        game_player.save()
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            {
+                'type': 'update_game_players',
+                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
+            }
+        )
 
     commands = {
         'update_game_players': update_game_players,
         'leave_game': leave_game,
         'NEW_MESSAGE': new_message,
         'get_messages': get_messages,
-        'start_round': start_round,
+        'START_ROUND': start_round,
     }
