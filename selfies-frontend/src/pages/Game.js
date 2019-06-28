@@ -145,21 +145,24 @@ class Game extends React.Component {
 Game.propTypes = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  history: PropTypes.func,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   messages: PropTypes.shape({
     id: PropTypes.number,
     message: PropTypes.string,
   }),
-  players: PropTypes.shape({
-    id: PropTypes.number,
-    username: PropTypes.string,
-  }),
+  players: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      username: PropTypes.string,
+    }),
+  ),
 };
 
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  history: PropTypes.func,
   messages: PropTypes.shape({
     id: PropTypes.number,
     message: PropTypes.string,
