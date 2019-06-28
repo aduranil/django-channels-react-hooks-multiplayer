@@ -4,7 +4,7 @@ const headers = {
 };
 
 export const updateGamePlayers = json => ({ type: 'UPDATE_GAME_PLAYERS', data: json });
-
+export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
 const API_ROOT = 'http://localhost:8000';
 
@@ -41,6 +41,8 @@ const gameInitialState = { games: [] };
 
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {
+    case 'LEAVE_GAME':
+      return { ...state, users: [...state.users] };
     case 'SET_GAME':
       return { ...state, roomName: action.data.room_name, players: action.data.users };
     case 'SHOW_GAMES':

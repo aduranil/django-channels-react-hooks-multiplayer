@@ -4,8 +4,8 @@ import {
 } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { wsConnect, leaveGame } from '../modules/websocket';
-import { getGame, startRound } from '../modules/game';
+import { wsConnect } from '../modules/websocket';
+import { getGame, startRound, leaveGame } from '../modules/game';
 import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 import { Phone } from '../images/iPhone';
