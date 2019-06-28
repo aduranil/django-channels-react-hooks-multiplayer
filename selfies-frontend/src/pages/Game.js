@@ -84,13 +84,13 @@ class Game extends React.Component {
             overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
           >
             {Array.isArray(messages.messages)
-              && messages.messages.map(message => (
-                <Grid key={message.id} columns={{ count: 2 }}>
+              && messages.messages.map(msg => (
+                <Grid key={msg.id} columns={{ count: 2 }}>
                   <Grommet theme={theme}>
                     <Text>
                       {' '}
-                      {message.message_type === 'action' ? null : `${message.user.username}: `}
-                      {message.message}
+                      {msg.message_type === 'action' ? null : `${msg.user.username}: `}
+                      {msg.message}
                     </Text>
                   </Grommet>
                 </Grid>
@@ -110,15 +110,7 @@ class Game extends React.Component {
             elevation="medium"
             background="accent-2"
           >
-            <Grid
-              columns={{
-                count: 6,
-              }}
-              gap="small"
-              columns="100px"
-              rows="medium"
-              justify="center"
-            >
+            <Grid gap="small" columns="100px" rows="medium" justify="center">
               {Array.isArray(players)
                 && players.map(player => (
                   <Box key={player.id}>
@@ -172,10 +164,7 @@ Game.defaultProps = {
     id: PropTypes.number,
     message: PropTypes.string,
   }),
-  players: PropTypes.shape({
-    id: PropTypes.number,
-    username: PropTypes.string,
-  }),
+  players: PropTypes.Array,
 };
 
 const s2p = (state, ownProps) => ({

@@ -82,7 +82,6 @@ const socketMiddleware = (function () {
         socket.send(
           JSON.stringify({ command: 'leave_game', username: action.username, id: action.id }),
         );
-        console.log('sent', action.username, action.id);
         break;
       case 'NEW_MESSAGE':
         socket.send(JSON.stringify({ command: 'NEW_MESSAGE', message: action.msg }));
