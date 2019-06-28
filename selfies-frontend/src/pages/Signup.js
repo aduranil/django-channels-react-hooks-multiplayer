@@ -51,12 +51,13 @@ class Signup extends React.Component {
 }
 
 Signup.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func,
 };
 
 Signup.defaultProps = {
-  history: PropTypes.object,
   dispatch: PropTypes.func,
 };
 export default connect()(Signup);

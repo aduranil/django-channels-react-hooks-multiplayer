@@ -104,7 +104,9 @@ const s2p = state => ({
 });
 
 Games.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func,
   games: PropTypes.shape({
     id: PropTypes.number,
@@ -119,7 +121,6 @@ Games.propTypes = {
 };
 
 Games.defaultProps = {
-  history: PropTypes.object,
   dispatch: PropTypes.func,
   games: PropTypes.null,
   loggedIn: PropTypes.bool,

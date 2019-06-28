@@ -26,12 +26,13 @@ class Entrance extends React.Component {
 }
 
 Entrance.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   loggedIn: PropTypes.bool,
 };
 
 Entrance.defaultProps = {
-  history: PropTypes.object,
   loggedIn: PropTypes.null,
 };
 const mapStateToProps = state => ({

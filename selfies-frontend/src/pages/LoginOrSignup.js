@@ -70,12 +70,13 @@ to create your user!
 }
 
 LoginOrSignup.propTypes = {
-  history: PropTypes.object,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
   dispatch: PropTypes.func,
 };
 
 LoginOrSignup.defaultProps = {
-  history: PropTypes.object,
   dispatch: PropTypes.func,
 };
 
