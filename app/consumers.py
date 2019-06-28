@@ -1,8 +1,9 @@
 """ All of the websocket actions for the game and chat functionalities"""
 import json
-from asgiref.sync import async_to_sync
 
+from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+
 from .models import Game, Message, GamePlayer
 
 
@@ -45,7 +46,9 @@ class GameConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in game.game_players.all()],
+                'players': [
+                    {'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories,
+                     'started': u.started} for u in game.game_players.all()],
                 'messages': [m.as_json() for m in messages]
             }
         )
@@ -66,7 +69,9 @@ class GameConsumer(WebsocketConsumer):
                 self.room_group_name,
                 {
                     'type': 'update_game_players',
-                    'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in game.game_players.all()],
+                    'players': [
+                        {'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories,
+                         'started': u.started} for u in game.game_players.all()],
                 }
             )
 
@@ -110,7 +115,9 @@ class GameConsumer(WebsocketConsumer):
             self.room_group_name,
             {
                 'type': 'update_game_players',
-                'players': [{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories, 'started': u.started} for u in self.game.game_players.all()],
+                'players': [
+                    {'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories,
+                     'started': u.started} for u in self.game.game_players.all()],
             }
         )
 
