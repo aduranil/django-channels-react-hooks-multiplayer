@@ -42,14 +42,15 @@ class GameConsumer(WebsocketConsumer):
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
         if not hasattr(user, 'gameplayer'):
-            game_player = GamePlayer.objects.create(user=user, game=game)
+            GamePlayer.objects.create(user=user, game=game)
             message = '{} joined'.format(user.username)
             Message.objects.create(
                 message=message,
                 game=game,
-                game_player=game_player,
+                username=user.username,
                 message_type="action"
             )
+        game.check_round_status()
         self.send_update_game_players(game)
 
     def leave_game(self, data):
@@ -62,7 +63,7 @@ class GameConsumer(WebsocketConsumer):
             game.delete()
         else:
             message = '{} left'.format(user.username)
-            Message.objects.create(message=message, game=game, game_player=game_player, message_type="action")
+            Message.objects.create(message=message, game=game, username=user.username, message_type="action")
             game_player.delete()
             self.send_update_game_players(game)
 
@@ -75,23 +76,22 @@ class GameConsumer(WebsocketConsumer):
 
     def new_message(self, data):
         user = self.scope['user']
-        game_player = GamePlayer.objects.get(user=user)
         game = Game.objects.get(id=self.id)
         Message.objects.create(
             message=data['message'],
             message_type='user_message',
             game=game,
-            game_player=game_player,
+            username=user.username,
         )
         self.send_update_game_players(game)
 
     def start_round(self, data):
         user = self.scope['user']
+        game = Game.objects.get(id=self.id)
         game_player = GamePlayer.objects.get(user=user)
         game_player.started = True
         game_player.save()
-        messages = self.game.messages.all().order_by('created_at')
-        self.send_update_game_players(self.game, messages)
+        self.send_update_game_players(game)
 
 
     commands = {

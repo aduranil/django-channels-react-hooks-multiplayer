@@ -38,7 +38,7 @@ export const getGame = id => dispatch => fetch(`${API_ROOT}/app/game/${id}`, {
     dispatch({ type: 'SET_GAME', data: json });
   });
 
-const gameInitialState = { games: [] };
+const gameInitialState = {};
 
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {

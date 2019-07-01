@@ -55,7 +55,7 @@ class ChatBox extends React.Component {
                 <Grommet theme={theme}>
                   <Text>
                     {' '}
-                    {msg.message_type === 'action' ? null : `${msg.user.username}: `}
+                    {msg.message_type === 'action' ? null : `${msg.username}: `}
                     {msg.message}
                   </Text>
                 </Grommet>

@@ -8,7 +8,6 @@ import { grommet } from 'grommet/themes';
 import { wsConnect } from '../modules/websocket';
 import { getGame, startRound, leaveGame } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
-import { Phone } from '../images/iPhone';
 import Timer from '../components/Timer';
 import ChatBox from '../components/ChatBox';
 import GameView from '../components/GameScreen';
@@ -60,9 +59,11 @@ class Game extends React.Component {
               </Box>
               <Box gridArea="main">
                 <GameView game={game} />
-
-                <Button onClick={this.leaveGame} label="leave game" />
-                <Button onClick={this.startRound} label="start game" />
+                <Grid columns="small">
+                  <Timer />
+                  <Button onClick={this.leaveGame} label="leave game" />
+                  <Button onClick={this.startRound} label="start game" />
+                </Grid>
               </Box>
             </Grid>
           </Grommet>
@@ -79,10 +80,6 @@ Game.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-  messages: PropTypes.shape({
-    id: PropTypes.number,
-    message: PropTypes.string,
-  }),
   players: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
@@ -94,16 +91,11 @@ Game.propTypes = {
 Game.defaultProps = {
   id: PropTypes.string,
   dispatch: PropTypes.func,
-  messages: PropTypes.shape({
-    id: PropTypes.number,
-    message: PropTypes.string,
-  }),
   players: PropTypes.Array,
 };
 
 const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
-  messages: state.messages,
   username: state.auth.username,
   game: state.games.game,
 });
