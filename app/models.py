@@ -11,12 +11,14 @@ class Game(models.Model):
     game_status = models.CharField(max_length=50, default="active")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    round_started = models.BooleanField(default=False)
 
     def as_json(self):
         return dict(
             id=self.id,
             game_status=self.game_status,
             room_name=self.room_name,
+            round_started=self.round_started,
             users=[{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories} for u in self.game_players.all()]
         )
 

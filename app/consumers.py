@@ -34,6 +34,7 @@ class GameConsumer(WebsocketConsumer):
                     self.room_group_name,
                     {
                         'type': 'update_game_players',
+                        'game': game.as_json(),
                         'players': [
                             {'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories,
                              'started': u.started} for u in game.game_players.all()],

@@ -44,7 +44,7 @@ export const gameReducer = (state = { ...gameInitialState }, action) => {
     case 'LEAVE_GAME':
       return { ...state, users: [...state.users] };
     case 'SET_GAME':
-      return { ...state, roomName: action.data.room_name, players: action.data.users };
+      return { ...state, game: action.data };
     case 'SHOW_GAMES':
       return { ...state, games: action.data };
     case 'UPDATE_GAME_PLAYERS':
