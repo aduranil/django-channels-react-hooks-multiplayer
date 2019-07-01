@@ -8,15 +8,32 @@ import { grommet } from 'grommet/themes';
 import { wsConnect } from '../modules/websocket';
 import { getGame, startRound, leaveGame } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
-import Timer from '../components/Timer';
 import ChatBox from '../components/ChatBox';
 import GameView from '../components/GameScreen';
 
 class Game extends React.Component {
+  state = {
+    time: 0,
+    start: 0,
+    isOn: false,
+  };
+
   componentDidMount() {
     const { id } = this.props;
     if (id) {
       this.connectAndJoin();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { game } = this.props;
+    if (
+      game
+      && prevProps.game
+      && game.round_started
+      && game.round_started !== prevProps.game.round_started
+    ) {
+      this.startTimer();
     }
   }
 
@@ -36,6 +53,30 @@ class Game extends React.Component {
   startRound = () => {
     const { id, dispatch } = this.props;
     dispatch(startRound(id));
+  };
+
+  startTimer = () => {
+    console.log('timer started');
+    this.setState({
+      time: this.state.time,
+      start: Date.now() - this.state.time,
+      isOn: true,
+    });
+    this.timer = setInterval(
+      () => this.setState({
+        time: Date.now() - this.state.start,
+      }),
+      1,
+    );
+  };
+
+  stopTimer = () => {
+    this.setState({ isOn: false });
+    clearInterval(this.timer);
+  };
+
+  resetTimer = () => {
+    this.setState({ time: 0 });
   };
 
   render() {
@@ -60,7 +101,7 @@ class Game extends React.Component {
               <Box gridArea="main">
                 <GameView game={game} />
                 <Grid columns="small">
-                  <Timer />
+                  <Text>{this.state.time}</Text>
                   <Button onClick={this.leaveGame} label="leave game" />
                   <Button onClick={this.startRound} label="start game" />
                 </Grid>

@@ -30,6 +30,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def send_update_game_players(self, game):
+        game = Game.objects.get(id=self.id)
         return async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
@@ -65,6 +66,7 @@ class GameConsumer(WebsocketConsumer):
             message = '{} left'.format(user.username)
             Message.objects.create(message=message, game=game, username=user.username, message_type="action")
             game_player.delete()
+            game.check_round_status()
             self.send_update_game_players(game)
 
     def update_game_players(self, username):
@@ -91,6 +93,7 @@ class GameConsumer(WebsocketConsumer):
         game_player = GamePlayer.objects.get(user=user)
         game_player.started = True
         game_player.save()
+        game.check_round_status()
         self.send_update_game_players(game)
 
 

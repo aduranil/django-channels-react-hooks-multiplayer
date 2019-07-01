@@ -1,4 +1,6 @@
 import React from 'react';
+import { Text } from 'grommet';
+import { connect } from 'react-redux';
 
 class Timer extends React.Component {
   state = {
@@ -8,6 +10,7 @@ class Timer extends React.Component {
   };
 
   startTimer = () => {
+    console.log('timer started');
     this.setState({
       time: this.state.time,
       start: Date.now() - this.state.time,
@@ -21,6 +24,20 @@ class Timer extends React.Component {
     );
   };
 
+  componentDidUpdate(prevProps) {
+    const { game } = this.props;
+    console.log(prevProps);
+    console.log(game);
+    if (
+      game
+      && prevProps.game
+      && game.round_started
+      && game.round_started !== prevProps.game.round_started
+    ) {
+      this.startTimer();
+    }
+  }
+
   stopTimer = () => {
     this.setState({ isOn: false });
     clearInterval(this.timer);
@@ -33,10 +50,14 @@ class Timer extends React.Component {
   render() {
     return (
       <div>
-        <h3>{this.state.time}</h3>
+        <Text>{this.state.time}</Text>
       </div>
     );
   }
 }
 
-export default Timer;
+const s2p = (state, ownProps) => ({
+  game: state.games.game,
+});
+
+export default connect(s2p)(Timer);
