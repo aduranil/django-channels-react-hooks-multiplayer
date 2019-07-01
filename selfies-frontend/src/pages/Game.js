@@ -1,38 +1,22 @@
 import React from 'react';
 import {
-  Box, Text, Button, Grid, Grommet, TextArea,
+  Box, Text, Button, Grid,
 } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect } from '../modules/websocket';
 import { getGame, startRound, leaveGame } from '../modules/game';
-import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 import { Phone } from '../images/iPhone';
 import Timer from '../components/Timer';
-
-const theme = {
-  button: {
-    padding: {
-      horizontal: '6px',
-    },
-  },
-};
+import ChatBox from '../components/ChatBox';
 
 class Game extends React.Component {
-  state = {
-    message: '',
-  };
-
   componentDidMount() {
     const { id } = this.props;
     if (id) {
       this.connectAndJoin();
     }
-  }
-
-  componentDidUpdate() {
-    this.scrollToBottom();
   }
 
   connectAndJoin = async () => {
@@ -48,61 +32,17 @@ class Game extends React.Component {
     history.push('/games');
   };
 
-  handleChange = (e) => {
-    const { value } = e.target;
-    this.setState({ message: value });
-  };
-
-  handleSubmit = () => {
-    const { dispatch } = this.props;
-    const { message } = this.state;
-    dispatch(newMessage(message));
-    this.setState({ message: '' });
-  };
-
-  scrollToBottom = () => {
-    this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
-  };
-
   startRound = () => {
     const { id, dispatch } = this.props;
     dispatch(startRound(id));
   };
 
   render() {
-    const { id, messages, game } = this.props;
-    const { message } = this.state;
+    const { id, game } = this.props;
     if (id) {
       return (
         <React.Fragment>
-          <Box
-            round="xsmall"
-            width="600px"
-            height="300px"
-            pad="medium"
-            elevation="medium"
-            background="accent-2"
-            overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
-          >
-            {game
-              && game.messages.map(msg => (
-                <Grid key={msg.id} columns={{ count: 2 }}>
-                  <Grommet theme={theme}>
-                    <Text>
-                      {' '}
-                      {msg.message_type === 'action' ? null : `${msg.user.username}: `}
-                      {msg.message}
-                    </Text>
-                  </Grommet>
-                </Grid>
-              ))}
-            <div
-              style={{ float: 'left', clear: 'both' }}
-              ref={(el) => {
-                this.messagesEnd = el;
-              }}
-            />
-          </Box>
+          <ChatBox game={game} />
           <Box
             width="800px"
             height="500px"
@@ -125,16 +65,6 @@ class Game extends React.Component {
             </Grid>
           </Box>
 
-          <Box round="xsmall" width="600px" pad="medium" elevation="medium" background="accent-2">
-            <Grid gap="small" columns={['450px', 'xsmall']}>
-              <Box>
-                <TextArea onChange={this.handleChange} value={message} />
-              </Box>
-              <Box justify="center" align="center" alignContent="center">
-                <Button onClick={this.handleSubmit} label="send" />
-              </Box>
-            </Grid>
-          </Box>
           <Button onClick={this.leaveGame} label="leave game" />
           <Button onClick={this.startRound} label="start game" />
         </React.Fragment>
