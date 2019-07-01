@@ -73,14 +73,12 @@ class GameConsumer(WebsocketConsumer):
 
     def update_game_players(self, username):
         self.send(text_data=json.dumps(username))
-        print(username)
 
     def get_messages(self, messages):
         self.send(text_data=json.dumps(messages))
 
     def receive(self, text_data):
         data = json.loads(text_data)
-        print(data)
         self.commands[data['command']](self, data)
 
     def new_message(self, data):
