@@ -3,7 +3,7 @@ import {
   Grid, Text, Grommet, Box, TextArea, Button,
 } from 'grommet';
 import { connect } from 'react-redux';
-import { newMessage } from '../modules/message';
+import { newMessage } from '../modules/game';
 
 const theme = {
   button: {

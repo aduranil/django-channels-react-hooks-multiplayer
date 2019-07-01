@@ -3,6 +3,7 @@ const headers = {
   Authorization: `Token ${localStorage.getItem('token')}`,
 };
 
+export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
 export const updateGame = json => ({ type: 'SET_GAME', data: json });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
