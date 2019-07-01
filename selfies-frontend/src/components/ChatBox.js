@@ -44,9 +44,6 @@ class ChatBox extends React.Component {
     return (
       <React.Fragment>
         <Box
-          round="xsmall"
-          width="600px"
-          height="300px"
           pad="medium"
           elevation="medium"
           background="accent-2"
@@ -71,8 +68,8 @@ class ChatBox extends React.Component {
             }}
           />
         </Box>
-        <Box round="xsmall" width="600px" pad="medium" elevation="medium" background="accent-2">
-          <Grid gap="small" columns={['450px', 'xsmall']}>
+        <Box pad="medium" elevation="medium" background="accent-2">
+          <Grid gap="small" columns={['small', 'xsmall']}>
             <Box>
               <TextArea onChange={this.handleChange} value={message} />
             </Box>

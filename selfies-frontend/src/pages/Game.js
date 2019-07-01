@@ -1,15 +1,17 @@
 import React from 'react';
 import {
-  Box, Text, Button, Grid,
+  Box, Text, Button, Grid, Grommet,
 } from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { grommet } from 'grommet/themes';
 import { wsConnect } from '../modules/websocket';
 import { getGame, startRound, leaveGame } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
 import { Phone } from '../images/iPhone';
 import Timer from '../components/Timer';
 import ChatBox from '../components/ChatBox';
+import GameView from '../components/GameScreen';
 
 class Game extends React.Component {
   componentDidMount() {
@@ -42,31 +44,28 @@ class Game extends React.Component {
     if (id) {
       return (
         <React.Fragment>
-          <ChatBox game={game} />
-          <Box
-            width="800px"
-            height="500px"
-            round="xsmall"
-            pad="medium"
-            elevation="medium"
-            background="accent-2"
-          >
-            <Timer />
-            <Grid gap="small" columns="100px" justify="center">
-              {game
-                && game.users.map(player => (
-                  <Box key={player.id}>
-                    {player.username}
-                    {player.started ? ' !' : ' ?'}
-                    <Phone />
-                    {' '}
-                  </Box>
-                ))}
-            </Grid>
-          </Box>
+          <Grommet theme={grommet} full>
+            <Grid
+              fill
+              areas={[
+                { name: 'nav', start: [0, 0], end: [0, 0] },
+                { name: 'main', start: [1, 0], end: [1, 0] },
+              ]}
+              columns={['medium', 'flex']}
+              rows={['flex']}
+              gap="small"
+            >
+              <Box gridArea="nav">
+                <ChatBox game={game} />
+              </Box>
+              <Box gridArea="main">
+                <GameView game={game} />
 
-          <Button onClick={this.leaveGame} label="leave game" />
-          <Button onClick={this.startRound} label="start game" />
+                <Button onClick={this.leaveGame} label="leave game" />
+                <Button onClick={this.startRound} label="start game" />
+              </Box>
+            </Grid>
+          </Grommet>
         </React.Fragment>
       );
     }
