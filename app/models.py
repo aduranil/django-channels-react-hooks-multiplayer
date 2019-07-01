@@ -72,3 +72,13 @@ class Message(models.Model):
             created_at=json.dumps(self.created_at, cls=DjangoJSONEncoder),
             username=self.username,
         )
+
+
+class Round(models.Model):
+    game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
+    started = models.BooleanField(default=False)
+
+
+class Moves(models.Model):
+    move = models.CharField(max_length=200, default=None)
+    
