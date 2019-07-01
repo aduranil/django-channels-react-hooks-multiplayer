@@ -9,6 +9,7 @@ import { getGame, startRound, leaveGame } from '../modules/game';
 import { newMessage } from '../modules/message';
 import withAuth from '../hocs/authWrapper';
 import { Phone } from '../images/iPhone';
+import Timer from '../components/Timer';
 
 const theme = {
   button: {
@@ -104,13 +105,14 @@ class Game extends React.Component {
           </Box>
           <Box
             width="800px"
-            height="300px"
+            height="500px"
             round="xsmall"
             pad="medium"
             elevation="medium"
             background="accent-2"
           >
-            <Grid gap="small" columns="100px" rows="medium" justify="center">
+            <Timer />
+            <Grid gap="small" columns="100px" justify="center">
               {Array.isArray(players)
                 && players.map(player => (
                   <Box key={player.id}>
