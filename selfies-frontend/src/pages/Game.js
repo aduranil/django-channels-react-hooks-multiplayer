@@ -70,7 +70,7 @@ class Game extends React.Component {
   };
 
   render() {
-    const { id, messages, players } = this.props;
+    const { id, messages, game } = this.props;
     const { message } = this.state;
     if (id) {
       return (
@@ -84,8 +84,8 @@ class Game extends React.Component {
             background="accent-2"
             overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
           >
-            {Array.isArray(messages.messages)
-              && messages.messages.map(msg => (
+            {game
+              && game.messages.map(msg => (
                 <Grid key={msg.id} columns={{ count: 2 }}>
                   <Grommet theme={theme}>
                     <Text>
@@ -113,8 +113,8 @@ class Game extends React.Component {
           >
             <Timer />
             <Grid gap="small" columns="100px" justify="center">
-              {Array.isArray(players)
-                && players.map(player => (
+              {game
+                && game.users.map(player => (
                   <Box key={player.id}>
                     {player.username}
                     {player.started ? ' !' : ' ?'}
@@ -176,6 +176,6 @@ const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
   messages: state.messages,
   username: state.auth.username,
-  players: state.games.players,
+  game: state.games.game,
 });
 export default withAuth(connect(s2p)(Game));

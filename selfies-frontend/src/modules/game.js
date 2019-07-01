@@ -3,7 +3,7 @@ const headers = {
   Authorization: `Token ${localStorage.getItem('token')}`,
 };
 
-export const updateGamePlayers = json => ({ type: 'UPDATE_GAME_PLAYERS', data: json });
+export const updateGame = json => ({ type: 'SET_GAME', data: json });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
 const API_ROOT = 'http://localhost:8000';
@@ -47,8 +47,6 @@ export const gameReducer = (state = { ...gameInitialState }, action) => {
       return { ...state, game: action.data };
     case 'SHOW_GAMES':
       return { ...state, games: action.data };
-    case 'UPDATE_GAME_PLAYERS':
-      return { ...state, players: action.data };
     default:
       return state;
   }

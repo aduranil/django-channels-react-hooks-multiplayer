@@ -29,23 +29,18 @@ class GameConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-    def send_update_game_players(self, game, messages):
+    def send_update_game_players(self, game):
         return async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'update_game_players',
                         'game': game.as_json(),
-                        'players': [
-                            {'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories,
-                             'started': u.started} for u in game.game_players.all()],
-                        'messages': [m.as_json() for m in messages]
                     }
                 )
 
     def join_game(self):
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
-        messages = game.messages.all().order_by('created_at')
         if not hasattr(user, 'gameplayer'):
             game_player = GamePlayer.objects.create(user=user, game=game)
             message = '{} joined'.format(user.username)
@@ -55,7 +50,7 @@ class GameConsumer(WebsocketConsumer):
                 game_player=game_player,
                 message_type="action"
             )
-        self.send_update_game_players(game, messages)
+        self.send_update_game_players(game)
 
     def leave_game(self, data):
         user = self.scope['user']
@@ -63,20 +58,16 @@ class GameConsumer(WebsocketConsumer):
         game_player = GamePlayer.objects.get(user=user)
         # retrieve the updated game
         game = Game.objects.get(id=self.id)
-        messages = game.messages.all().order_by('created_at')
         if game.game_players.all().count() == 1:
             game.delete()
         else:
             message = '{} left'.format(user.username)
             Message.objects.create(message=message, game=game, game_player=game_player, message_type="action")
             game_player.delete()
-            self.send_update_game_players(game, messages)
+            self.send_update_game_players(game)
 
     def update_game_players(self, username):
         self.send(text_data=json.dumps(username))
-
-    def get_messages(self, messages):
-        self.send(text_data=json.dumps(messages))
 
     def receive(self, text_data):
         data = json.loads(text_data)
@@ -92,15 +83,7 @@ class GameConsumer(WebsocketConsumer):
             game=game,
             game_player=game_player,
         )
-        messages = game.messages.all().order_by('created_at')
-        updated_messages = [m.as_json() for m in messages]
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            {
-                'type': 'get_messages',
-                'messages': updated_messages,
-            }
-        )
+        self.send_update_game_players(game)
 
     def start_round(self, data):
         user = self.scope['user']
@@ -113,8 +96,7 @@ class GameConsumer(WebsocketConsumer):
 
     commands = {
         'update_game_players': update_game_players,
-        'leave_game': leave_game,
+        'LEAVE_GAME': leave_game,
         'NEW_MESSAGE': new_message,
-        'get_messages': get_messages,
         'START_ROUND': start_round,
     }

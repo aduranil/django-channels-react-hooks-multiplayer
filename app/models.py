@@ -19,7 +19,8 @@ class Game(models.Model):
             game_status=self.game_status,
             room_name=self.room_name,
             round_started=self.round_started,
-            users=[{'id': u.user.id, 'username': u.user.username, 'followers': u.followers, 'stories': u.stories} for u in self.game_players.all()]
+            users=[u.as_json() for u in self.game_players.all()],
+            messages=[m.as_json() for m in self.messages.all()]
         )
 
 
@@ -33,6 +34,14 @@ class GamePlayer(models.Model):
     )
     started = models.BooleanField(default=False)
     game = models.ForeignKey(Game, related_name="game_players", on_delete=models.CASCADE)
+
+    def as_json(self):
+        return dict(
+            followers=self.followers,
+            stories=self.stories,
+            username= self.user.username,
+            started=self.started
+        )
 
 
 class Message(models.Model):
@@ -48,6 +57,5 @@ class Message(models.Model):
             message=self.message,
             message_type=self.message_type,
             created_at=json.dumps(self.created_at, cls=DjangoJSONEncoder),
-            game={'id': self.game.id, 'room_name': self.game.room_name},
             user={'id': self.game_player.user.id, 'username': self.game_player.user.username},
         )
