@@ -36,6 +36,7 @@ class Game(models.Model):
                 return False
         self.round_started = True
         self.save()
+        return True
 
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=0)
@@ -74,11 +75,10 @@ class Message(models.Model):
         )
 
 
-class Round(models.Model):
-    game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
-    started = models.BooleanField(default=False)
-
-
-class Moves(models.Model):
-    move = models.CharField(max_length=200, default=None)
-    
+# class Round(models.Model):
+#     game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
+#     started = models.BooleanField(default=False)
+#
+#
+# class Moves(models.Model):
+#     move = models.CharField(max_length=200, default=None)

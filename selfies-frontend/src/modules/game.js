@@ -7,6 +7,7 @@ export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
 export const updateGame = json => ({ type: 'SET_GAME', data: json });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
+export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
 const API_ROOT = 'http://localhost:8000';
 
 export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`, {
@@ -38,7 +39,7 @@ export const getGame = id => dispatch => fetch(`${API_ROOT}/app/game/${id}`, {
     dispatch({ type: 'SET_GAME', data: json });
   });
 
-const gameInitialState = {};
+const gameInitialState = { time: null };
 
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {
@@ -48,6 +49,8 @@ export const gameReducer = (state = { ...gameInitialState }, action) => {
       return { ...state, game: action.data };
     case 'SHOW_GAMES':
       return { ...state, games: action.data };
+    case 'UPDATE_TIMER':
+      return { ...state, time: action.time };
     default:
       return state;
   }

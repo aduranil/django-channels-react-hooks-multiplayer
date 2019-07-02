@@ -1,5 +1,5 @@
 import * as actions from '../modules/websocket';
-import { updateGame } from '../modules/game';
+import { updateGame, updateTimer } from '../modules/game';
 
 const socketMiddleware = (function () {
   let socket = null;
@@ -29,6 +29,9 @@ const socketMiddleware = (function () {
     switch (payload.type) {
       case 'update_game_players':
         store.dispatch(updateGame(payload.game));
+        break;
+      case 'update_timer':
+        store.dispatch(updateTimer(payload.time));
         break;
       default:
         console.log('Received unknown server payload', payload);

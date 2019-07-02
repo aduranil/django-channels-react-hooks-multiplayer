@@ -2,6 +2,8 @@
 import json
 
 from asgiref.sync import async_to_sync
+import time
+import threading
 from channels.generic.websocket import WebsocketConsumer
 
 from .models import Game, Message, GamePlayer
@@ -31,7 +33,7 @@ class GameConsumer(WebsocketConsumer):
 
     def send_update_game_players(self, game):
         game = Game.objects.get(id=self.id)
-        return async_to_sync(self.channel_layer.group_send)(
+        async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'update_game_players',
@@ -88,17 +90,36 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players(game)
 
     def start_round(self, data):
+        """Checks if the user has opted in to starting the game"""
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
         game_player = GamePlayer.objects.get(user=user)
         game_player.started = True
         game_player.save()
-        game.check_round_status()
         self.send_update_game_players(game)
+        game_status = game.check_round_status()
+        if game_status:
+            i = 0
+            while i <=60:
+                threading.Timer(10, self.update_timer_data, [i]).start()
+                i += 1
 
+    def update_timer(self, timedata):
+        """send timer data"""
+        self.send(text_data=json.dumps(timedata))
+
+    def update_timer_data(self, data):
+        async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'update_timer',
+                        'time': str(data),
+                    }
+                )
 
     commands = {
         'update_game_players': update_game_players,
+        'update_timer': update_timer,
         'LEAVE_GAME': leave_game,
         'NEW_MESSAGE': new_message,
         'START_ROUND': start_round,
