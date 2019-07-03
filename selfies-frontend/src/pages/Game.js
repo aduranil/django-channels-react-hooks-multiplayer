@@ -59,10 +59,10 @@ class Game extends React.Component {
               </Box>
               <Box gridArea="main">
                 <GameView game={game} />
-                <Grid columns="small">
+                <Grid columns="140px">
+                  <Button margin="xsmall" onClick={this.leaveGame} label="leave game" />
+                  <Button margin="xsmall" onClick={this.startRound} label="start game" />
                   <Text>{time}</Text>
-                  <Button onClick={this.leaveGame} label="leave game" />
-                  <Button onClick={this.startRound} label="start game" />
                 </Grid>
               </Box>
             </Grid>

@@ -5,11 +5,11 @@ import { Phone } from '../images/iPhone';
 const GameView = ({ game }) => (
   <Box
     width="800px"
+    background="light-3"
     height="500px"
     round="xsmall"
     pad="medium"
     elevation="medium"
-    background="accent-2"
   >
     <Grid gap="small" columns="100px" justify="center">
       {game

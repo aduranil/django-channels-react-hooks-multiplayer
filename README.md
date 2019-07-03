@@ -1,8 +1,23 @@
-# selfies 2020
+![SELFIES](https://i.ibb.co/CK6K28b/Screen-Shot-2019-07-03-at-2-44-12-PM.png)
 
-## Every girl starts with 0 followers. The girl that gets to 100 followers first wins and wins an advertisement deal with flat tummy tea! Everyone else sets their account to private :(
+## About
 
-Each round is 10 seconds
+Every girl starts with 0 followers. The girl that gets to 100 followers first wins and wins an advertisement deal with flat tummy tea! Everyone else sets their account to private :(
+
+This is my magnum opus lol....this is currently only 20% done but has a decent amount of functionality
+
+how to run:
+
+```
+docker-compose up -d
+python manage.py runserver
+cd selfies-frontend
+yarn start
+```
+
+![game_screen](https://i.ibb.co/71DDchG/Screen-Shot-2019-07-03-at-7-31-10-PM.png)
+
+![all_games](https://i.ibb.co/qmTPbwM/Screen-Shot-2019-07-03-at-7-17-05-PM.png)
 
 ## Moves
 

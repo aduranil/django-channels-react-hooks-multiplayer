@@ -47,6 +47,7 @@ class ChatBox extends React.Component {
           pad="medium"
           elevation="medium"
           background="accent-2"
+          height="385px"
           overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
         >
           {game
@@ -68,8 +69,8 @@ class ChatBox extends React.Component {
             }}
           />
         </Box>
-        <Box pad="medium" elevation="medium" background="accent-2">
-          <Grid gap="small" columns={['small', 'xsmall']}>
+        <Box pad="medium" elevation="medium" background="accent-1">
+          <Grid gap="small" columns={['240px', 'xsmall']}>
             <Box>
               <TextArea onChange={this.handleChange} value={message} />
             </Box>
