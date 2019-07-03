@@ -12,20 +12,22 @@ class Game(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     round_started = models.BooleanField(default=False)
-
+    is_joinable = models.BooleanField(default=True)
     def as_json(self):
         return dict(
             id=self.id,
             game_status=self.game_status,
+            is_joinable=self.is_joinable,
             room_name=self.room_name,
             round_started=self.round_started,
             users=[u.as_json() for u in self.game_players.all()],
             messages=[m.as_json() for m in self.messages.all()]
         )
 
-    def check_round_status(self):
+    def can_start_game(self):
         """See if the round can be started. Requires at least 3 players and that all players in the
         room have started"""
+
         if self.game_players.all().count() <= 2:
             self.round_started = False
             self.save()
@@ -35,8 +37,18 @@ class Game(models.Model):
             if player.started is False:
                 return False
         self.round_started = True
+        self.is_joinable = False # the game is not joinable if the round has started
         self.save()
         return True
+
+    def check_joinability(self):
+        if self.game_players.all().count() == 6:
+            self.is_joinable = False
+            self.save()
+        else:
+            self.is_joinable = True
+            self.save()
+
 
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=0)

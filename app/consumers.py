@@ -44,7 +44,7 @@ class GameConsumer(WebsocketConsumer):
     def join_game(self):
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
-        if not hasattr(user, 'gameplayer'):
+        if not hasattr(user, 'gameplayer') and game.is_joinable:
             GamePlayer.objects.create(user=user, game=game)
             message = '{} joined'.format(user.username)
             Message.objects.create(
@@ -53,7 +53,8 @@ class GameConsumer(WebsocketConsumer):
                 username=user.username,
                 message_type="action"
             )
-        game.check_round_status()
+            game.check_joinability()
+
         self.send_update_game_players(game)
 
     def leave_game(self, data):
@@ -68,7 +69,7 @@ class GameConsumer(WebsocketConsumer):
             message = '{} left'.format(user.username)
             Message.objects.create(message=message, game=game, username=user.username, message_type="action")
             game_player.delete()
-            game.check_round_status()
+            game.check_joinability()
             self.send_update_game_players(game)
 
     def update_game_players(self, username):
@@ -97,23 +98,32 @@ class GameConsumer(WebsocketConsumer):
         game_player.started = True
         game_player.save()
         self.send_update_game_players(game)
-        game_status = game.check_round_status()
-        if game_status:
-            i = 0
-            while i <=60:
-                threading.Timer(10, self.update_timer_data, [i]).start()
-                i += 1
+        if game.can_start_game():
+            threading.Thread(target=self.update_timer_data).start()
 
     def update_timer(self, timedata):
         """send timer data"""
         self.send(text_data=json.dumps(timedata))
 
-    def update_timer_data(self, data):
+    def update_timer_data(self):
+        """countdown the timer for the game"""
+        i = 60
+        while i >= 0:
+            time.sleep(1)
+            async_to_sync(self.channel_layer.group_send)(
+                        self.room_group_name,
+                        {
+                            'type': 'update_timer',
+                            'time': str(i),
+                        }
+                    )
+            i -= 1
+        # reset timer back to null
         async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'update_timer',
-                        'time': str(data),
+                        'time': None,
                     }
                 )
 

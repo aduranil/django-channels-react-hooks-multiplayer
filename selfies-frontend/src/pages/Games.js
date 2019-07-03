@@ -69,6 +69,7 @@ class Games extends React.Component {
                     value={game.id}
                     margin={{ right: '5px', bottom: '5px' }}
                     label="join"
+                    disabled={game.is_joinable === false}
                   />
                   <Text>
                     {game.room_name}
