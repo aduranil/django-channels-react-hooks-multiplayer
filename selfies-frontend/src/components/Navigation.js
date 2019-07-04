@@ -5,6 +5,7 @@ import {
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { logoutUser } from '../modules/account';
+import { wsDisconnect } from '../modules/websocket';
 
 const theme = {
   button: {
@@ -15,9 +16,10 @@ const theme = {
 };
 
 class Navigation extends React.Component {
-  onLogout = () => {
-    const { dispatch, history } = this.props;
-    dispatch(logoutUser());
+  onLogout = async () => {
+    const { dispatch, history, host } = this.props;
+    await dispatch(logoutUser());
+    await dispatch(wsDisconnect(host));
     history.push('/loginorsignup');
   };
 
@@ -33,4 +35,8 @@ class Navigation extends React.Component {
   }
 }
 
-export default connect()(withRouter(Navigation));
+const s2p = state => ({
+  host: state.websocket.host,
+});
+
+export default connect(s2p)(withRouter(Navigation));

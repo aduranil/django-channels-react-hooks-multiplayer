@@ -70,7 +70,7 @@ const socketMiddleware = (function () {
           socket.close();
         }
         socket = null;
-
+        console.log('websocket closed');
         // Tell the store that we've been disconnected...
         store.dispatch(actions.wsDisconnected(action.host));
 

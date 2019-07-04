@@ -5,7 +5,7 @@ import {
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { grommet } from 'grommet/themes';
-import { wsConnect } from '../modules/websocket';
+import { wsConnect, wsDisconnect } from '../modules/websocket';
 import { getGame, startRound, leaveGame } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
 import ChatBox from '../components/ChatBox';
@@ -28,7 +28,9 @@ class Game extends React.Component {
 
   leaveGame = async () => {
     const { id, dispatch, history } = this.props;
+    const host = `ws://127.0.0.1:8000/ws/game/${id}?token=${localStorage.getItem('token')}`;
     await dispatch(leaveGame(id));
+    await dispatch(wsDisconnect(host));
     history.push('/games');
   };
 
@@ -39,7 +41,6 @@ class Game extends React.Component {
 
   render() {
     const { id, game, time } = this.props;
-    console.log(time);
     if (id) {
       return (
         <React.Fragment>
