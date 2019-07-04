@@ -14,7 +14,6 @@ class GameCreateView(APIView):
     def post(self, request):
         user = request.user
         game = Game.objects.create(room_name=request.data['room_name'])
-        GamePlayer.objects.create(user=user, game=game)
         return HttpResponse(json.dumps(game.as_json()))
 
 
