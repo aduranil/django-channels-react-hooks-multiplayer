@@ -43,8 +43,6 @@ const gameInitialState = { time: null };
 
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {
-    case 'LEAVE_GAME':
-      return { ...state, users: [...state.users] };
     case 'SET_GAME':
       return { ...state, game: action.data };
     case 'SHOW_GAMES':

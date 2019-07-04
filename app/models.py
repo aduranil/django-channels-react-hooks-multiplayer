@@ -1,5 +1,4 @@
 # Create your models here.
-from datetime import datetime
 import json
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
@@ -13,6 +12,7 @@ class Game(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     round_started = models.BooleanField(default=False)
     is_joinable = models.BooleanField(default=True)
+
     def as_json(self):
         return dict(
             id=self.id,
@@ -25,8 +25,8 @@ class Game(models.Model):
         )
 
     def can_start_game(self):
-        """See if the round can be started. Requires at least 3 players and that all players in the
-        room have started"""
+        """See if the round can be started. Requires at least 3 players and
+        that all players in the room have started"""
 
         if self.game_players.all().count() <= 2:
             self.round_started = False
@@ -37,12 +37,15 @@ class Game(models.Model):
             if player.started is False:
                 return False
         self.round_started = True
-        self.is_joinable = False # the game is not joinable if the round has started
+        self.is_joinable = False  # game is not joinable if the round started
         self.save()
         return True
 
     def check_joinability(self):
         if self.game_players.all().count() == 6:
+            self.is_joinable = False
+            self.save()
+        elif self.round_started is True:
             self.is_joinable = False
             self.save()
         else:
@@ -59,19 +62,27 @@ class GamePlayer(models.Model):
         primary_key=True,
     )
     started = models.BooleanField(default=False)
-    game = models.ForeignKey(Game, related_name="game_players", on_delete=models.CASCADE)
+    game = models.ForeignKey(
+        Game,
+        related_name="game_players",
+        on_delete=models.CASCADE,
+    )
 
     def as_json(self):
         return dict(
             followers=self.followers,
             stories=self.stories,
-            username= self.user.username,
-            started=self.started
+            username=self.user.username,
+            started=self.started,
         )
 
 
 class Message(models.Model):
-    game = models.ForeignKey(Game, related_name="messages", on_delete=models.CASCADE)
+    game = models.ForeignKey(
+        Game,
+        related_name="messages",
+        on_delete=models.CASCADE,
+    )
     username = models.CharField(max_length=200, default=None)
     message = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)

@@ -15,7 +15,7 @@ class GameCreateView(APIView):
         user = request.user
         game = Game.objects.create(room_name=request.data['room_name'])
         GamePlayer.objects.create(user=user, game=game)
-        return HttpResponse(json.dumps(game.as_json()), content_type="application/json")
+        return HttpResponse(json.dumps(game.as_json()))
 
 
 class GameListView(APIView):
@@ -34,4 +34,4 @@ class GameGetView(APIView):
 
     def get(self, request, id):
         game = Game.objects.get(id=id)
-        return HttpResponse(json.dumps(game.as_json()), content_type="application/json")
+        return HttpResponse(json.dumps(game.as_json()))

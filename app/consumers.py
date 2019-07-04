@@ -67,7 +67,12 @@ class GameConsumer(WebsocketConsumer):
             game.delete()
         else:
             message = '{} left'.format(user.username)
-            Message.objects.create(message=message, game=game, username=user.username, message_type="action")
+            Message.objects.create(
+                message=message,
+                game=game,
+                username=user.username,
+                message_type="action",
+            )
             game_player.delete()
             game.check_joinability()
             self.send_update_game_players(game)
