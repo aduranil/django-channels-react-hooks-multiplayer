@@ -8,6 +8,7 @@ export const updateGame = json => ({ type: 'SET_GAME', data: json });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
 export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
+export const makeMove = move => ({ type: 'MAKE_MOVE', move });
 const API_ROOT = 'http://localhost:8000';
 
 export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`, {

@@ -12,7 +12,6 @@ class GameCreateView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        user = request.user
         game = Game.objects.create(room_name=request.data['room_name'])
         return HttpResponse(json.dumps(game.as_json()))
 

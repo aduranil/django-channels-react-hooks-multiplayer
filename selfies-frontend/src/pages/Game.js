@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { grommet } from 'grommet/themes';
 import { wsConnect, wsDisconnect } from '../modules/websocket';
-import { getGame, startRound, leaveGame } from '../modules/game';
+import {
+  getGame, startRound, leaveGame, makeMove,
+} from '../modules/game';
 import withAuth from '../hocs/authWrapper';
 import ChatBox from '../components/ChatBox';
 import GameView from '../components/GameScreen';
@@ -39,6 +41,11 @@ class Game extends React.Component {
     dispatch(startRound(id));
   };
 
+  makeMove = () => {
+    const { dispatch } = this.props;
+    dispatch(makeMove('SELFIE'));
+  };
+
   render() {
     const { id, game, time } = this.props;
     if (id) {
@@ -61,6 +68,7 @@ class Game extends React.Component {
               <Box gridArea="main">
                 <GameView game={game} />
                 <Grid columns="140px">
+                  <Button margin="xsmall" onClick={this.makeMove} label="Post a selfie" />
                   <Button margin="xsmall" onClick={this.leaveGame} label="leave game" />
                   <Button margin="xsmall" onClick={this.startRound} label="start game" />
                   <Text>{time}</Text>

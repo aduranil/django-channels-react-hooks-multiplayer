@@ -8,23 +8,21 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   redis:
-    image: redis:3.2.8
+    image: redis:latest
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/selfies
     ports:
-      - "6379:6379"
+      - "8000:8000"
     expose:
-      - 6379
-  # web:
-  #   build: .
-  #   command: python manage.py runserver 0.0.0.0:8000
-  #   volumes:
-  #     - .:/selfies/
-  #   ports:
-  #     - "8000:8000"
-  #   expose:
-  #     - 8000
-  #   depends_on:
-  #     - db
-  #     - redis
+      - 8000
+    links:
+      - redis
+    depends_on:
+      - db
+      - redis
 
 volumes:
   postgres_data:

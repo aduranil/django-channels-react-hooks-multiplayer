@@ -98,10 +98,16 @@ class Message(models.Model):
         )
 
 
-# class Round(models.Model):
-#     game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
-#     started = models.BooleanField(default=False)
-#
-#
-# class Moves(models.Model):
-#     move = models.CharField(max_length=200, default=None)
+class Round(models.Model):
+    game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
+    started = models.BooleanField(default=False)
+
+    def as_json(self):
+        return dict(id=self.id, started=self.started)
+
+
+class Move(models.Model):
+    round = models.ForeignKey(Round, related_name="moves", on_delete=models.CASCADE)
+    action_type = models.CharField(max_length=200)
+    player = models.ForeignKey(GamePlayer, related_name="game_player", on_delete=models.CASCADE)
+    victim = models.ForeignKey(GamePlayer, related_name="victim", blank=True, null=True, on_delete=models.CASCADE)

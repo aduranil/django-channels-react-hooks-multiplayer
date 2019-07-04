@@ -6,7 +6,7 @@ import time
 import threading
 from channels.generic.websocket import WebsocketConsumer
 
-from .models import Game, Message, GamePlayer
+from .models import Game, Message, GamePlayer, Round, Move
 
 
 class GameConsumer(WebsocketConsumer):
@@ -104,10 +104,12 @@ class GameConsumer(WebsocketConsumer):
         game_player.save()
         self.send_update_game_players(game)
         if game.can_start_game():
+            # start the timer in another thread
+            Round.objects.create(game=game, started=True)
             threading.Thread(target=self.update_timer_data).start()
 
     def update_timer(self, timedata):
-        """send timer data"""
+        """send timer data to the frontend"""
         self.send(text_data=json.dumps(timedata))
 
     def update_timer_data(self):
@@ -132,10 +134,17 @@ class GameConsumer(WebsocketConsumer):
                     }
                 )
 
+    def make_move(self, data):
+        print('noooo')
+        print('nevermind')
+        print('received')
+        print('cool')
+
     commands = {
         'update_game_players': update_game_players,
         'update_timer': update_timer,
         'LEAVE_GAME': leave_game,
         'NEW_MESSAGE': new_message,
         'START_ROUND': start_round,
+        'MAKE_MOVE': make_move,
     }
