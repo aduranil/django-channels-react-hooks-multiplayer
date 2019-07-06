@@ -71,7 +71,7 @@ class RoundFactory(factory.django.DjangoModelFactory):
 
 class MoveFactory(factory.django.DjangoModelFactory):
     round = factory.SubFactory(RoundFactory)
-    action_type = "do_nothing"
+    action_type = "dont_post"
     player = factory.SubFactory(GamePlayerFactory)
     victim = factory.SubFactory(GamePlayerFactory)
 

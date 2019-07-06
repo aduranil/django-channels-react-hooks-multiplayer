@@ -105,6 +105,19 @@ class Round(models.Model):
     def as_json(self):
         return dict(id=self.id, started=self.started)
 
+    def tabulate_round(self):
+        POST_SELFIE = 0
+        POST_GROUP_SELFIE = 0
+        POST_STORY = 0
+        GO_LIVE = 0
+        LEAVE_COMMENT = 0
+        DONT_POST = 0
+        for move in self.moves.all():
+            if move.action_type == move.POST_SELFIE:
+                move.player.followers = move.player.followers + 5
+                POST_SELFIE += 1
+                move.player.save()
+
 
 class Move(models.Model):
     POST_SELFIE = "post_selfie"
@@ -113,7 +126,6 @@ class Move(models.Model):
     GO_LIVE = "go_live"
     LEAVE_COMMENT = "leave_comment"
     DONT_POST = "dont_post"
-    DO_NOTHING = "do_nothing"
 
     ACTION_TYPES = (
         (POST_SELFIE, "Post a selfie"),
@@ -122,10 +134,9 @@ class Move(models.Model):
         (GO_LIVE, "Go live"),
         (LEAVE_COMMENT, "Leave a comment"),
         (DONT_POST, "Don't post"),
-        (DO_NOTHING, "Do nothing")
     )
 
     round = models.ForeignKey(Round, related_name="moves", on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=200, choices=ACTION_TYPES, default=DO_NOTHING)
+    action_type = models.CharField(max_length=200, choices=ACTION_TYPES, default=DONT_POST)
     player = models.ForeignKey(GamePlayer, related_name="game_player", on_delete=models.CASCADE)
     victim = models.ForeignKey(GamePlayer, related_name="victim", blank=True, null=True, on_delete=models.CASCADE)

@@ -31,3 +31,5 @@ Go live - if you go live, every girl that posted a photo or story while you were
 Leave a sarcastic comment. - If you leave a mean comment on another girl’s photo, she loses 5 followers and you gain 5. If two girls leave sarcastic comments on each others photos, nothing happens.
 
 Dont post. - Nothing happens to you. Defense against Go Live and sarcastic comments.
+
+If you don't move during a game, you automatically lose 5 followers or remain at 0.
