@@ -10,7 +10,6 @@ how to run:
 
 ```
 docker-compose up -d
-python manage.py runserver
 cd selfies-frontend
 yarn start
 ```

@@ -107,7 +107,25 @@ class Round(models.Model):
 
 
 class Move(models.Model):
+    POST_SELFIE = "post_selfie"
+    POST_GROUP_SELFIE = "post_group_selfie"
+    POST_STORY = "post_story"
+    GO_LIVE = "go_live"
+    LEAVE_COMMENT = "leave_comment"
+    DONT_POST = "dont_post"
+    DO_NOTHING = "do_nothing"
+
+    ACTION_TYPES = (
+        (POST_SELFIE, "Post a selfie"),
+        (POST_GROUP_SELFIE, "Post group selfie"),
+        (POST_STORY, "Post a story"),
+        (GO_LIVE, "Go live"),
+        (LEAVE_COMMENT, "Leave a comment"),
+        (DONT_POST, "Don't post"),
+        (DO_NOTHING, "Do nothing")
+    )
+
     round = models.ForeignKey(Round, related_name="moves", on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=200)
+    action_type = models.CharField(max_length=200, choices=ACTION_TYPES, default=DO_NOTHING)
     player = models.ForeignKey(GamePlayer, related_name="game_player", on_delete=models.CASCADE)
     victim = models.ForeignKey(GamePlayer, related_name="victim", blank=True, null=True, on_delete=models.CASCADE)
