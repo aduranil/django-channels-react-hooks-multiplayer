@@ -1,7 +1,3 @@
-frontend/node_modules/
-frontend/.cache/
 backend/app/__pycache__/
-frontend/dist/
-backend/chat/__pycache__/
-.cache
-__pycache__
+.cache/
+__pycache__/
