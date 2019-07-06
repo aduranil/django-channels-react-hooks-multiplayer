@@ -31,16 +31,7 @@ class GameConsumer(WebsocketConsumer):
             self.channel_name
         )
 
-    def send_update_game_players(self, game):
-        game = Game.objects.get(id=self.id)
-        async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'update_game_players',
-                        'game': game.as_json(),
-                    }
-                )
-
+    # GAME MOVE ACTIONS
     def join_game(self):
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
@@ -77,13 +68,6 @@ class GameConsumer(WebsocketConsumer):
             game.check_joinability()
             self.send_update_game_players(game)
 
-    def update_game_players(self, username):
-        self.send(text_data=json.dumps(username))
-
-    def receive(self, text_data):
-        data = json.loads(text_data)
-        self.commands[data['command']](self, data)
-
     def new_message(self, data):
         user = self.scope['user']
         game = Game.objects.get(id=self.id)
@@ -108,37 +92,55 @@ class GameConsumer(WebsocketConsumer):
             Round.objects.create(game=game, started=True)
             threading.Thread(target=self.update_timer_data).start()
 
-    def update_timer(self, timedata):
-        """send timer data to the frontend"""
-        self.send(text_data=json.dumps(timedata))
-
     def update_timer_data(self):
         """countdown the timer for the game"""
         i = 60
         while i >= 0:
             time.sleep(1)
-            async_to_sync(self.channel_layer.group_send)(
-                        self.room_group_name,
-                        {
-                            'type': 'update_timer',
-                            'time': str(i),
-                        }
-                    )
+            self.send_time(str(i))
             i -= 1
         # reset timer back to null
-        async_to_sync(self.channel_layer.group_send)(
-                    self.room_group_name,
-                    {
-                        'type': 'update_timer',
-                        'time': None,
-                    }
-                )
+        self.send_time(None)
 
     def make_move(self, data):
         print('noooo')
         print('nevermind')
         print('received')
         print('cool')
+
+    # ASYNC TO SYNC ACTIONS
+    def send_update_game_players(self, game):
+        """sends all game info as a json object when there's an update"""
+        game = Game.objects.get(id=self.id)
+        async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'update_game_players',
+                        'game': game.as_json(),
+                    }
+                )
+
+    def send_time(self, time):
+        """sends the current time on the clock"""
+        async_to_sync(self.channel_layer.group_send)(
+                    self.room_group_name,
+                    {
+                        'type': 'update_timer',
+                        'time': time,
+                    }
+                )
+
+    # SEND DATA ACTIONS
+    def update_game_players(self, username):
+        self.send(text_data=json.dumps(username))
+
+    def update_timer(self, timedata):
+        """send timer data to the frontend"""
+        self.send(text_data=json.dumps(timedata))
+
+    def receive(self, text_data):
+        data = json.loads(text_data)
+        self.commands[data['command']](self, data)
 
     commands = {
         'update_game_players': update_game_players,

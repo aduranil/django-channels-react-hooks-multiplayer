@@ -21,7 +21,7 @@ class Game(models.Model):
             room_name=self.room_name,
             round_started=self.round_started,
             users=[u.as_json() for u in self.game_players.all()],
-            messages=[m.as_json() for m in self.messages.all()]
+            messages=[m.as_json() for m in self.messages.all().order_by('created_at')]
         )
 
     def can_start_game(self):
