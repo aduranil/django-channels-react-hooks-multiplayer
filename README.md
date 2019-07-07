@@ -20,7 +20,7 @@ yarn start
 
 ## Moves
 
-Post a selfie - move that gains 10 followers. But if someone leaves a mean comment when you post a selfie, you lose 5 followers
+Post a selfie - move that gains 10 followers. But if someone leaves a mean comment when you post a selfie, you lose 5 followers. If two girls leave a mean comment, you lose 10 followers, and so on.
 
 Post a group selfie - if at least two people do a group photo, they both get 20 followers. But if someone leaves a sarcastic comment on their group photo, the girl who gets the sarcastic comment loses 15 followers. If you do a group selfie alone, its like a regular selfie.
 
@@ -32,4 +32,4 @@ Leave a sarcastic comment. - If you leave a mean comment on another girl’s pho
 
 Dont post. - Nothing happens to you. Defense against Go Live and sarcastic comments.
 
-If you don't move during a game, you automatically lose 5 followers or remain at 0.
+If you don't move during a game, you automatically lose 5 followers. You lose an additional 10 followers if anyone leaves a mean comment while you do nothing.
