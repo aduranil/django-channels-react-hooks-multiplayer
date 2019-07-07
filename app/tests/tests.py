@@ -62,7 +62,12 @@ def test_when_one_player_goes_live(
     gp = game_player_factory(game=game, user=users[0], started=True)
     gp2 = game_player_factory(game=game, user=users[1], started=True)
     gp3 = game_player_factory(game=game, user=users[2], started=True)
-    move_factory(round=round, action_type=Move.GO_LIVE, player=gp)
-    move_factory(round=round, action_type=Move.POST_SELFIE, player=gp2)
-    move_factory(round=round, action_type=Move.POST_SELFIE, player=gp3)
+    move_factory(round=round, action_type=Move.POST_SELFIE, player=gp)
+    move_factory(
+        round=round,
+        action_type=Move.LEAVE_COMMENT,
+        player=gp2,
+        victim=gp3,
+    )
+    move_factory(round=round, action_type=Move.POST_GROUP_SELFIE, player=gp3)
     round_results = round.tabulate_round()

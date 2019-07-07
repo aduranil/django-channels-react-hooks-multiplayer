@@ -28,7 +28,7 @@ Post a story - defensive move that can only be done 3 times. You gain 10 followe
 
 Go live - if you go live, every girl that posted a photo or story while you were live loses 15 followers. If two or more girls go live at the same time, they both lose 20 followers. The person going live gains 20.
 
-Leave a sarcastic comment. - If you leave a mean comment on another girl’s photo, she loses 5 followers and you gain 5. If two girls leave sarcastic comments on each others photos, nothing happens.
+Leave a sarcastic comment. - If you leave a mean comment on another girl’s photo, she loses 5 followers.
 
 Dont post. - Nothing happens to you. Defense against Go Live and sarcastic comments.
 

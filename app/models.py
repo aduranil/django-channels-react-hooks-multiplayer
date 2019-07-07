@@ -117,15 +117,19 @@ class Round(models.Model):
         DONT_POST = "dont_post"
         NO_MOVE = "no_move"
         GO_LIVE_DAMAGE = "go_live_damage"
-        MEAN_COMMENT_MULTIPLIER = 2
+        LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
+        LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
+
         POINTS = dict([
             (POST_SELFIE, 10),
             (POST_GROUP_SELFIE, 0),
             (POST_STORY, 10),
             (GO_LIVE, 20),
             (LEAVE_COMMENT, -5),
+            (LEAVE_COMMENT_NO_MOVE, -10),
+            (LEAVE_COMMENT_GROUP_SELFIE, -15),
             (DONT_POST, 0),
-            (NO_MOVE, -5)
+            (NO_MOVE, -5),
             (GO_LIVE_DAMAGE, -15)]
         )
 
@@ -181,21 +185,59 @@ class Round(models.Model):
                     player=player,
                 )
 
-        # TODO convert a group selfie into a regular selfie if there's just 1
+        # convert a group selfie into a regular selfie if there's just 1
+        if len(PLAYER_MOVES[POST_GROUP_SELFIE]) == 1:
+            PLAYER_MOVES[POST_SELFIE].append(PLAYER_MOVES[POST_GROUP_SELFIE][0])
+            PLAYER_MOVES[POST_GROUP_SELFIE] = []
 
         # calculate the points for go live
         if len(PLAYER_MOVES[GO_LIVE]) == 1:
+
             # if just one player went live, they get 20 points
             PLAYER_POINTS[PLAYER_MOVES[GO_LIVE][0]] = POINTS[GO_LIVE]
-            # everyone loses 15 followers who posted a story or selfie
+
+            # delete the user from the array now that their action is resolved
+            del PLAYER_MOVES[GO_LIVE][0]
+
+            # everyone loses 15 followers who posted a story
             for user in PLAYER_MOVES[POST_STORY]:
                 PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
+
+                # remove the user now since they have been resolved
+                PLAYER_MOVES[POST_STORY].remove(user)
+
+            # everyone loses 15 followers who posted a selfie
             for user in PLAYER_MOVES[POST_SELFIE]:
                 PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
         elif len(PLAYER_MOVES[GO_LIVE]) > 1:
             # if more than one player went live they all lose 20 points
             for user in PLAYER_MOVES[GO_LIVE]:
                 PLAYER_POINTS[user] -= POINTS[GO_LIVE]
+
+                # remove the user now since they have been resolved
+                PLAYER_MOVES[GO_LIVE].remove(user)
+
+        # calculate the points lost by any victims
+        for v in VICTIMS:
+            if v in PLAYER_MOVES[POST_SELFIE]:
+                # VICTIMS[v] is how many people did the victimizing action
+                # POINTS[LEAVE_COMMENT] is -5
+                PLAYER_POINTS[v] += (POINTS[LEAVE_COMMENT] * VICTIMS[v])
+
+                # remove the selfie poster, they are resolved
+                PLAYER_MOVES[POST_SELFIE].remove(v)
+            if v in PLAYER_MOVES[NO_MOVE]:
+                # POINTS[LEAVE_COMMENT_NO_MOVE] is -10
+                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT_NO_MOVE] * VICTIMS[v]
+
+                # remove the non-mover, they are resolved
+                PLAYER_MOVES[NO_MOVE].remove(v)
+            if v in PLAYER_MOVES[POST_GROUP_SELFIE]:
+                # POINTS[LEAVE_COMMENT_GROUP_SELFIE] is -15
+                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
+
+                # remove the group-selfier, they are resolved
+                PLAYER_MOVES[POST_GROUP_SELFIE].remove(v)
 
 
 class Move(models.Model):
