@@ -108,7 +108,6 @@ class Round(models.Model):
         return dict(id=self.id, started=self.started)
 
     def tabulate_round(self):
-        # TODO come up with a way to "resolve" a player's actions at a point
         POST_SELFIE = "post_selfie"
         POST_GROUP_SELFIE = "post_group_selfie"
         POST_STORY = "post_story"
@@ -212,9 +211,6 @@ class Round(models.Model):
                 # UPDATE their points
                 PLAYER_POINTS[user] = POINTS[GO_LIVE_DAMAGE]
 
-                # remove the user now since they have been resolved
-                PLAYER_MOVES[POST_STORY].remove(user)
-
             # everyone loses 15 followers who posted a selfie
             for user in PLAYER_MOVES[POST_SELFIE]:
                 # add points to existing total of 0
@@ -225,9 +221,6 @@ class Round(models.Model):
                 # UPDATE their points
                 PLAYER_POINTS[user] = POINTS[GO_LIVE]
 
-                # remove the user now since they have been resolved
-                PLAYER_MOVES[GO_LIVE].remove(user)
-
         # calculate the points lost by any victims
         for v in VICTIMS:
             if v in PLAYER_MOVES[POST_SELFIE]:
@@ -235,23 +228,14 @@ class Round(models.Model):
                 # POINTS[LEAVE_COMMENT] is -5
                 # Don't update points, subtract from existing points
                 PLAYER_POINTS[v] += (POINTS[LEAVE_COMMENT] * VICTIMS[v])
-
-                # remove the selfie poster, they are resolved
-                PLAYER_MOVES[POST_SELFIE].remove(v)
             if v in PLAYER_MOVES[NO_MOVE]:
                 # POINTS[LEAVE_COMMENT_NO_MOVE] is -10
                 # UPDATE their points
                 PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_NO_MOVE] * VICTIMS[v]
-
-                # remove the non-mover, they are resolved
-                PLAYER_MOVES[NO_MOVE].remove(v)
             if v in PLAYER_MOVES[POST_GROUP_SELFIE]:
                 # POINTS[LEAVE_COMMENT_GROUP_SELFIE] is -15
                 # UPDATE their points
                 PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
-
-                # remove the group-selfier, they are resolved
-                PLAYER_MOVES[POST_GROUP_SELFIE].remove(v)
 
         # finally tabulate the post_selfies move
         for user in PLAYER_MOVES[POST_SELFIE]:
