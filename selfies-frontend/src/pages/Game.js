@@ -47,10 +47,8 @@ class Game extends React.Component {
     if (id) {
       return (
         <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <div>
-            <ChatBox game={game} />
-          </div>
-          <div>
+          <ChatBox game={game} />
+          <div className="gamebox">
             <GameView game={game} />
             <div style={{ display: 'flex', flexDirection: 'row' }}>
               <button type="button" onClick={this.makeMove}>

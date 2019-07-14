@@ -45,7 +45,19 @@ button[disabled] {
   border-radius: 20px;
   flex-grow: 1;
   margin: auto;
-  width: 90%;
+  width: 50%;
+  padding: 2%;
+  margin: 2%;
+  min-height: 300px;
+}
+
+.gamebox {
+  background-color: #70d6ff;
+  box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  flex-grow: 1;
+  margin: auto;
+  width: 100%;
   padding: 2%;
   margin: 2%;
   min-height: 300px;
