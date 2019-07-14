@@ -16,10 +16,6 @@ class Navigation extends React.Component {
     return (
       <div className="container">
         <div>
-          {' '}
-          <span> SELFIES 2020 </span>
-        </div>
-        <div>
           <button
             style={{
               borderRadius: '20px',

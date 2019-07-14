@@ -31,20 +31,7 @@ const Form = ({
       type="password"
       error={error}
     />
-    <button
-      style={{
-        width: '100%',
-        height: '40px',
-        borderRadius: '20px',
-        marginTop: '20px',
-        marginBottom: '10px',
-        cursor: 'pointer',
-        border: '3px solid #44FFD1',
-        backgroundColor: '#44FFD1',
-      }}
-      type="submit"
-      onClick={handleSubmit}
-    >
+    <button type="submit" style={{ width: '100%' }} onClick={handleSubmit}>
       <span style={{ fontSize: '20px' }}>Submit</span>
     </button>
     {route === '/loginorsignup' && (

@@ -1,7 +1,4 @@
 import React from 'react';
-import {
-  Button, TextInput, Grid, Grommet,
-} from 'grommet';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Navigation from '../components/Navigation';
@@ -49,19 +46,7 @@ class Games extends React.Component {
           {Array.isArray(games.games)
             && games.games.map(game => (
               <div style={{ marginTop: '10px', marginBottom: '10px' }} key={game.id}>
-                <button
-                  style={{
-                    borderRadius: '20px',
-                    marginRight: '10px',
-                    padding: '7px',
-                    cursor: 'pointer',
-                    border: '3px solid #44FFD1',
-                    backgroundColor: '#44FFD1',
-                  }}
-                  onClick={this.onJoin}
-                  value={game.id}
-                  disabled={game.is_joinable === false}
-                >
+                <button onClick={this.onJoin} value={game.id} disabled={game.is_joinable === false}>
                   {' '}
                   join
                   {' '}
@@ -81,20 +66,7 @@ class Games extends React.Component {
               </div>
             ))}
           <div style={{ flexWrap: 'wrap' }}>
-            <button
-              style={{
-                borderRadius: '20px',
-                marginRight: '10px',
-                padding: '7px',
-                cursor: 'pointer',
-                border: '3px solid #44FFD1',
-                backgroundColor: '#44FFD1',
-              }}
-              onClick={this.onClick}
-            >
-              create a new game
-              {' '}
-            </button>
+            <button onClick={this.onClick}>create a new game </button>
             <input
               value={roomName}
               onChange={event => this.setState({ roomName: event.target.value })}

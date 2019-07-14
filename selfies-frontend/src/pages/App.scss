@@ -14,8 +14,29 @@ $roboto: 'Roboto Mono', monospace;
   color: #464655;
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+button {
+  border-radius: 20px;
+  margin-right: 10px;
+  padding: 7px;
+  cursor: pointer;
+  border: 3px solid #44ffd1;
+  background-color: #44ffd1;
+}
 h1 {
   font-family: $lobster;
+}
+
+button[disabled] {
+  opacity: 0.5;
+  cursor: default;
 }
 
 .entrance-title {
