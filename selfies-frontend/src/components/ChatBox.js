@@ -48,7 +48,7 @@ class ChatBox extends React.Component {
             this.messagesEnd = el;
           }}
         />
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', marginTop: '5px' }}>
           <input
             style={{ width: '100%', marginRight: '5px' }}
             onChange={this.handleChange}
