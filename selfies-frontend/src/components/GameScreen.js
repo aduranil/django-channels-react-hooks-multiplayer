@@ -5,7 +5,7 @@ const GameView = ({ game }) => (
   <div style={{ display: 'flex', flexDirection: 'row' }}>
     {game
       && game.users.map(player => (
-        <div key={player.username}>
+        <div style={{ margin: '1%' }} key={player.username}>
           {player.username}
           {player.started ? ' !' : ' ?'}
           <div>
