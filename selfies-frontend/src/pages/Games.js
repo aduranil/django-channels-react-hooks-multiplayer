@@ -45,6 +45,7 @@ class Games extends React.Component {
         <HalfRectangle color="#70D6FF" />
         <Navigation />
         <Box>
+          <h1 style={{ textAlign: 'center' }}>Active Games</h1>
           {Array.isArray(games.games)
             && games.games.map(game => (
               <div style={{ marginTop: '10px', marginBottom: '10px' }} key={game.id}>

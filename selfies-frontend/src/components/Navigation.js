@@ -1,19 +1,8 @@
 import React from 'react';
-import {
-  Grid, Text, Grommet, Button,
-} from 'grommet';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { logoutUser } from '../modules/account';
 import { wsDisconnect } from '../modules/websocket';
-
-const theme = {
-  button: {
-    padding: {
-      horizontal: '6px',
-    },
-  },
-};
 
 class Navigation extends React.Component {
   onLogout = async () => {
@@ -25,11 +14,26 @@ class Navigation extends React.Component {
 
   render() {
     return (
-      <div>
-        <Text alignSelf="start"> SELFIES 2020 </Text>
-        <Grommet theme={theme} style={{ textAlign: 'right' }}>
-          <Button onClick={this.onLogout} label="logout" />
-        </Grommet>
+      <div className="container">
+        <div>
+          {' '}
+          <span> SELFIES 2020 </span>
+        </div>
+        <div>
+          <button
+            style={{
+              borderRadius: '20px',
+              marginRight: '10px',
+              padding: '7px',
+              cursor: 'pointer',
+              border: '3px solid #44FFD1',
+              backgroundColor: '#44FFD1',
+            }}
+            onClick={this.onLogout}
+          >
+            logout
+          </button>
+        </div>
       </div>
     );
   }
