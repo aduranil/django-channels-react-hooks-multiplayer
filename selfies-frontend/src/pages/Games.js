@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import Navigation from '../components/Navigation';
 import { createGame, getGames } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
-import Box from '../components/Box';
 import HalfRectangle from '../images/Rectangle';
 
 class Games extends React.Component {
@@ -13,8 +12,9 @@ class Games extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch, loggedIn } = this.props;
-    if (loggedIn) return dispatch(getGames());
+    const { dispatch, loggedIn, history } = this.props;
+    if (!loggedIn) return history.push('/loginorsignup');
+    return dispatch(getGames());
   }
 
   onClick = () => {
@@ -41,15 +41,18 @@ class Games extends React.Component {
       <React.Fragment>
         <HalfRectangle color="#70D6FF" />
         <Navigation />
-        <Box>
+        <div className="box">
           <h1 style={{ textAlign: 'center' }}>Active Games</h1>
           {Array.isArray(games.games)
             && games.games.map(game => (
               <div style={{ marginTop: '10px', marginBottom: '10px' }} key={game.id}>
-                <button onClick={this.onJoin} value={game.id} disabled={game.is_joinable === false}>
-                  {' '}
+                <button
+                  type="button"
+                  onClick={this.onJoin}
+                  value={game.id}
+                  disabled={game.is_joinable === false}
+                >
                   join
-                  {' '}
                 </button>
                 <span>
                   {game.room_name}
@@ -65,22 +68,27 @@ class Games extends React.Component {
                 ))}
               </div>
             ))}
-          <div style={{ flexWrap: 'wrap' }}>
-            <button onClick={this.onClick}>create a new game </button>
-            <input
-              value={roomName}
-              onChange={event => this.setState({ roomName: event.target.value })}
-              placeholder="room name"
-              style={{
-                height: '30px',
-                padding: '5px',
-                border: 'none',
-                borderRadius: '20px',
-                marginTop: '5px',
-              }}
-            />
+          <div style={{ display: 'flex' }}>
+            <div>
+              <button type="button" onClick={this.onClick}>
+                create new game
+              </button>
+            </div>
+            <div style={{ width: '70%' }}>
+              <input
+                value={roomName}
+                onChange={event => this.setState({ roomName: event.target.value })}
+                placeholder="room name"
+                style={{
+                  padding: '7px',
+                  borderRadius: '20px',
+                  border: '3px solid white',
+                  width: '100%',
+                }}
+              />
+            </div>
           </div>
-        </Box>
+        </div>
       </React.Fragment>
     );
   }

@@ -15,21 +15,9 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className="container">
-        <div>
-          <button
-            style={{
-              borderRadius: '20px',
-              marginRight: '10px',
-              padding: '7px',
-              cursor: 'pointer',
-              border: '3px solid #44FFD1',
-              backgroundColor: '#44FFD1',
-            }}
-            onClick={this.onLogout}
-          >
-            logout
-          </button>
-        </div>
+        <button style={{ width: '100px' }} onClick={this.onLogout}>
+          logout
+        </button>
       </div>
     );
   }
