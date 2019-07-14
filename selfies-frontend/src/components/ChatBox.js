@@ -31,25 +31,23 @@ class ChatBox extends React.Component {
     const { message } = this.state;
     const { game } = this.props;
     return (
-      <React.Fragment>
-        <div style={{ horizontal: 'hidden', vertical: 'scroll' }}>
-          {game
-            && game.messages.map(msg => (
-              <div key={msg.id} columns={{ count: 2 }}>
-                <span>
-                  {' '}
-                  {msg.message_type === 'action' ? null : `${msg.username}: `}
-                  {msg.message}
-                </span>
-              </div>
-            ))}
-          <div
-            style={{ float: 'left', clear: 'both' }}
-            ref={(el) => {
-              this.messagesEnd = el;
-            }}
-          />
-        </div>
+      <div className="chatbox" style={{ horizontal: 'hidden', vertical: 'scroll' }}>
+        {game
+          && game.messages.map(msg => (
+            <div key={msg.id}>
+              <span>
+                {' '}
+                {msg.message_type === 'action' ? null : `${msg.username}: `}
+                {msg.message}
+              </span>
+            </div>
+          ))}
+        <div
+          style={{ float: 'left', clear: 'both' }}
+          ref={(el) => {
+            this.messagesEnd = el;
+          }}
+        />
         <div>
           <div>
             <input onChange={this.handleChange} value={message} />
@@ -59,7 +57,7 @@ class ChatBox extends React.Component {
             </button>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }

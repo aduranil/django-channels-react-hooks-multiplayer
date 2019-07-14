@@ -9,19 +9,10 @@ const FormField = ({
       marginBottom: '10px',
     }}
   >
-    <label>
-      {' '}
-      {labelName}
-      {' '}
-    </label>
+    <label>{labelName}</label>
     <input
       style={{
         width: '100%',
-        height: '40px',
-        padding: '5px',
-        border: 'none',
-        borderRadius: '20px',
-        marginTop: '5px',
       }}
       type={type}
       label={labelName}
