@@ -35,11 +35,12 @@ const Form = ({
       style={{
         width: '100%',
         height: '40px',
-        borderRadius: '5px',
-        border: 'none',
+        borderRadius: '20px',
         marginTop: '20px',
         marginBottom: '10px',
         cursor: 'pointer',
+        border: '3px solid #44FFD1',
+        backgroundColor: '#44FFD1',
       }}
       type="submit"
       onClick={handleSubmit}

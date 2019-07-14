@@ -20,7 +20,7 @@ const FormField = ({
         height: '30px',
         padding: '5px',
         border: 'none',
-        borderRadius: '5px',
+        borderRadius: '20px',
         marginTop: '5px',
       }}
       type={type}

@@ -25,12 +25,12 @@ class Navigation extends React.Component {
 
   render() {
     return (
-      <Grid alignSelf="center" columns={['medium', 'medium']}>
+      <div>
         <Text alignSelf="start"> SELFIES 2020 </Text>
         <Grommet theme={theme} style={{ textAlign: 'right' }}>
           <Button onClick={this.onLogout} label="logout" />
         </Grommet>
-      </Grid>
+      </div>
     );
   }
 }

@@ -1,21 +1,14 @@
 import React from 'react';
 import {
-  Button, TextInput, Grid, Box, Text, Grommet,
+  Button, TextInput, Grid, Grommet,
 } from 'grommet';
 import PropTypes from 'prop-types';
-import { Gamepad } from 'grommet-icons';
 import { connect } from 'react-redux';
 import Navigation from '../components/Navigation';
 import { createGame, getGames } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
-
-const theme = {
-  button: {
-    padding: {
-      horizontal: '6px',
-    },
-  },
-};
+import Box from '../components/Box';
+import HalfRectangle from '../images/Rectangle';
 
 class Games extends React.Component {
   state = {
@@ -49,51 +42,72 @@ class Games extends React.Component {
     const { games } = this.props;
     return (
       <React.Fragment>
+        <HalfRectangle color="#70D6FF" />
         <Navigation />
-        <Box
-          round="xsmall"
-          height="medium"
-          margin="medium"
-          width="600px"
-          pad="medium"
-          elevation="medium"
-          background="accent-2"
-          overflow={{ horizontal: 'hidden', vertical: 'scroll' }}
-        >
+        <Box>
           {Array.isArray(games.games)
             && games.games.map(game => (
-              <Grid key={game.id} columns={{ count: 2 }}>
-                <Grommet theme={theme}>
-                  <Button
-                    onClick={this.onJoin}
-                    value={game.id}
-                    margin={{ right: '5px', bottom: '5px' }}
-                    label="join"
-                    disabled={game.is_joinable === false}
-                  />
-                  <Text>
-                    {game.room_name}
-                    , players:
+              <div style={{ marginTop: '10px', marginBottom: '10px' }} key={game.id}>
+                <button
+                  style={{
+                    borderRadius: '20px',
+                    marginRight: '10px',
+                    padding: '7px',
+                    cursor: 'pointer',
+                    border: '3px solid #44FFD1',
+                    backgroundColor: '#44FFD1',
+                  }}
+                  onClick={this.onJoin}
+                  value={game.id}
+                  disabled={game.is_joinable === false}
+                >
+                  {' '}
+                  join
+                  {' '}
+                </button>
+                <span>
+                  {game.room_name}
+                  , players:
+                  {' '}
+                </span>
+                {game.users.map(user => (
+                  <span key={user.username}>
                     {' '}
-                  </Text>
-                  {game.users.map(user => (
-                    <Text key={user.username}>
-                      {' '}
-                      {user.username}
-                    </Text>
-                  ))}
-                </Grommet>
-              </Grid>
+                    {user.username}
+                    ,
+                  </span>
+                ))}
+              </div>
             ))}
+          <div style={{ flexWrap: 'wrap' }}>
+            <button
+              style={{
+                borderRadius: '20px',
+                marginRight: '10px',
+                padding: '7px',
+                cursor: 'pointer',
+                border: '3px solid #44FFD1',
+                backgroundColor: '#44FFD1',
+              }}
+              onClick={this.onClick}
+            >
+              create a new game
+              {' '}
+            </button>
+            <input
+              value={roomName}
+              onChange={event => this.setState({ roomName: event.target.value })}
+              placeholder="room name"
+              style={{
+                height: '30px',
+                padding: '5px',
+                border: 'none',
+                borderRadius: '20px',
+                marginTop: '5px',
+              }}
+            />
+          </div>
         </Box>
-        <Grid columns={{ count: 2, size: 'auto' }} gap="small">
-          <TextInput
-            placeholder="room name"
-            value={roomName}
-            onChange={event => this.setState({ roomName: event.target.value })}
-          />
-          <Button onClick={this.onClick} icon={<Gamepad />} label="Create new game" />
-        </Grid>
       </React.Fragment>
     );
   }
