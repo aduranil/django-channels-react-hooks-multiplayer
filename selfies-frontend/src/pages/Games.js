@@ -69,24 +69,15 @@ class Games extends React.Component {
               </div>
             ))}
           <div style={{ display: 'flex' }}>
-            <div>
-              <button type="button" onClick={this.onClick}>
-                create new game
-              </button>
-            </div>
-            <div style={{ width: '70%' }}>
-              <input
-                value={roomName}
-                onChange={event => this.setState({ roomName: event.target.value })}
-                placeholder="room name"
-                style={{
-                  padding: '7px',
-                  borderRadius: '20px',
-                  border: '3px solid white',
-                  width: '100%',
-                }}
-              />
-            </div>
+            <button type="button" style={{ width: '30%' }} onClick={this.onClick}>
+              create game
+            </button>
+            <input
+              value={roomName}
+              onChange={event => this.setState({ roomName: event.target.value })}
+              placeholder="room name"
+              style={{ width: '100%' }}
+            />
           </div>
         </div>
       </React.Fragment>

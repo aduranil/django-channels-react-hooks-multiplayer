@@ -15,7 +15,7 @@ class Navigation extends React.Component {
   render() {
     return (
       <div className="container">
-        <button style={{ width: '100px' }} onClick={this.onLogout}>
+        <button type="button" style={{ width: '100px' }} onClick={this.onLogout}>
           logout
         </button>
       </div>

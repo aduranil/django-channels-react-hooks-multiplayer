@@ -2,7 +2,31 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import FormField from './FormField';
+
+const FormField = ({
+  input, onChange, error, labelName, type,
+}) => (
+  <div
+    style={{
+      marginTop: '10px',
+      marginBottom: '10px',
+    }}
+  >
+    <label>{labelName}</label>
+    <input
+      style={{
+        width: '100%',
+        marginTop: '5px',
+      }}
+      type={type}
+      label={labelName}
+      name={labelName}
+      value={input}
+      onChange={onChange}
+      error={error}
+    />
+  </div>
+);
 
 const Form = ({
   handleSubmit, email, password, username, route, handleChange, error,

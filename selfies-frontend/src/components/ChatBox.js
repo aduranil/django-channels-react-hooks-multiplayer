@@ -48,14 +48,16 @@ class ChatBox extends React.Component {
             this.messagesEnd = el;
           }}
         />
-        <div>
-          <div>
-            <input onChange={this.handleChange} value={message} />
-            <button type="button" onClick={this.handleSubmit}>
-              send
-              {' '}
-            </button>
-          </div>
+        <div style={{ display: 'flex' }}>
+          <input
+            style={{ width: '100%', marginRight: '5px' }}
+            onChange={this.handleChange}
+            value={message}
+          />
+          <button style={{ width: '20%' }} type="button" onClick={this.handleSubmit}>
+            send
+            {' '}
+          </button>
         </div>
       </div>
     );

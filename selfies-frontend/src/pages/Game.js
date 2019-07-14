@@ -8,6 +8,7 @@ import {
 import withAuth from '../hocs/authWrapper';
 import ChatBox from '../components/ChatBox';
 import GameView from '../components/GameScreen';
+import Navigation from '../components/Navigation';
 
 class Game extends React.Component {
   componentDidMount() {
@@ -46,24 +47,27 @@ class Game extends React.Component {
     const { id, game, time } = this.props;
     if (id) {
       return (
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
-          <ChatBox game={game} />
-          <div className="gamebox">
-            <GameView game={game} />
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-              <button type="button" onClick={this.makeMove}>
-                post a selfie
-              </button>
-              <button type="button" onClick={this.leaveGame}>
-                leave game
-              </button>
-              <button type="button" onClick={this.startRound}>
-                start game
-              </button>
-              <span>{time}</span>
+        <React.Fragment>
+          <Navigation />
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <ChatBox game={game} />
+            <div className="gamebox">
+              <GameView game={game} />
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <button type="button" onClick={this.makeMove}>
+                  post a selfie
+                </button>
+                <button type="button" onClick={this.leaveGame}>
+                  leave game
+                </button>
+                <button type="button" onClick={this.startRound}>
+                  start game
+                </button>
+                <span>{time}</span>
+              </div>
             </div>
           </div>
-        </div>
+        </React.Fragment>
       );
     }
     return `${<span> LOADING </span>}`;
