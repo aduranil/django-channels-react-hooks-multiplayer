@@ -8,13 +8,6 @@ import { Message } from '../images/iMessage';
 import './App.scss';
 
 class Entrance extends React.Component {
-  componentDidMount() {
-    const { loggedIn, history } = this.props;
-    if (loggedIn) {
-      history.push('/games');
-    }
-  }
-
   render() {
     return (
       <div style={{ minWidth: '100vw', minHeight: '100vh' }}>

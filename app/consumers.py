@@ -100,28 +100,61 @@ class GameConsumer(WebsocketConsumer):
 
     def update_timer_data(self, round):
         """countdown the timer for the game"""
-        i = 60
+        i = 15
         while i >= 0:
             time.sleep(1)
             self.send_time(str(i))
             i -= 1
         # reset timer back to null
         self.send_time(None)
-        round = round.tabulate_round()
+        self.new_round_or_determine_winner(round)
+
+    def new_round_or_determine_winner(self, round):
+        "determines a winner or loops through again"
+        # TODO i need to move this somewhere else
+        player_points = round.tabulate_round()
+        winner = None
+        for player in self.game.game_players.all():
+            points = player_points[player.user_id]
+            updated_points = points + player.followers
+
+            # the floor is zero
+            if updated_points < 0:
+                updated_points = 0
+            if updated_points >= 100:
+                winner = player
+            player.followers = updated_points
+            player.save()
         round.started = False
         round.save()
+        updated_round = Round.objects.create(game=self.game, started=True)
+        if not winner:
+            self.start_round_and_timer(updated_round, self.game)
+        else:
+            self.when_someone_wins()
 
+    def when_someone_wins(self):
+        # placeholder method for now
+        return
 
     def make_move(self, data):
         user = self.scope['user']
-        round = Round.objects.get(id=data['move']['round'])
+        round = Round.objects.get(game=self.game, started=True)
         game_player = GamePlayer.objects.get(user=user)
-        move = Move.objects.create(round=round, action_type=data['move']['move'], player=game_player)
-
+        try:
+            move = Move.objects.get(player=game_player, round=round)
+            move.action_type = data['move']['move']
+            # if in a former move they left a comment but now they want to
+            # do something else, a victim is still saved on the Move object
+            # update victim to be none in this case
+            if data['move']['move'] is not "leave_comment" and move.victim is not None:
+                move.victim = None
+            move.save()
+        except:
+            move = Move.objects.create(round=round, action_type=data['move']['move'], player=game_player)
         # save the victim if they are there
         if data['move']['victim']:
-            user = User.objects.get(id=data['move']['victim'])
-            victim = GamePlayer.objects.get(user=user)
+            victim = GamePlayer.objects.get(user_id=data['move']['victim'])
             move.victim = victim
             move.save()
 

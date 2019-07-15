@@ -168,6 +168,11 @@ class Round(models.Model):
                 PLAYER_MOVES[POST_STORY].append(move.player.user.id)
                 PLAYERS_WHO_MOVED.append(move.player.user.id)
                 PLAYER_POINTS[move.player.user.id] = POINTS[POST_STORY]
+
+                # decrement the number of stories the player has
+                game_player = GamePlayer.objects.get(user_id=move.player.user_id)
+                game_player.stories = game_player.stories - 1
+                game_player.save()
             elif move.action_type == move.GO_LIVE:
                 PLAYER_MOVES[GO_LIVE].append(move.player.user.id)
                 PLAYERS_WHO_MOVED.append(move.player.user.id)

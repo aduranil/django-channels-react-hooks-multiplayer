@@ -92,7 +92,6 @@ const socketMiddleware = (function () {
           JSON.stringify({
             command: 'MAKE_MOVE',
             move: action.move,
-            round: action.round,
             victim: action.victim,
           }),
         );
