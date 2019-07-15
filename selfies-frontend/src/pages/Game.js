@@ -7,8 +7,8 @@ import {
 } from '../modules/game';
 import withAuth from '../hocs/authWrapper';
 import ChatBox from '../components/ChatBox';
-import GameView from '../components/GameScreen';
 import Navigation from '../components/Navigation';
+import { Phone } from '../images/iPhone';
 
 class Game extends React.Component {
   componentDidMount() {
@@ -38,9 +38,14 @@ class Game extends React.Component {
     dispatch(startRound(id));
   };
 
-  makeMove = () => {
+  makeMove = (event) => {
     const { dispatch } = this.props;
-    dispatch(makeMove('SELFIE'));
+    dispatch(makeMove({ move: event.target.value, victim: null }));
+  };
+
+  meanComment = (event) => {
+    const { dispatch } = this.props;
+    dispatch(makeMove({ move: 'leave_comment', victim: event.currentTarget.value }));
   };
 
   render() {
@@ -52,10 +57,41 @@ class Game extends React.Component {
           <div style={{ display: 'flex', flexDirection: 'row' }}>
             <ChatBox game={game} />
             <div className="gamebox">
-              <GameView game={game} />
               <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <button type="button" onClick={this.makeMove}>
+                {game
+                  && game.users.map(player => (
+                    <div style={{ margin: '1%' }} key={player.username}>
+                      {player.username}
+                      {player.started ? ' !' : ' ?'}
+                      <div>
+                        {player.followers}
+                        {' '}
+followers
+                      </div>
+                      <div>
+                        {player.stories}
+                        {' '}
+stories
+                      </div>
+                      <button onClick={this.meanComment} value={player.id} type="button">
+                        <Phone />
+                      </button>
+                      {' '}
+                    </div>
+                  ))}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <button type="button" value="post_selfie" onClick={this.makeMove}>
                   post a selfie
+                </button>
+                <button type="button" value="post_group_selfie" onClick={this.makeMove}>
+                  post group selfie
+                </button>
+                <button type="button" value="post_story" onClick={this.makeMove}>
+                  post story
+                </button>
+                <button type="button" value="dont_post" onClick={this.makeMove}>
+                  don't post
                 </button>
                 <button type="button" onClick={this.leaveGame}>
                   leave game

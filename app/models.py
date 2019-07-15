@@ -72,6 +72,7 @@ class GamePlayer(models.Model):
 
     def as_json(self):
         return dict(
+            id=self.user.id,
             followers=self.followers,
             stories=self.stories,
             username=self.user.username,

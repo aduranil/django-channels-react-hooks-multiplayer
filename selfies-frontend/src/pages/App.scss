@@ -52,6 +52,8 @@ button[disabled] {
   margin-bottom: 1%;
   margin-top: 2%;
   min-height: 300px;
+  max-height: 500px;
+  overflow: scroll;
 }
 
 .gamebox {
