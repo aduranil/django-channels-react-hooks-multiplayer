@@ -5,6 +5,7 @@ from asgiref.sync import async_to_sync
 import time
 import threading
 from channels.generic.websocket import WebsocketConsumer
+from django.contrib.auth.models import User
 
 from .models import Game, Message, GamePlayer, Round, Move
 
@@ -91,7 +92,11 @@ class GameConsumer(WebsocketConsumer):
             # start the timer in another thread
             round = Round.objects.create(game=game, started=True)
             # pass round so we can set it to false after the time is done
-            threading.Thread(target=self.update_timer_data, args=[round]).start()
+            self.start_round_and_timer(round, game)
+
+    def start_round_and_timer(self, round, game):
+        threading.Thread(target=self.update_timer_data, args=[round]).start()
+        self.send_update_game_players(game)
 
     def update_timer_data(self, round):
         """countdown the timer for the game"""
@@ -102,13 +107,23 @@ class GameConsumer(WebsocketConsumer):
             i -= 1
         # reset timer back to null
         self.send_time(None)
-        round.tabulate_round()
+        round = round.tabulate_round()
+        round.started = False
+        round.save()
+
 
     def make_move(self, data):
-        print('noooo')
-        print('nevermind')
-        print('received')
-        print('cool')
+        user = self.scope['user']
+        round = Round.objects.get(id=data['move']['round'])
+        game_player = GamePlayer.objects.get(user=user)
+        move = Move.objects.create(round=round, action_type=data['move']['move'], player=game_player)
+
+        # save the victim if they are there
+        if data['move']['victim']:
+            user = User.objects.get(id=data['move']['victim'])
+            victim = GamePlayer.objects.get(user=user)
+            move.victim = victim
+            move.save()
 
     # ASYNC TO SYNC ACTIONS
     def send_update_game_players(self, game):

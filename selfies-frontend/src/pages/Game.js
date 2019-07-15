@@ -39,13 +39,19 @@ class Game extends React.Component {
   };
 
   makeMove = (event) => {
-    const { dispatch } = this.props;
+    const { dispatch, game } = this.props;
     let victim = null;
     // only the comment game move has another player that it impacts
     if (event.currentTarget.value === 'leave_comment') {
       victim = event.currentTarget.id;
     }
-    dispatch(makeMove({ move: event.currentTarget.value, victim }));
+    dispatch(
+      makeMove({
+        move: event.currentTarget.value,
+        round: game.current_round[0].id,
+        victim,
+      }),
+    );
   };
 
   render() {

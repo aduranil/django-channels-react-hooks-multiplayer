@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.db import IntegrityError
 
+
 class LoginUser(ObtainAuthToken):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.AllowAny,)

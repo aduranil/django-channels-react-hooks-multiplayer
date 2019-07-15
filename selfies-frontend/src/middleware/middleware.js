@@ -89,7 +89,12 @@ const socketMiddleware = (function () {
         break;
       case 'MAKE_MOVE':
         socket.send(
-          JSON.stringify({ command: 'MAKE_MOVE', move: action.move, victim: action.victim }),
+          JSON.stringify({
+            command: 'MAKE_MOVE',
+            move: action.move,
+            round: action.round,
+            victim: action.victim,
+          }),
         );
         break;
       default:
