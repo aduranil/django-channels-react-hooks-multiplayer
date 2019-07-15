@@ -23,7 +23,8 @@ class Game(models.Model):
             room_name=self.room_name,
             round_started=self.round_started,
             users=[u.as_json() for u in self.game_players.all()],
-            messages=[m.as_json() for m in self.messages.all().order_by('created_at')]
+            messages=[m.as_json() for m in self.messages.all().order_by('created_at')],
+            current_round=[r.as_json() for r in self.rounds.all().filter(started=True)]
         )
 
     def can_start_game(self):
@@ -242,6 +243,8 @@ class Round(models.Model):
         for user in PLAYER_MOVES[POST_SELFIE]:
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
+
+        return PLAYER_POINTS
 
 
 class Move(models.Model):

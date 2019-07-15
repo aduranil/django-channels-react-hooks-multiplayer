@@ -40,12 +40,12 @@ class Game extends React.Component {
 
   makeMove = (event) => {
     const { dispatch } = this.props;
-    dispatch(makeMove({ move: event.target.value, victim: null }));
-  };
-
-  meanComment = (event) => {
-    const { dispatch } = this.props;
-    dispatch(makeMove({ move: 'leave_comment', victim: event.currentTarget.value }));
+    let victim = null;
+    // only the comment game move has another player that it impacts
+    if (event.currentTarget.value === 'leave_comment') {
+      victim = event.currentTarget.id;
+    }
+    dispatch(makeMove({ move: event.currentTarget.value, victim }));
   };
 
   render() {
@@ -73,7 +73,12 @@ followers
                         {' '}
 stories
                       </div>
-                      <button onClick={this.meanComment} value={player.id} type="button">
+                      <button
+                        onClick={this.makeMove}
+                        id={player.id}
+                        value="leave_comment"
+                        type="button"
+                      >
                         <Phone />
                       </button>
                       {' '}

@@ -89,10 +89,11 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players(game)
         if game.can_start_game():
             # start the timer in another thread
-            Round.objects.create(game=game, started=True)
-            threading.Thread(target=self.update_timer_data).start()
+            round = Round.objects.create(game=game, started=True)
+            # pass round so we can set it to false after the time is done
+            threading.Thread(target=self.update_timer_data, args=[round]).start()
 
-    def update_timer_data(self):
+    def update_timer_data(self, round):
         """countdown the timer for the game"""
         i = 60
         while i >= 0:
@@ -101,6 +102,7 @@ class GameConsumer(WebsocketConsumer):
             i -= 1
         # reset timer back to null
         self.send_time(None)
+        round.tabulate_round()
 
     def make_move(self, data):
         print('noooo')
