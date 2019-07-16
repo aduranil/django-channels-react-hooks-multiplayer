@@ -132,6 +132,7 @@ class GameConsumer(WebsocketConsumer):
         if not winner:
             self.start_round_and_timer(updated_round, self.game)
         else:
+            # TODO disconnect when this happens
             self.when_someone_wins()
 
     def when_someone_wins(self):
