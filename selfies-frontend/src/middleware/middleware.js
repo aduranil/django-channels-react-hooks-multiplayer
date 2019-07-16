@@ -28,7 +28,7 @@ const socketMiddleware = (function () {
 
     switch (payload.type) {
       case 'update_game_players':
-        store.dispatch(updateGame(payload.game));
+        store.dispatch(updateGame(payload.game, payload.current_player));
         break;
       case 'update_timer':
         store.dispatch(updateTimer(payload.time));

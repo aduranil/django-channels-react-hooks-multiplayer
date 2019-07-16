@@ -4,7 +4,7 @@ const headers = {
 };
 
 export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
-export const updateGame = json => ({ type: 'SET_GAME', data: json });
+export const updateGame = (json, player) => ({ type: 'SET_GAME', data: json, player });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
 export const startRound = id => ({ type: 'START_ROUND', id });
 export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
@@ -45,7 +45,7 @@ const gameInitialState = { time: null };
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {
     case 'SET_GAME':
-      return { ...state, game: action.data };
+      return { ...state, game: action.data, current_player: action.player };
     case 'SHOW_GAMES':
       return { ...state, games: action.data };
     case 'UPDATE_TIMER':

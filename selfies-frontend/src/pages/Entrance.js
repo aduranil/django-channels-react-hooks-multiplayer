@@ -7,56 +7,52 @@ import { EntrancePhone } from '../images/EntrancePhone';
 import { Message } from '../images/iMessage';
 import './App.scss';
 
-class Entrance extends React.Component {
-  render() {
-    return (
-      <div style={{ minWidth: '100vw', minHeight: '100vh' }}>
-        <HalfRectangle color="#70D6FF" />
-        <div style={{ textAlign: 'center' }}>
-          <span className="entrance-title">Selfies 2020</span>
-        </div>
+const Entrance = () => (
+  <div style={{ minWidth: '100vw', minHeight: '100vh' }}>
+    <HalfRectangle color="#70D6FF" />
+    <div style={{ textAlign: 'center' }}>
+      <span className="entrance-title">Selfies 2020</span>
+    </div>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: '100vw',
+        minHeight: '80vh',
+      }}
+    >
+      <div className="landing-page-wrapper">
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
-            minWidth: '100vw',
-            minHeight: '80vh',
+            textAlign: 'center',
+            marginTop: '15px',
+            position: 'relative',
+            marginBottom: '15px',
           }}
         >
-          <div className="landing-page-wrapper">
+          <Link to="/loginorsignup">
             <div
               style={{
-                textAlign: 'center',
-                marginTop: '15px',
-                position: 'relative',
-                marginBottom: '15px',
+                top: '35%',
+                left: '37.6%',
+                width: '25%',
+                height: '14%',
+                borderRadius: '15px',
+                backgroundColor: 'white',
+                opacity: '0.5',
+                position: 'absolute',
+                alignSelf: 'center',
               }}
             >
-              <Link to="/loginorsignup">
-                <div
-                  style={{
-                    top: '35%',
-                    left: '37.6%',
-                    width: '25%',
-                    height: '14%',
-                    borderRadius: '15px',
-                    backgroundColor: 'white',
-                    opacity: '0.5',
-                    position: 'absolute',
-                    alignSelf: 'center',
-                  }}
-                >
-                  <Message />
-                </div>
-              </Link>
-              <EntrancePhone />
+              <Message />
             </div>
-          </div>
+          </Link>
+          <EntrancePhone />
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  </div>
+);
 
 Entrance.propTypes = {
   history: PropTypes.shape({

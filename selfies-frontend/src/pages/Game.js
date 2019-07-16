@@ -54,7 +54,9 @@ class Game extends React.Component {
   };
 
   render() {
-    const { id, game, time } = this.props;
+    const {
+      id, game, time, current_player,
+    } = this.props;
     if (id) {
       return (
         <React.Fragment>
@@ -97,7 +99,12 @@ class Game extends React.Component {
                 <button type="button" value="post_group_selfie" onClick={this.makeMove}>
                   post group selfie
                 </button>
-                <button type="button" value="post_story" onClick={this.makeMove}>
+                <button
+                  type="button"
+                  disabled={current_player && current_player.stories === 0}
+                  value="post_story"
+                  onClick={this.makeMove}
+                >
                   post story
                 </button>
                 <button type="button" value="dont_post" onClick={this.makeMove}>
@@ -147,6 +154,7 @@ const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
   username: state.auth.username,
   game: state.games.game,
+  current_player: state.games.current_player,
   time: state.games.time,
 });
 export default withAuth(connect(s2p)(Game));
