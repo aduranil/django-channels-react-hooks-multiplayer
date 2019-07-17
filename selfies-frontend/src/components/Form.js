@@ -35,7 +35,7 @@ const Form = ({
     style={{
       padding: '5%',
       width: '500px',
-      height: '330px',
+      height: '350px',
     }}
   >
     <FormField input={email} labelName="email" onChange={handleChange} error={error} type="text" />
@@ -55,7 +55,11 @@ const Form = ({
       type="password"
       error={error}
     />
-    <button type="submit" style={{ width: '100%' }} onClick={handleSubmit}>
+    <button
+      type="submit"
+      style={{ width: '100%', marginTop: '10px', marginBottom: '10px' }}
+      onClick={handleSubmit}
+    >
       <span style={{ fontSize: '20px' }}>Submit</span>
     </button>
     {route === '/loginorsignup' && (

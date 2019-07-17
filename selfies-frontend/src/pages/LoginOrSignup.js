@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { handleLogin, removeError, handleSignup } from '../modules/account';
 import Form from '../components/Form';
 import HalfRectangle from '../images/Rectangle';
+import Navigation from '../components/Navigation';
 
 class LoginOrSignup extends React.Component {
   state = {
@@ -31,7 +32,7 @@ class LoginOrSignup extends React.Component {
     const { dispatch, history, route } = this.props;
     if (route === '/loginorsignup') {
       await dispatch(handleLogin(this.state));
-      history.push('/games');
+      return history.push('/games');
     }
     dispatch(handleSignup(this.state));
     history.push('/games');
@@ -41,37 +42,40 @@ class LoginOrSignup extends React.Component {
     const { username, email, password } = this.state;
     const { route } = this.props;
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          minWidth: '100vw',
-          minHeight: '100vh',
-        }}
-      >
-        <HalfRectangle color="#70D6FF" />
+      <React.Fragment>
+        <Navigation />
         <div
           style={{
-            alignSelf: 'center',
-            boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.25), inset 0 1px 3px 0 rgba(0, 0, 0, 0.25)',
-            borderRadius: '20px',
-            backgroundColor: '#ff70a6',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            minWidth: '100vw',
+            minHeight: '80vh',
           }}
         >
-          <h1 style={{ textAlign: 'center', marginTop: '15px' }}>
-            {route === '/loginorsignup' ? 'Returning Users' : 'New Users'}
-          </h1>
-          <Form
-            route={route}
-            username={username}
-            password={password}
-            email={email}
-            handleChange={this.handleChange}
-            handleSubmit={this.handleSubmit}
-          />
+          <HalfRectangle color="#70D6FF" />
+          <div
+            style={{
+              alignSelf: 'center',
+              boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.25), inset 0 1px 3px 0 rgba(0, 0, 0, 0.25)',
+              borderRadius: '20px',
+              backgroundColor: '#ff70a6',
+            }}
+          >
+            <h1 style={{ textAlign: 'center', marginTop: '15px' }}>
+              {route === '/loginorsignup' ? 'Returning Users' : 'New Users'}
+            </h1>
+            <Form
+              route={route}
+              username={username}
+              password={password}
+              email={email}
+              handleChange={this.handleChange}
+              handleSubmit={this.handleSubmit}
+            />
+          </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }
