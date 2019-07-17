@@ -12,8 +12,10 @@ class Games extends React.Component {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    return dispatch(getGames());
+    const { dispatch, loggedIn } = this.props;
+    if (loggedIn) {
+      dispatch(getGames());
+    }
   }
 
   onClick = () => {

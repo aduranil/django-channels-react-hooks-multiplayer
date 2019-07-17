@@ -1,8 +1,3 @@
-const headers = {
-  'Content-Type': 'application/json',
-  Authorization: `Token ${localStorage.getItem('token')}`,
-};
-
 export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
 export const updateGame = (json, player) => ({ type: 'SET_GAME', data: json, player });
 export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
@@ -13,7 +8,10 @@ const API_ROOT = 'http://localhost:8000';
 
 export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`, {
   method: 'POST',
-  headers,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Token ${localStorage.getItem('token')}`,
+  },
   body: JSON.stringify({ room_name: roomName }),
 })
   .then(res => res.json())
@@ -24,7 +22,10 @@ export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`,
 
 export const getGames = () => dispatch => fetch(`${API_ROOT}/app/games`, {
   method: 'GET',
-  headers,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Token ${localStorage.getItem('token')}`,
+  },
 })
   .then(res => res.json())
   .then((json) => {
@@ -33,7 +34,10 @@ export const getGames = () => dispatch => fetch(`${API_ROOT}/app/games`, {
 
 export const getGame = id => dispatch => fetch(`${API_ROOT}/app/game/${id}`, {
   method: 'GET',
-  headers,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Token ${localStorage.getItem('token')}`,
+  },
 })
   .then(res => res.json())
   .then((json) => {

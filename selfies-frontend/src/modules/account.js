@@ -1,8 +1,3 @@
-const headers = {
-  'Content-Type': 'application/json',
-  Authorization: `Token ${localStorage.getItem('token')}`,
-};
-
 const API_ROOT = 'http://localhost:8000';
 
 function status(res) {
@@ -14,11 +9,16 @@ function status(res) {
 
 export const getCurrentUser = () => dispatch => fetch(`${API_ROOT}/app/user/`, {
   method: 'GET',
-  headers,
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Token ${localStorage.getItem('token')}`,
+  },
 })
   .then(status)
   .then(res => res.json())
-  .then(json => dispatch({ type: 'SET_CURRENT_USER', data: json }))
+  .then((json) => {
+    dispatch({ type: 'SET_CURRENT_USER', data: json });
+  })
   .catch((e) => {
     dispatch({ type: 'SET_ERROR', data: e.message });
   });

@@ -34,7 +34,7 @@ class LoginOrSignup extends React.Component {
       await dispatch(handleLogin(this.state));
       return history.push('/games');
     }
-    dispatch(handleSignup(this.state));
+    await dispatch(handleSignup(this.state));
     history.push('/games');
   };
 

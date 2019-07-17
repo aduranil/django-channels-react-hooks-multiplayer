@@ -18,6 +18,8 @@ const withAuth = (WrappedComponent) => {
     componentWillReceiveProps(nextProps) {
       if (nextProps.loggedIn) {
         this.setState({ authCompleted: true });
+      } else {
+        this.setState({ authCompleted: false });
       }
     }
 

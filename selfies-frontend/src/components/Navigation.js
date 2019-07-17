@@ -2,13 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { logoutUser } from '../modules/account';
-import { wsDisconnect } from '../modules/websocket';
 
 class Navigation extends React.Component {
   onLogout = async () => {
-    const { dispatch, history, host } = this.props;
+    const { dispatch, history } = this.props;
     await dispatch(logoutUser());
-    history.push('/loginorsignup');
+    return history.push('/loginorsignup');
   };
 
   render() {

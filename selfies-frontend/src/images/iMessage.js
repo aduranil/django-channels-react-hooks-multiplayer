@@ -53,7 +53,7 @@ export const Message = () => (
             fill="#000000"
           >
             <tspan x="12" y="54">
-              Click to enter!!!!
+              enter!!!!
             </tspan>
           </text>
           <g

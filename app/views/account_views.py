@@ -3,6 +3,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
+from rest_framework import serializers
 
 from app.serializers import UserSerializer, LoginSerializer
 from django.contrib.auth import authenticate
@@ -29,7 +30,8 @@ class LoginUser(ObtainAuthToken):
 
 class GetUser(ObtainAuthToken):
     authentication_classes = (TokenAuthentication,)
-
+    permission_classes = (permissions.IsAuthenticated,)
+    
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)

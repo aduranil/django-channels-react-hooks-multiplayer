@@ -17,7 +17,6 @@ class GameConsumer(WebsocketConsumer):
         self.id = game_id
         self.room_group_name = 'game_%s' % self.id
         self.game = Game.objects.get(id=game_id)
-        self.game_player = GamePlayer.objects.get(user=self.scope['user'])
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name,
@@ -164,12 +163,13 @@ class GameConsumer(WebsocketConsumer):
     def send_update_game_players(self, game):
         """sends all game info as a json object when there's an update"""
         game = Game.objects.get(id=self.id)
+        game_player = GamePlayer.objects.get(user=self.scope['user'])
         async_to_sync(self.channel_layer.group_send)(
                     self.room_group_name,
                     {
                         'type': 'update_game_players',
                         'game': game.as_json(),
-                        'current_player': self.game_player.as_json()
+                        'current_player': game_player.as_json()
                     }
                 )
 
