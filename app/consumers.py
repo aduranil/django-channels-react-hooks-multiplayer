@@ -44,7 +44,7 @@ class GameConsumer(WebsocketConsumer):
 
         self.send_update_game_players(game)
 
-    def leave_game(self, data):
+    def leave_game(self):
         user = self.scope["user"]
 
         game_player = GamePlayer.objects.get(user=user)
