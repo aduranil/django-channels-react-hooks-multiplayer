@@ -7,30 +7,28 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0012_auto_20190625_0118'),
-    ]
+    dependencies = [("app", "0012_auto_20190625_0118")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='gameplayer',
-            name='user',
-        ),
-        migrations.RemoveField(
-            model_name='game',
-            name='game_players',
+        migrations.RemoveField(model_name="gameplayer", name="user"),
+        migrations.RemoveField(model_name="game", name="game_players"),
+        migrations.AlterField(
+            model_name="message",
+            name="game",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="messages",
+                to="app.Game",
+            ),
         ),
         migrations.AlterField(
-            model_name='message',
-            name='game',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='app.Game'),
+            model_name="message",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="messages",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
-        migrations.AlterField(
-            model_name='message',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to=settings.AUTH_USER_MODEL),
-        ),
-        migrations.DeleteModel(
-            name='GamePlayer',
-        ),
+        migrations.DeleteModel(name="GamePlayer"),
     ]

@@ -9,26 +9,37 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('app', '0009_message_message_type'),
+        ("app", "0009_message_message_type"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GamePlayers',
+            name="GamePlayers",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('followers', models.IntegerField(default=0)),
-                ('stories', models.IntegerField(default=3)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("followers", models.IntegerField(default=0)),
+                ("stories", models.IntegerField(default=3)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
-        migrations.RemoveField(
-            model_name='game',
-            name='users',
-        ),
+        migrations.RemoveField(model_name="game", name="users"),
         migrations.AddField(
-            model_name='game',
-            name='game_players',
-            field=models.ManyToManyField(to='app.GamePlayers'),
+            model_name="game",
+            name="game_players",
+            field=models.ManyToManyField(to="app.GamePlayers"),
         ),
     ]

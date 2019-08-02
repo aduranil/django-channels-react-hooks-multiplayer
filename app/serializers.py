@@ -10,20 +10,20 @@ class UserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create and return a `User` with an email, username and password."""
-        user = User(username=validated_data['username'], email=validated_data['email'])
-        user.set_password(validated_data['password'])
+        user = User(username=validated_data["username"], email=validated_data["email"])
+        user.set_password(validated_data["password"])
         user.save()
         return user
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'password')
+        fields = ("id", "username", "email", "password")
 
 
 class LoginSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True,)
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(min_length=8)
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'password')
+        fields = ("id", "email", "password")

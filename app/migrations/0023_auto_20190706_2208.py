@@ -5,14 +5,24 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0022_move'),
-    ]
+    dependencies = [("app", "0022_move")]
 
     operations = [
         migrations.AlterField(
-            model_name='move',
-            name='action_type',
-            field=models.CharField(choices=[('post_selfie', 'Post a selfie'), ('post_group_selfie', 'Post group selfie'), ('post_story', 'Post a story'), ('go_live', 'Go live'), ('leave_comment', 'Leave a comment'), ('dont_post', "Don't post"), ('do_nothing', 'Do nothing')], default='do_nothing', max_length=200),
-        ),
+            model_name="move",
+            name="action_type",
+            field=models.CharField(
+                choices=[
+                    ("post_selfie", "Post a selfie"),
+                    ("post_group_selfie", "Post group selfie"),
+                    ("post_story", "Post a story"),
+                    ("go_live", "Go live"),
+                    ("leave_comment", "Leave a comment"),
+                    ("dont_post", "Don't post"),
+                    ("do_nothing", "Do nothing"),
+                ],
+                default="do_nothing",
+                max_length=200,
+            ),
+        )
     ]

@@ -9,30 +9,39 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('app', '0011_game_users'),
+        ("app", "0011_game_users"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GamePlayer',
+            name="GamePlayer",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('followers', models.IntegerField(default=0)),
-                ('stories', models.IntegerField(default=3)),
-                ('started', models.BooleanField(default=False)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("followers", models.IntegerField(default=0)),
+                ("stories", models.IntegerField(default=3)),
+                ("started", models.BooleanField(default=False)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
-        migrations.RemoveField(
-            model_name='gameplayers',
-            name='user',
-        ),
+        migrations.RemoveField(model_name="gameplayers", name="user"),
         migrations.AlterField(
-            model_name='game',
-            name='game_players',
-            field=models.ManyToManyField(to='app.GamePlayer'),
+            model_name="game",
+            name="game_players",
+            field=models.ManyToManyField(to="app.GamePlayer"),
         ),
-        migrations.DeleteModel(
-            name='GamePlayers',
-        ),
+        migrations.DeleteModel(name="GamePlayers"),
     ]

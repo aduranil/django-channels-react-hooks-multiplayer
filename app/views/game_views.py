@@ -12,7 +12,7 @@ class GameCreateView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def post(self, request):
-        game = Game.objects.create(room_name=request.data['room_name'])
+        game = Game.objects.create(room_name=request.data["room_name"])
         return HttpResponse(json.dumps(game.as_json()))
 
 
@@ -21,7 +21,7 @@ class GameListView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
-        game_objects = Game.objects.all().filter(game_status='active')
+        game_objects = Game.objects.all().filter(game_status="active")
         games = [g.as_json() for g in game_objects]
         return HttpResponse(json.dumps(games), content_type="application/json")
 

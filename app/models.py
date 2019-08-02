@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 
 class GetOrNoneManager(models.Manager):
     """Adds get_or_none method to objects"""
+
     def get_or_none(self, **kwargs):
         try:
             return self.get(**kwargs)
@@ -32,8 +33,8 @@ class Game(models.Model):
             room_name=self.room_name,
             round_started=self.round_started,
             users=[u.as_json() for u in self.game_players.all()],
-            messages=[m.as_json() for m in self.messages.all().order_by('created_at')],
-            current_round=[r.as_json() for r in self.rounds.all().filter(started=True)]
+            messages=[m.as_json() for m in self.messages.all().order_by("created_at")],
+            current_round=[r.as_json() for r in self.rounds.all().filter(started=True)],
         )
 
     def can_start_game(self):
@@ -68,16 +69,10 @@ class Game(models.Model):
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=0)
     stories = models.IntegerField(default=3)
-    user = models.OneToOneField(
-        User,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     started = models.BooleanField(default=False)
     game = models.ForeignKey(
-        Game,
-        related_name="game_players",
-        on_delete=models.CASCADE,
+        Game, related_name="game_players", on_delete=models.CASCADE
     )
     objects = GetOrNoneManager()
 
@@ -92,11 +87,7 @@ class GamePlayer(models.Model):
 
 
 class Message(models.Model):
-    game = models.ForeignKey(
-        Game,
-        related_name="messages",
-        on_delete=models.CASCADE,
-    )
+    game = models.ForeignKey(Game, related_name="messages", on_delete=models.CASCADE)
     username = models.CharField(max_length=200, default=None)
     message = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -119,6 +110,13 @@ class Round(models.Model):
     def as_json(self):
         return dict(id=self.id, started=self.started)
 
+    def no_one_moved(self):
+        "if no one moved, we want to end the game"
+        for move in self.moves:
+            if move.action_type != "no_move":
+                return False
+        return True
+
     def tabulate_round(self):
         POST_SELFIE = "post_selfie"
         POST_GROUP_SELFIE = "post_group_selfie"
@@ -131,28 +129,32 @@ class Round(models.Model):
         LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
         LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 
-        POINTS = dict([
-            (POST_SELFIE, 10),
-            (POST_GROUP_SELFIE, 20),
-            (POST_STORY, 10),
-            (GO_LIVE, 20),
-            (LEAVE_COMMENT, -5),
-            (LEAVE_COMMENT_NO_MOVE, -10),
-            (LEAVE_COMMENT_GROUP_SELFIE, -15),
-            (DONT_POST, 0),
-            (NO_MOVE, -5),
-            (GO_LIVE_DAMAGE, -15)]
+        POINTS = dict(
+            [
+                (POST_SELFIE, 10),
+                (POST_GROUP_SELFIE, 20),
+                (POST_STORY, 10),
+                (GO_LIVE, 20),
+                (LEAVE_COMMENT, -5),
+                (LEAVE_COMMENT_NO_MOVE, -10),
+                (LEAVE_COMMENT_GROUP_SELFIE, -15),
+                (DONT_POST, 0),
+                (NO_MOVE, -5),
+                (GO_LIVE_DAMAGE, -15),
+            ]
         )
 
         # the list has the id of the player who performed that move
-        PLAYER_MOVES = dict([
-            (POST_SELFIE, []),
-            (POST_GROUP_SELFIE, []),
-            (POST_STORY, []),
-            (GO_LIVE, []),
-            (LEAVE_COMMENT, []),
-            (DONT_POST, []),
-            (NO_MOVE, [])]
+        PLAYER_MOVES = dict(
+            [
+                (POST_SELFIE, []),
+                (POST_GROUP_SELFIE, []),
+                (POST_STORY, []),
+                (GO_LIVE, []),
+                (LEAVE_COMMENT, []),
+                (DONT_POST, []),
+                (NO_MOVE, []),
+            ]
         )
         # see which players completed a move during a round
         PLAYERS_WHO_MOVED = []
@@ -202,11 +204,7 @@ class Round(models.Model):
             if player.user.id not in PLAYERS_WHO_MOVED:
                 PLAYER_MOVES[NO_MOVE].append(player.user.id)
                 PLAYER_POINTS[player.user.id] = POINTS[NO_MOVE]
-                Move.objects.create(
-                    round=self,
-                    action_type=NO_MOVE,
-                    player=player,
-                )
+                Move.objects.create(round=self, action_type=NO_MOVE, player=player)
 
         # convert a group selfie into a regular selfie if there's just 1
         if len(PLAYER_MOVES[POST_GROUP_SELFIE]) == 1:
@@ -244,7 +242,7 @@ class Round(models.Model):
                 # VICTIMS[v] is how many people did the victimizing action
                 # POINTS[LEAVE_COMMENT] is -5
                 # Don't update points, subtract from existing points
-                PLAYER_POINTS[v] += (POINTS[LEAVE_COMMENT] * VICTIMS[v])
+                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT] * VICTIMS[v]
             if v in PLAYER_MOVES[NO_MOVE]:
                 # POINTS[LEAVE_COMMENT_NO_MOVE] is -10
                 # UPDATE their points
@@ -282,6 +280,16 @@ class Move(models.Model):
     )
 
     round = models.ForeignKey(Round, related_name="moves", on_delete=models.CASCADE)
-    action_type = models.CharField(max_length=200, choices=ACTION_TYPES, default=DONT_POST)
-    player = models.ForeignKey(GamePlayer, related_name="game_player", on_delete=models.CASCADE)
-    victim = models.ForeignKey(GamePlayer, related_name="victim", blank=True, null=True, on_delete=models.CASCADE)
+    action_type = models.CharField(
+        max_length=200, choices=ACTION_TYPES, default=DONT_POST
+    )
+    player = models.ForeignKey(
+        GamePlayer, related_name="game_player", on_delete=models.CASCADE
+    )
+    victim = models.ForeignKey(
+        GamePlayer,
+        related_name="victim",
+        blank=True,
+        null=True,
+        on_delete=models.CASCADE,
+    )

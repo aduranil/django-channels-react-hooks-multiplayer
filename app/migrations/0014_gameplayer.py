@@ -8,19 +8,34 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auth', '0009_alter_user_last_name_max_length'),
-        ('app', '0013_auto_20190627_0109'),
+        ("auth", "0009_alter_user_last_name_max_length"),
+        ("app", "0013_auto_20190627_0109"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GamePlayer',
+            name="GamePlayer",
             fields=[
-                ('followers', models.IntegerField(default=0)),
-                ('stories', models.IntegerField(default=3)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, primary_key=True, serialize=False, to=settings.AUTH_USER_MODEL)),
-                ('started', models.BooleanField(default=False)),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='game_players', to='app.Game')),
+                ("followers", models.IntegerField(default=0)),
+                ("stories", models.IntegerField(default=3)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        primary_key=True,
+                        serialize=False,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                ("started", models.BooleanField(default=False)),
+                (
+                    "game",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="game_players",
+                        to="app.Game",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

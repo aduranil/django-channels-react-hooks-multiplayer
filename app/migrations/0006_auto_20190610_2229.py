@@ -5,17 +5,9 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0005_auto_20190609_1947'),
-    ]
+    dependencies = [("app", "0005_auto_20190609_1947")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='game',
-            name='created_at',
-        ),
-        migrations.RemoveField(
-            model_name='game',
-            name='updated_at',
-        ),
+        migrations.RemoveField(model_name="game", name="created_at"),
+        migrations.RemoveField(model_name="game", name="updated_at"),
     ]

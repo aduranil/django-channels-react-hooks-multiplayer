@@ -5,14 +5,12 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0017_auto_20190627_0219'),
-    ]
+    dependencies = [("app", "0017_auto_20190627_0219")]
 
     operations = [
         migrations.AddField(
-            model_name='game',
-            name='round_started',
+            model_name="game",
+            name="round_started",
             field=models.BooleanField(default=False),
-        ),
+        )
     ]

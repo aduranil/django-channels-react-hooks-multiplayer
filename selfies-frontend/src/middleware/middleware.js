@@ -5,8 +5,6 @@ const socketMiddleware = () => {
   let socket = null;
 
   const onOpen = store => (event) => {
-    // Authenticate with Backend...
-    console.log('websocket open', event.target.url);
     store.dispatch(actions.wsConnected(event.target.url));
   };
 
@@ -16,7 +14,6 @@ const socketMiddleware = () => {
 
   const onMessage = store => (event) => {
     const payload = JSON.parse(event.data);
-    console.log('receiving server message');
     switch (payload.type) {
       case 'update_game_players':
         store.dispatch(updateGame(payload.game, payload.current_player));
@@ -25,7 +22,6 @@ const socketMiddleware = () => {
         store.dispatch(updateTimer(payload.time));
         break;
       default:
-        console.log('Received unknown server payload', payload);
         break;
     }
   };
@@ -51,7 +47,6 @@ const socketMiddleware = () => {
           socket.close();
         }
         socket = null;
-        console.log('websocket closed');
         break;
       case 'LEAVE_GAME':
         socket.send(
@@ -59,7 +54,6 @@ const socketMiddleware = () => {
         );
         break;
       case 'NEW_MESSAGE':
-        console.log('sending a message', action.msg);
         socket.send(JSON.stringify({ command: 'NEW_MESSAGE', message: action.msg }));
         break;
       case 'START_ROUND':
@@ -75,7 +69,6 @@ const socketMiddleware = () => {
         );
         break;
       default:
-        console.log('the next action:', action);
         return next(action);
     }
   };

@@ -8,13 +8,13 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('app', '0010_auto_20190625_0053'),
+        ("app", "0010_auto_20190625_0053"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='game',
-            name='users',
+            model_name="game",
+            name="users",
             field=models.ManyToManyField(to=settings.AUTH_USER_MODEL),
-        ),
+        )
     ]

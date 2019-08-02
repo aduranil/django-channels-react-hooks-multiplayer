@@ -6,14 +6,18 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0016_message'),
-    ]
+    dependencies = [("app", "0016_message")]
 
     operations = [
         migrations.AlterField(
-            model_name='message',
-            name='game_player',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='app.GamePlayer'),
-        ),
+            model_name="message",
+            name="game_player",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="messages",
+                to="app.GamePlayer",
+            ),
+        )
     ]

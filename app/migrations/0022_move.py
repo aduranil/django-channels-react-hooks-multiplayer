@@ -6,19 +6,48 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0021_round'),
-    ]
+    dependencies = [("app", "0021_round")]
 
     operations = [
         migrations.CreateModel(
-            name='Move',
+            name="Move",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('action_type', models.CharField(max_length=200)),
-                ('player', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='game_player', to='app.GamePlayer')),
-                ('round', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='moves', to='app.Round')),
-                ('victim', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='victim', to='app.GamePlayer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("action_type", models.CharField(max_length=200)),
+                (
+                    "player",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="game_player",
+                        to="app.GamePlayer",
+                    ),
+                ),
+                (
+                    "round",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="moves",
+                        to="app.Round",
+                    ),
+                ),
+                (
+                    "victim",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="victim",
+                        to="app.GamePlayer",
+                    ),
+                ),
             ],
-        ),
+        )
     ]

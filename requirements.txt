@@ -5,6 +5,7 @@ async-timeout==3.0.1
 attrs==19.1.0
 autobahn==19.3.3
 Automat==0.7.0
+black
 channels==2.2
 channels-redis==2.4.0
 Click==7.0

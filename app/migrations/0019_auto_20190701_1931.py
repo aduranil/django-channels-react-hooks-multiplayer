@@ -5,18 +5,13 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0018_game_round_started'),
-    ]
+    dependencies = [("app", "0018_game_round_started")]
 
     operations = [
-        migrations.RemoveField(
-            model_name='message',
-            name='game_player',
-        ),
+        migrations.RemoveField(model_name="message", name="game_player"),
         migrations.AddField(
-            model_name='message',
-            name='username',
+            model_name="message",
+            name="username",
             field=models.CharField(default=None, max_length=200),
         ),
     ]

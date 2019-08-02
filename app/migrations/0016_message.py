@@ -6,20 +6,40 @@ import django.db.models.deletion
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('app', '0015_auto_20190627_0121'),
-    ]
+    dependencies = [("app", "0015_auto_20190627_0121")]
 
     operations = [
         migrations.CreateModel(
-            name='Message',
+            name="Message",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('message', models.CharField(max_length=200)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('message_type', models.CharField(default=None, max_length=50)),
-                ('game', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='app.Game')),
-                ('game_player', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='app.GamePlayer')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("message", models.CharField(max_length=200)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("message_type", models.CharField(default=None, max_length=50)),
+                (
+                    "game",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="messages",
+                        to="app.Game",
+                    ),
+                ),
+                (
+                    "game_player",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="messages",
+                        to="app.GamePlayer",
+                    ),
+                ),
             ],
-        ),
+        )
     ]
