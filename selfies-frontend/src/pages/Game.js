@@ -8,8 +8,8 @@ import ChatBox from '../components/ChatBox';
 import Navigation from '../components/Navigation';
 import { Phone } from '../images/iPhone';
 
-// const HOST = 'localhost:8000';
-const HOST = 'selfies-2020.herokuapp.com';
+const HOST = 'localhost:8000';
+// const HOST = 'selfies-2020.herokuapp.com';
 
 class Game extends React.Component {
   componentDidMount() {
