@@ -16,14 +16,6 @@ import dj_database_url
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-redis_host = os.environ.get("REDIS_URL")
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [os.environ.get("REDIS_URL", 6379)]},
-    }
-}
 
 ASGI_APPLICATION = "selfies.routing.application"
 
@@ -96,6 +88,21 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "selfies.wsgi.application"
+
+# redis_host = os.environ.get("REDIS_URL")
+redis_host = os.environ.get('REDIS_URL', 'localhost')
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [(redis_host, 6379)]},
+    }
+}
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {"hosts": [os.environ.get("REDIS_URL", 'redis://redis:6379')]},
+#     }
+# }
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases

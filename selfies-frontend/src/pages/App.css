@@ -21,6 +21,12 @@ button[disabled] {
   cursor: default;
 }
 
+.button-color {
+  background-color: #a06cd5;
+  border: 3px solid #a06cd5;
+  color: white;
+}
+
 .landingbox {
   background: #ff70a6;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);

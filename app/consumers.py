@@ -20,7 +20,6 @@ class GameConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
-
         self.accept()
         self.join_game()
 
@@ -44,15 +43,17 @@ class GameConsumer(WebsocketConsumer):
 
         self.send_update_game_players(game)
 
-    def leave_game(self):
+    def leave_game(self, data):
         user = self.scope["user"]
 
         game_player = GamePlayer.objects.get(user=user)
         # retrieve the updated game
         game = Game.objects.get(id=self.id)
         if game.game_players.all().count() == 1:
+            print("game was deleted")
             game.delete()
         else:
+            print('someone self')
             message = "{} left".format(user.username)
             Message.objects.create(
                 message=message,
@@ -127,7 +128,8 @@ class GameConsumer(WebsocketConsumer):
         round.save()
         updated_round = Round.objects.create(game=self.game, started=True)
         if round.no_one_moved:
-            async_to_sync(self.channel_layer.group_discard)(
+            print('no one moved')
+            return async_to_sync(self.channel_layer.group_discard)(
                 self.room_group_name, self.channel_name
             )
 
