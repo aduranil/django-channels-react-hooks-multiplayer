@@ -57,13 +57,11 @@ class Game(models.Model):
     def check_joinability(self):
         if self.game_players.all().count() == 6:
             self.is_joinable = False
-            self.save()
         elif self.round_started is True:
             self.is_joinable = False
-            self.save()
         else:
             self.is_joinable = True
-            self.save()
+        self.save()
 
 
 class GamePlayer(models.Model):
@@ -112,7 +110,7 @@ class Round(models.Model):
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"
-        for move in self.moves:
+        for move in self.moves.all():
             if move.action_type != "no_move":
                 return False
         return True

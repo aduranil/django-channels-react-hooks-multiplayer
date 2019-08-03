@@ -49,7 +49,8 @@ class GameConsumer(WebsocketConsumer):
         game_player = GamePlayer.objects.get(user=user)
         # retrieve the updated game
         game = Game.objects.get(id=self.id)
-        if game.game_players.all().count() == 1:
+        print(game.game_players.all().count())
+        if game.game_players.all().count() <= 1:
             print("game was deleted")
             game.delete()
         else:
@@ -127,7 +128,7 @@ class GameConsumer(WebsocketConsumer):
         round.started = False
         round.save()
         updated_round = Round.objects.create(game=self.game, started=True)
-        if round.no_one_moved:
+        if round.no_one_moved():
             print('no one moved')
             return async_to_sync(self.channel_layer.group_discard)(
                 self.room_group_name, self.channel_name

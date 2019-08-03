@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect } from '../modules/websocket';
-import { startRound, leaveGame, makeMove } from '../modules/game';
+import {
+  startRound, leaveGame, makeMove, getGame,
+} from '../modules/game';
 import WithAuth from '../hocs/AuthenticationWrapper';
 import ChatBox from '../components/ChatBox';
 import Navigation from '../components/Navigation';
@@ -20,6 +22,13 @@ class Game extends React.Component {
     const { id } = this.props;
     if (id) {
       this.connectAndJoin();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { dispatch, games } = this.props;
+    if (games !== prevProps.games) {
+      dispatch(updateGame());
     }
   }
 
@@ -125,6 +134,7 @@ class Game extends React.Component {
                       id={player.id}
                       disabled={!game.round_started}
                       value="leave_comment"
+                      className={currentMove === 'leave_comment' ? 'button-color' : null}
                       type="button"
                     >
                       <Phone />
