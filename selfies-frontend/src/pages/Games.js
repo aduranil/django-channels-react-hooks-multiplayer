@@ -18,12 +18,12 @@ class Games extends React.Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { dispatch, games } = this.props;
-    if (games !== prevProps.games) {
-      dispatch(getGames());
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const { dispatch, games } = this.props;
+  //   if (games !== prevProps.games) {
+  //     dispatch(getGames());
+  //   }
+  // }
 
   onClick = () => {
     const { dispatch, history } = this.props;

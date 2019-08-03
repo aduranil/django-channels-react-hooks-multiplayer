@@ -41,7 +41,7 @@ class Game(models.Model):
         """See if the round can be started. Requires at least 3 players and
         that all players in the room have started"""
 
-        if self.game_players.all().count() <= 1:
+        if self.game_players.all().count() <= 0:
             self.round_started = False
             self.save()
             return False
@@ -62,6 +62,11 @@ class Game(models.Model):
         else:
             self.is_joinable = True
         self.save()
+
+    def set_players_as_not_having_started(self):
+        for player in self.game_players.all():
+            player.started = False
+            player.save()
 
 
 class GamePlayer(models.Model):

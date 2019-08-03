@@ -130,9 +130,13 @@ class GameConsumer(WebsocketConsumer):
         updated_round = Round.objects.create(game=self.game, started=True)
         if round.no_one_moved():
             print('no one moved')
-            return async_to_sync(self.channel_layer.group_discard)(
-                self.room_group_name, self.channel_name
-            )
+            # the below 4 things can be combined into one reset_game method
+            self.game.round_started = False
+            self.game.is_joinable = True
+            self.game.set_players_as_not_having_started()
+            self.game.save()
+
+            return self.send_update_game_players(self.game)
 
         if not winner:
             self.start_round_and_timer(updated_round, self.game)

@@ -2,9 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect } from '../modules/websocket';
-import {
-  startRound, leaveGame, makeMove, getGame,
-} from '../modules/game';
+import { startRound, leaveGame, makeMove } from '../modules/game';
 import WithAuth from '../hocs/AuthenticationWrapper';
 import ChatBox from '../components/ChatBox';
 import Navigation from '../components/Navigation';
@@ -26,9 +24,9 @@ class Game extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { dispatch, games } = this.props;
-    if (games !== prevProps.games) {
-      dispatch(updateGame());
+    const { time } = this.props;
+    if (time === '15' && time !== prevProps.time) {
+      this.setState({ currentMove: null });
     }
   }
 
@@ -52,11 +50,12 @@ class Game extends React.Component {
   makeMove = (event) => {
     const { dispatch } = this.props;
     let victim = null;
-    this.setState({ currentMove: event.currentTarget.value });
+
     // only the comment game move has another player that it impacts
-    if (event.currentTarget.value === 'leave_comment') {
+    if (event.currentTarget.value.includes('leave_comment')) {
       victim = event.currentTarget.id;
     }
+    this.setState({ currentMove: event.currentTarget.value, victim });
     dispatch(
       makeMove({
         move: event.currentTarget.value,
@@ -133,8 +132,10 @@ class Game extends React.Component {
                       onClick={this.makeMove}
                       id={player.id}
                       disabled={!game.round_started}
-                      value="leave_comment"
-                      className={currentMove === 'leave_comment' ? 'button-color' : null}
+                      value={`leave_comment_${player.id}`}
+                      className={
+                        currentMove === `leave_comment_${player.id}` ? 'button-color' : null
+                      }
                       type="button"
                     >
                       <Phone />
