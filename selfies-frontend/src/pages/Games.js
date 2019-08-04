@@ -9,13 +9,13 @@ import HalfRectangle from '../images/Rectangle';
 function Games({
   history, dispatch, loggedIn, games,
 }) {
-  const [roomName, setRoomName] = useState(null);
+  const [roomName, setRoomName] = useState('');
 
   useEffect(() => {
     if (loggedIn) {
       dispatch(getGames());
     }
-  });
+  }, []);
 
   const onClick = () => {
     if (roomName.length === 0) {
