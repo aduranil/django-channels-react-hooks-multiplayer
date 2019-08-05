@@ -49,6 +49,7 @@ class GameConsumer(WebsocketConsumer):
         print(self.game.game_players.all().count())
         if self.game.game_players.all().count() <= 1:
             print("game was deleted")
+            game_player.delete()
             self.game.delete()
         else:
             print("someone self")
@@ -86,13 +87,13 @@ class GameConsumer(WebsocketConsumer):
             # start the timer in another thread
             round = Round.objects.create(game=self.game, started=True)
             # pass round so we can set it to false after the time is done
-            self.start_round_and_timer(round)
+            self.start_round_and_timer()
 
-    def start_round_and_timer(self, round):
-        threading.Thread(target=self.update_timer_data, args=[round]).start()
+    def start_round_and_timer(self):
+        threading.Thread(target=self.update_timer_data).start()
         self.send_update_game_players()
 
-    def update_timer_data(self, round):
+    def update_timer_data(self):
         """countdown the timer for the game"""
         i = 15
         while i >= 0:
@@ -101,44 +102,47 @@ class GameConsumer(WebsocketConsumer):
             i -= 1
         # reset timer back to null
         self.send_time(None)
-        self.new_round_or_determine_winner(round)
+        self.new_round_or_determine_winner()
 
-    def new_round_or_determine_winner(self, round):
+    def new_round_or_determine_winner(self):
         "determines a winner or loops through again"
         # TODO i need to move this somewhere else
-        player_points = round.tabulate_round()
-        winner = None
-        for player in self.game.game_players.all():
-            points = player_points[player.user_id]
-            updated_points = points + player.followers
+        round = Round.objects.get_or_none(game=self.game, started=True)
+        if round:
+            player_points = round.tabulate_round()
+            winner = None
+            for player in self.game.game_players.all():
+                points = player_points[player.user_id]
+                updated_points = points + player.followers
 
-            # the floor is zero
-            if updated_points < 0:
-                updated_points = 0
-            if updated_points >= 100:
-                winner = player
-            player.followers = updated_points
-            player.save()
+                # the floor is zero
+                if updated_points < 0:
+                    updated_points = 0
+                if updated_points >= 100:
+                    winner = player
+                player.followers = updated_points
+                player.save()
 
-        if round.no_one_moved():
-            print("no one moved")
-            # the below 4 things can be combined into one reset_game method
-            self.game.round_started = False
-            self.game.is_joinable = True
+            if round.no_one_moved():
+                print("no one moved")
+                # the below 4 things can be combined into one reset_game method
+                self.game.round_started = False
+                self.game.is_joinable = True
+                self.game.set_players_as_not_having_started()
+                self.game.save()
+                round.started = False
+                round.save()
+
+                return self.send_update_game_players()
+
             round.started = False
-            self.game.set_players_as_not_having_started()
-            self.game.save()
-
-            return self.send_update_game_players()
-
-        round.started = False
-        round.save()
-        updated_round = Round.objects.create(game=self.game, started=True)
-        if not winner:
-            self.start_round_and_timer(updated_round)
-        else:
-            # TODO disconnect when this happens
-            self.when_someone_wins()
+            round.save()
+            updated_round = Round.objects.create(game=self.game, started=True)
+            if not winner:
+                self.start_round_and_timer()
+            else:
+                # TODO disconnect when this happens
+                self.when_someone_wins()
 
     def when_someone_wins(self):
         # placeholder method for now
@@ -146,10 +150,7 @@ class GameConsumer(WebsocketConsumer):
 
     def make_move(self, data):
         user = self.scope["user"]
-        try:
-            round = Round.objects.get(game=self.game, started=True)
-        except Exception:
-            round = Round.objects.filter(game=self.game, started=True)[0]
+        round = Round.objects.get(game=self.game, started=True)
 
         game_player = GamePlayer.objects.get_or_none(user=user)
         try:

@@ -63,6 +63,23 @@ function Game({
           {' '}
           {game.room_name}
         </h1>
+        <div
+          style={{
+            background: '#ff70a6',
+            boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
+            borderRadius: '20px',
+            flexGrow: '1',
+            marginRight: '1%',
+            marginBottom: '1%',
+            marginTop: '2%',
+            width: '100%',
+            padding: '3%',
+            maxHeight: '500px',
+          }}
+        >
+          {' '}
+          <h1 style={{ textAlign: 'center' }}> Round History</h1>
+        </div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <ChatBox game={game} />
           <div
