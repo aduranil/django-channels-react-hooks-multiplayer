@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getCurrentUser } from '../modules/account';
 
 const WithAuth = (WrappedComponent) => {
@@ -10,8 +11,9 @@ const WithAuth = (WrappedComponent) => {
     };
 
     componentDidMount() {
+      const { dispatch } = this.props;
       if (localStorage.getItem('token')) {
-        this.props.dispatch(getCurrentUser());
+        dispatch(getCurrentUser());
       }
     }
 
@@ -51,11 +53,20 @@ const WithAuth = (WrappedComponent) => {
     }
   }
 
-  const mapStateToProps = state => ({
+  AuthedComponent.propTypes = {
+    loggedIn: PropTypes.bool,
+    dispatch: PropTypes.func.isRequired,
+  };
+
+  AuthedComponent.defaultProps = {
+    loggedIn: PropTypes.null,
+  };
+
+  const s2p = state => ({
     loggedIn: state.auth.loggedIn,
   });
 
-  return connect(mapStateToProps)(AuthedComponent);
+  return connect(s2p)(AuthedComponent);
 };
 
 export default WithAuth;

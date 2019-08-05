@@ -85,7 +85,7 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
         if self.game.can_start_game():
             # start the timer in another thread
-            round = Round.objects.create(game=self.game, started=True)
+            Round.objects.create(game=self.game, started=True)
             # pass round so we can set it to false after the time is done
             self.start_round_and_timer()
 
@@ -137,7 +137,7 @@ class GameConsumer(WebsocketConsumer):
 
             round.started = False
             round.save()
-            updated_round = Round.objects.create(game=self.game, started=True)
+            Round.objects.create(game=self.game, started=True)
             if not winner:
                 self.start_round_and_timer()
             else:

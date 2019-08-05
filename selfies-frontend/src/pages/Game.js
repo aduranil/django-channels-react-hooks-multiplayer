@@ -22,7 +22,6 @@ function Game({
 
   useEffect(
     () => {
-      console.log(time);
       if (time === '15') {
         setCurrentMove(null);
       }
@@ -178,7 +177,7 @@ function Game({
                     value="dont_post"
                     onClick={newMove}
                   >
-                    don't post
+                    {"don't post"}
                   </button>
                   <button
                     className={currentMove === 'go_live' ? 'button-color' : null}

@@ -111,7 +111,7 @@ class Round(models.Model):
     started = models.BooleanField(default=False)
 
     objects = GetOrNoneManager()
-    
+
     def as_json(self):
         return dict(id=self.id, started=self.started)
 
