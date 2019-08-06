@@ -20,14 +20,11 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), []);
 
-  useEffect(
-    () => {
-      if (time === '15') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '15') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const exitGame = async () => {
     await dispatch(leaveGame(id));
@@ -55,6 +52,7 @@ function Game({
   };
 
   if (id && game) {
+    console.log(game);
     return (
       <React.Fragment>
         <Navigation />
@@ -228,6 +226,15 @@ Game.propTypes = {
       }),
     ),
     messages: PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        username: PropTypes.string.isRequired,
+        message: PropTypes.string.isRequired,
+        message_type: PropTypes.string.isRequired,
+        created_at: PropTypes.string.isRequired,
+      }),
+    ),
+    round_history: PropTypes.arrayOf(
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         username: PropTypes.string.isRequired,

@@ -115,7 +115,7 @@ class GameConsumer(WebsocketConsumer):
             for player in self.game.game_players.all():
                 points = player_points[player.user_id]
                 updated_points = points + player.followers
-                # move = Move.objects.get(round=round, player=player)
+                move = Move.objects.get(round=round, player=player)
 
                 # the floor is zero
                 if updated_points < 0:
@@ -124,7 +124,14 @@ class GameConsumer(WebsocketConsumer):
                     winner = player
                 player.followers = updated_points
                 player.save()
-                round.generate_message(move.action_type, player.user.username, points, updated_points, player_moves, player.user_id)
+                round.generate_message(
+                    move.action_type,
+                    player.user.username,
+                    points,
+                    updated_points,
+                    player_moves,
+                    player.user_id,
+                )
             if round.no_one_moved():
                 print("no one moved")
                 # the below 4 things can be combined into one reset_game method
@@ -170,7 +177,9 @@ class GameConsumer(WebsocketConsumer):
             )
         # save the victim if they are there
         if data["move"]["victim"]:
-            victim = GamePlayer.objects.get(user_id=data["move"]["victim"], game=self.game)
+            victim = GamePlayer.objects.get(
+                user_id=data["move"]["victim"], game=self.game
+            )
             move.victim = victim
             move.save()
 
