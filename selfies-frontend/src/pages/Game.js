@@ -15,24 +15,26 @@ function Game({
   id, time, dispatch, history, game, currentPlayer,
 }) {
   const [currentMove, setCurrentMove] = useState('');
-  const [victim, setVictim] = useState(null);
   const host = `ws://${HOST}/ws/game/${id}?token=${localStorage.getItem('token')}`;
 
   useEffect(() => dispatch(wsConnect(host)), []);
 
-  useEffect(() => {
-    if (time === '15') {
-      setCurrentMove(null);
-    }
-  }, [time]);
+  useEffect(
+    () => {
+      if (time === '5') {
+        setCurrentMove(null);
+      }
+    },
+    [time],
+  );
 
   const exitGame = async () => {
-    await dispatch(leaveGame(id));
+    await dispatch(leaveGame());
     history.push('/games');
   };
 
   const beginRound = () => {
-    dispatch(startRound(id));
+    dispatch(startRound());
   };
 
   const newMove = (event) => {
@@ -42,12 +44,10 @@ function Game({
     // only the comment game move has another player that it impacts
     if (event.currentTarget.value.includes('leave_comment')) {
       move = 'leave_comment';
-      setVictim(event.currentTarget.id);
       theVictim = event.currentTarget.id;
       // victim = event.currentTarget.id;
     }
     setCurrentMove(event.currentTarget.value);
-    console.log(event.currentTarget.id);
     dispatch(
       makeMove({
         move,

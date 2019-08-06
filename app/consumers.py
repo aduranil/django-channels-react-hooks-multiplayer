@@ -43,7 +43,7 @@ class GameConsumer(WebsocketConsumer):
 
         self.send_update_game_players()
 
-    def leave_game(self, data):
+    def leave_game(self, data=None):
         print('in leave game')
         user = self.scope["user"]
         game_player = GamePlayer.objects.get(user=user, game=self.game)
@@ -78,7 +78,7 @@ class GameConsumer(WebsocketConsumer):
         )
         self.send_update_game_players()
 
-    def start_round(self, data):
+    def start_round(self, data=None):
         """Checks if the user has opted in to starting the game"""
 
         game_player = GamePlayer.objects.get(user=self.scope["user"], game=self.game)
@@ -114,7 +114,7 @@ class GameConsumer(WebsocketConsumer):
             player_points, player_moves, victims = round.tabulate_round()
             winner = None
             for player in self.game.game_players.all():
-                points = player_points[player.user_id]
+                points = player_points[player.id]
                 updated_points = points + player.followers
                 move = Move.objects.get(round=round, player=player)
 
@@ -216,6 +216,7 @@ class GameConsumer(WebsocketConsumer):
 
     def receive(self, text_data):
         data = json.loads(text_data)
+
         self.commands[data["command"]](self, data)
 
     commands = {

@@ -49,15 +49,13 @@ const socketMiddleware = () => {
         socket = null;
         break;
       case 'LEAVE_GAME':
-        socket.send(
-          JSON.stringify({ command: 'LEAVE_GAME', username: action.username, id: action.id }),
-        );
+        socket.send(JSON.stringify({ command: 'LEAVE_GAME' }));
         break;
       case 'NEW_MESSAGE':
         socket.send(JSON.stringify({ command: 'NEW_MESSAGE', message: action.msg }));
         break;
       case 'START_ROUND':
-        socket.send(JSON.stringify({ command: 'START_ROUND', id: action.id }));
+        socket.send(JSON.stringify({ command: 'START_ROUND' }));
         break;
       case 'MAKE_MOVE':
         socket.send(

@@ -1,7 +1,7 @@
 export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
 export const updateGame = (json, player) => ({ type: 'SET_GAME', data: json, player });
-export const leaveGame = id => ({ type: 'LEAVE_GAME', id });
-export const startRound = id => ({ type: 'START_ROUND', id });
+export const leaveGame = () => ({ type: 'LEAVE_GAME' });
+export const startRound = () => ({ type: 'START_ROUND' });
 export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
 export const makeMove = move => ({ type: 'MAKE_MOVE', move });
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';

@@ -213,6 +213,7 @@ class Round(models.Model):
 
         # populate what each player did and initial points for them
         for move in self.moves.all():
+            print(move.action_type, move.player.id)
             # TODO refactor this into a switch statement
             if move.action_type == move.POST_SELFIE:
                 PLAYER_MOVES[POST_SELFIE].append(move.player.id)
@@ -302,7 +303,7 @@ class Round(models.Model):
         for user in PLAYER_MOVES[POST_SELFIE]:
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
-
+        print(PLAYER_POINTS, PLAYER_MOVES, VICTIMS)
         return [PLAYER_POINTS, PLAYER_MOVES, VICTIMS]
 
 
