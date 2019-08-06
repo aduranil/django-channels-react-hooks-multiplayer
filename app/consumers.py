@@ -110,7 +110,7 @@ class GameConsumer(WebsocketConsumer):
         # TODO i need to move this somewhere else
         round = Round.objects.get_or_none(game=self.game, started=True)
         if round:
-            player_points, player_moves = round.tabulate_round()
+            player_points, player_moves, victims = round.tabulate_round()
             winner = None
             for player in self.game.game_players.all():
                 points = player_points[player.user_id]
@@ -131,6 +131,7 @@ class GameConsumer(WebsocketConsumer):
                     updated_points,
                     player_moves,
                     player.user_id,
+                    victims
                 )
             if round.no_one_moved():
                 print("no one moved")

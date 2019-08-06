@@ -128,7 +128,7 @@ class Round(models.Model):
         )
 
     def generate_message(
-        self, action_type, username, points, updated_points, player_moves, id
+        self, action_type, username, points, updated_points, player_moves, id, victims
     ):
         # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
         message = "{} did {} and got {} points".format(username, action_type, points)
@@ -142,6 +142,8 @@ class Round(models.Model):
                 )
         if id in player_moves["dont_post"]:
             message = "{} didn't post and lost {} points. i dont know why since she had nothing better to do.".format(username, points)
+        if id in player_moves["no_move"]:
+            message = "{} was so lazy that she forgot to move. she lost {} points".format(username, points)
         if id in player_moves["post_selfie"]:
             message1 = "{} posted a selfie. how original. she gained {} points".format(
                 username, points
@@ -300,7 +302,7 @@ class Round(models.Model):
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
 
-        return [PLAYER_POINTS, PLAYER_MOVES]
+        return [PLAYER_POINTS, PLAYER_MOVES, VICTIMS]
 
 
 class Move(models.Model):
