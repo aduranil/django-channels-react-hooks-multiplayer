@@ -72,7 +72,9 @@ class Game(models.Model):
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=0)
     stories = models.IntegerField(default=3)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.ForeignKey(
+        User, related_name="game_players", on_delete=models.CASCADE, primary_key=False, default=""
+    )
     started = models.BooleanField(default=False)
     game = models.ForeignKey(
         Game, related_name="game_players", on_delete=models.CASCADE
@@ -87,7 +89,6 @@ class GamePlayer(models.Model):
             username=self.user.username,
             started=self.started,
         )
-
 
 class Message(models.Model):
     game = models.ForeignKey(Game, related_name="messages", on_delete=models.CASCADE)
@@ -113,7 +114,10 @@ class Round(models.Model):
     objects = GetOrNoneManager()
 
     def as_json(self):
-        return dict(id=self.id, started=self.started)
+        return dict(
+        id=self.id,
+        started=self.started,
+        moves=[m.as_json() for m in self.moves.all()])
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"
@@ -298,3 +302,11 @@ class Move(models.Model):
         null=True,
         on_delete=models.CASCADE,
     )
+
+    def as_json(self):
+        return dict(
+            id=self.id,
+            action_type=self.action_type,
+            player=self.player.as_json() if self.player else None,
+            victim=self.victim.as_json() if self.victim else None,
+        )

@@ -29,7 +29,8 @@ class GameConsumer(WebsocketConsumer):
     # GAME MOVE ACTIONS
     def join_game(self):
         user = self.scope["user"]
-        if not hasattr(user, "gameplayer") and self.game.is_joinable:
+        game_player = GamePlayer.objects.get_or_none(user=user, game=self.game)
+        if not game_player and self.game.is_joinable:
             GamePlayer.objects.create(user=user, game=self.game)
             message = "{} joined".format(user.username)
             Message.objects.create(
@@ -152,7 +153,7 @@ class GameConsumer(WebsocketConsumer):
         user = self.scope["user"]
         round = Round.objects.get(game=self.game, started=True)
 
-        game_player = GamePlayer.objects.get_or_none(user=user)
+        game_player = GamePlayer.objects.get_or_none(user=user, game=self.game)
         try:
             move = Move.objects.get(player=game_player, round=round)
             move.action_type = data["move"]["move"]
@@ -168,7 +169,7 @@ class GameConsumer(WebsocketConsumer):
             )
         # save the victim if they are there
         if data["move"]["victim"]:
-            victim = GamePlayer.objects.get(user_id=data["move"]["victim"])
+            victim = GamePlayer.objects.get(user_id=data["move"]["victim"], game=self.game)
             move.victim = victim
             move.save()
 
@@ -176,7 +177,7 @@ class GameConsumer(WebsocketConsumer):
     def send_update_game_players(self):
         """sends all game info as a json object when there's an update"""
         game = Game.objects.get(id=self.id)
-        game_player = GamePlayer.objects.get_or_none(user=self.scope["user"])
+        game_player = GamePlayer.objects.get_or_none(user=self.scope["user"], game=game)
         current_player = game_player.as_json() if game_player else None
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
