@@ -45,7 +45,7 @@ class GameConsumer(WebsocketConsumer):
 
     def leave_game(self, data):
         user = self.scope["user"]
-        game_player = GamePlayer.objects.get(user=user)
+        game_player = GamePlayer.objects.get(user=user, game=self.game)
         # retrieve the updated game
         print(self.game.game_players.all().count())
         if self.game.game_players.all().count() <= 1:
@@ -80,7 +80,7 @@ class GameConsumer(WebsocketConsumer):
     def start_round(self, data):
         """Checks if the user has opted in to starting the game"""
 
-        game_player = GamePlayer.objects.get(user=self.scope["user"])
+        game_player = GamePlayer.objects.get(user=self.scope["user"], game=self.game)
         game_player.started = True
         game_player.save()
         self.send_update_game_players()
@@ -96,7 +96,7 @@ class GameConsumer(WebsocketConsumer):
 
     def update_timer_data(self):
         """countdown the timer for the game"""
-        i = 15
+        i = 5
         while i >= 0:
             time.sleep(1)
             self.send_time(str(i))
@@ -110,11 +110,12 @@ class GameConsumer(WebsocketConsumer):
         # TODO i need to move this somewhere else
         round = Round.objects.get_or_none(game=self.game, started=True)
         if round:
-            player_points = round.tabulate_round()
+            player_points, player_moves = round.tabulate_round()
             winner = None
             for player in self.game.game_players.all():
                 points = player_points[player.user_id]
                 updated_points = points + player.followers
+                # move = Move.objects.get(round=round, player=player)
 
                 # the floor is zero
                 if updated_points < 0:
@@ -123,7 +124,7 @@ class GameConsumer(WebsocketConsumer):
                     winner = player
                 player.followers = updated_points
                 player.save()
-
+                round.generate_message(move.action_type, player.user.username, points, updated_points, player_moves, player.user_id)
             if round.no_one_moved():
                 print("no one moved")
                 # the below 4 things can be combined into one reset_game method

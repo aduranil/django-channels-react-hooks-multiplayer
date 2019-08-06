@@ -115,9 +115,19 @@ class Round(models.Model):
 
     def as_json(self):
         return dict(
-        id=self.id,
-        started=self.started,
-        moves=[m.as_json() for m in self.moves.all()])
+            id=self.id,
+            started=self.started,
+            moves=[m.as_json() for m in self.moves.all()],
+        )
+
+    def generate_message(self, action_type, username, points, updated_points, player_moves, id):
+        # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
+        if id in player_moves['go_live']:
+                message = "{username} went live and got {points} points, and now has {updated_points}".format(username, points, updated_points)
+            if len(player_moves['go_live'] > 1):
+                message = "{username} went live while other girls also went live. what a dummy! She lost {points} and now has {updated_points}".format(username, points, updated_points)
+        if id in player_moves['post_selfie']:
+            message = "{username} posted a selfie. how original. she gained {points}".format(username, points)
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"
@@ -266,7 +276,7 @@ class Round(models.Model):
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
 
-        return PLAYER_POINTS
+        return [PLAYER_POINTS, PLAYER_MOVES]
 
 
 class Move(models.Model):
