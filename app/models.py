@@ -89,7 +89,7 @@ class GamePlayer(models.Model):
 
     def as_json(self):
         return dict(
-            id=self.user.id,
+            id=self.id,
             followers=self.followers,
             stories=self.stories,
             username=self.user.username,
@@ -131,6 +131,7 @@ class Round(models.Model):
         self, action_type, username, points, updated_points, player_moves, id, victims
     ):
         # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
+        # victims {33: 1} the player.id and the count of how many people left a mean comment
         message = "{} did {} and got {} points".format(username, action_type, points)
         if id in player_moves["go_live"]:
             message = "{} went live and got {} points, and now has {}".format(
@@ -214,41 +215,41 @@ class Round(models.Model):
         for move in self.moves.all():
             # TODO refactor this into a switch statement
             if move.action_type == move.POST_SELFIE:
-                PLAYER_MOVES[POST_SELFIE].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
+                PLAYER_MOVES[POST_SELFIE].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
                 # dont update these points until the end
             elif move.action_type == move.POST_GROUP_SELFIE:
-                PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
-                PLAYER_POINTS[move.player.user.id] = POINTS[POST_GROUP_SELFIE]
+                PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
+                PLAYER_POINTS[move.player.id] = POINTS[POST_GROUP_SELFIE]
             elif move.action_type == move.POST_STORY:
-                PLAYER_MOVES[POST_STORY].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
-                PLAYER_POINTS[move.player.user.id] = POINTS[POST_STORY]
+                PLAYER_MOVES[POST_STORY].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
+                PLAYER_POINTS[move.player.id] = POINTS[POST_STORY]
 
                 # decrement the number of stories the player has
                 game_player = GamePlayer.objects.get(user_id=move.player.user_id, game=self.game)
                 game_player.stories = game_player.stories - 1
                 game_player.save()
             elif move.action_type == move.GO_LIVE:
-                PLAYER_MOVES[GO_LIVE].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
-                PLAYER_POINTS[move.player.user.id] = POINTS[GO_LIVE]
+                PLAYER_MOVES[GO_LIVE].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
+                PLAYER_POINTS[move.player.id] = POINTS[GO_LIVE]
             elif move.action_type == move.LEAVE_COMMENT:
-                PLAYER_MOVES[LEAVE_COMMENT].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
-                VICTIMS[move.victim.user.id] += 1
-                PLAYER_POINTS[move.player.user.id] = POINTS[LEAVE_COMMENT]
+                PLAYER_MOVES[LEAVE_COMMENT].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
+                VICTIMS[move.victim.id] += 1
+                PLAYER_POINTS[move.player.id] = POINTS[LEAVE_COMMENT]
             elif move.action_type == move.DONT_POST:
-                PLAYER_MOVES[DONT_POST].append(move.player.user.id)
-                PLAYERS_WHO_MOVED.append(move.player.user.id)
-                PLAYER_POINTS[move.player.user.id] = POINTS[DONT_POST]
+                PLAYER_MOVES[DONT_POST].append(move.player.id)
+                PLAYERS_WHO_MOVED.append(move.player.id)
+                PLAYER_POINTS[move.player.id] = POINTS[DONT_POST]
 
         # see if any of the players didnt move and add a no_move action
         for player in self.game.game_players.all():
-            if player.user.id not in PLAYERS_WHO_MOVED:
-                PLAYER_MOVES[NO_MOVE].append(player.user.id)
-                PLAYER_POINTS[player.user.id] = POINTS[NO_MOVE]
+            if player.id not in PLAYERS_WHO_MOVED:
+                PLAYER_MOVES[NO_MOVE].append(player.id)
+                PLAYER_POINTS[player.id] = POINTS[NO_MOVE]
                 Move.objects.create(round=self, action_type=NO_MOVE, player=player)
 
         # convert a group selfie into a regular selfie if there's just 1

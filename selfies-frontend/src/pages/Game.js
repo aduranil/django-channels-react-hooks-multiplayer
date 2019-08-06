@@ -37,16 +37,21 @@ function Game({
 
   const newMove = (event) => {
     event.preventDefault();
-
+    let move = event.currentTarget.value;
+    let theVictim = null;
     // only the comment game move has another player that it impacts
     if (event.currentTarget.value.includes('leave_comment')) {
+      move = 'leave_comment';
       setVictim(event.currentTarget.id);
+      theVictim = event.currentTarget.id;
+      // victim = event.currentTarget.id;
     }
     setCurrentMove(event.currentTarget.value);
+    console.log(event.currentTarget.id);
     dispatch(
       makeMove({
-        move: event.currentTarget.value,
-        victim,
+        move,
+        victim: theVictim,
       }),
     );
   };

@@ -44,6 +44,7 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
 
     def leave_game(self, data):
+        print('in leave game')
         user = self.scope["user"]
         game_player = GamePlayer.objects.get(user=user, game=self.game)
         # retrieve the updated game
@@ -130,7 +131,7 @@ class GameConsumer(WebsocketConsumer):
                     points,
                     updated_points,
                     player_moves,
-                    player.user_id,
+                    player.id,
                     victims
                 )
             if round.no_one_moved():
@@ -179,7 +180,7 @@ class GameConsumer(WebsocketConsumer):
         # save the victim if they are there
         if data["move"]["victim"]:
             victim = GamePlayer.objects.get(
-                user_id=data["move"]["victim"], game=self.game
+                id=data["move"]["victim"], game=self.game
             )
             move.victim = victim
             move.save()
