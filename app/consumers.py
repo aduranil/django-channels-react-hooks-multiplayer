@@ -132,7 +132,7 @@ class GameConsumer(WebsocketConsumer):
                     updated_points,
                     player_moves,
                     player.id,
-                    victims
+                    victims,
                 )
             if round.no_one_moved():
                 print("no one moved")
