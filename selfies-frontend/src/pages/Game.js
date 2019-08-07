@@ -5,6 +5,7 @@ import { wsConnect } from '../modules/websocket';
 import { startRound, leaveGame, makeMove } from '../modules/game';
 import WithAuth from '../hocs/AuthenticationWrapper';
 import ChatBox from '../components/ChatBox';
+import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import { Phone } from '../images/iPhone';
 
@@ -19,14 +20,11 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), []);
 
-  useEffect(
-    () => {
-      if (time === '5') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '5') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const exitGame = async () => {
     await dispatch(leaveGame());
@@ -61,30 +59,7 @@ function Game({
     return (
       <React.Fragment>
         <Navigation />
-        <div
-          style={{
-            background: '#ff70a6',
-            boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
-            borderRadius: '20px',
-            flexGrow: '1',
-            marginLeft: '1%',
-            marginRight: '1%',
-            marginTop: '1%',
-            width: '98%',
-            padding: '1%',
-            minHeight: '150px',
-            maxHeight: '150px',
-          }}
-        >
-          {' '}
-          <h3 style={{ textAlign: 'center' }}>
-            {' '}
-            {game.room_name}
-            {' '}
-Round History
-          </h3>
-          {game.round_history.map(msg => <div key={msg.id}>{msg.message}</div>)}
-        </div>
+        <RoundHistory game={game} />
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <ChatBox game={game} />
           <div

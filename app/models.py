@@ -128,38 +128,44 @@ class Round(models.Model):
         )
 
     def generate_message(
-        self, action_type, username, points, updated_points, player_moves, id, victims
+        self, action_type, username, followers, updated_followers, player_moves, id, victims
     ):
         # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
         # victims {33: 1} the player.id and the count of how many people left a mean comment
-        message = "{} did {} and got {} points".format(username, action_type, points)
+        message = "{} did {} and got {} followers".format(username, action_type, followers)
         if id in player_moves["go_live"]:
-            message = "{} went live and got {} points, and now has {} points. but for some reason she just played old town road on repeat the whole time".format(
-                username, points, updated_points
+            message = "{} went live and got {} followers, and now has {} followers. but for some reason she just played old town road on repeat the whole time".format(
+                username, followers, updated_followers
             )
             if len(player_moves["go_live"]) > 1:
-                message = "{} went live while other girls also went live. what a dummy! she lost {} points and now has {} points".format(
-                    username, points, updated_points
+                message = "{} went live while other girls also went live. what a dummy! she lost {} followers and now has {} followers".format(
+                    username, followers, updated_followers
                 )
         if id in player_moves["dont_post"]:
-            message1 = "{} didn't post and lost {} points. i dont know why since she had nothing better to do.".format(username, points)
-            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} points".format(username, points)
+            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(username, followers)
+            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(username, followers)
             message = random.choice([message1, message2])
         if id in player_moves["no_move"]:
-            message = "{} was so lazy that she forgot to move. she lost {} points".format(username, points)
+            message = "{} was so lazy that she forgot to move. she lost {} followers".format(username, followers)
         if id in player_moves["post_selfie"]:
-            message1 = "{} posted a selfie. how original. she gained {} points".format(
-                username, points
+            message1 = "{} posted a selfie. how original. she gained {} followers".format(
+                username, followers
             )
-            message2 = "{} posted a selfie. cool i guess. she now has {} points".format(username, updated_points)
-            message3 = "{} delighted her followers with a beautiful selfie and gained {}".format(username, points)
+            message2 = "{} posted a selfie. cool i guess. she now has {} followers".format(username, updated_followers)
+            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(username, followers)
             message = random.choice([message1, message2, message3])
             if len(player_moves["go_live"]) == 1:
-                message = "{} lost {} points because she posted a selfie while another girl was going live!".format(username, points)
+                message = "{} lost {} followers because she posted a selfie while another girl was going live!".format(username, followers)
         if id in player_moves["post_group_selfie"]:
-            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} points".format(username, points)
-            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} points anyway".format(username, points)
+            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(username, followers)
+            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(username, followers)
             message = random.choice([message1, message2])
+        if id in player_moves["post_story"]:
+            message1 = "{} posted a story for {} followers. i hope she got some views".format(username, followers)
+            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(username, followers)
+            message = random.choice([message1, message2])
+        if id in player_moves["leave_comment"]:
+            message = "{} decided to be petty and left a mean comment, ruining some girl's self esteem".format(username)
         Message.objects.create(message=message, message_type="round_recap", username=username, game=self.game)
 
     def no_one_moved(self):
