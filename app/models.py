@@ -34,8 +34,18 @@ class Game(models.Model):
             room_name=self.room_name,
             round_started=self.round_started,
             users=[u.as_json() for u in self.game_players.all()],
-            messages=[m.as_json() for m in self.messages.all().exclude(message_type="round_recap").order_by("created_at")],
-            round_history=[m.as_json() for m in self.messages.all().filter(message_type="round_recap").order_by("created_at")],
+            messages=[
+                m.as_json()
+                for m in self.messages.all()
+                .exclude(message_type="round_recap")
+                .order_by("created_at")
+            ],
+            round_history=[
+                m.as_json()
+                for m in self.messages.all()
+                .filter(message_type="round_recap")
+                .order_by("created_at")
+            ],
             current_round=[r.as_json() for r in self.rounds.all().filter(started=True)],
         )
 
@@ -127,84 +137,75 @@ class Round(models.Model):
             moves=[m.as_json() for m in self.moves.all()],
         )
 
-    def generate_message(
-        self, action_type, username, followers, updated_followers, player_moves, id, victims
-    ):
-        # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
-        # victims {33: 1} the player.id and the count of how many people left a mean comment
-        message = "{} did {} and got {} followers".format(username, action_type, followers)
-        if action_type == "go_live": # go_live gets deleted out of player_moves
-            message = "{} went live and got {} followers, and now has {} followers. but for some reason she just played old town road on repeat the whole time".format(
-                username, followers, updated_followers
-            )
-            if len(player_moves["go_live"]) > 1:
-                message = "{} went live while other girls also went live. what a dummy! she lost {} followers and now has {} followers".format(
-                    username, followers, updated_followers
-                )
-        if id in player_moves["dont_post"]:
-            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(username, followers)
-            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(username, followers)
-            message = random.choice([message1, message2])
-        if id in player_moves["no_move"]:
-            message = "{} was so lazy that she forgot to move. she lost {} followers".format(username, followers)
-        if id in player_moves["post_selfie"]:
-            message1 = "{} posted a selfie. how original. she gained {} followers".format(
+    def generate_new_message(self, action_type, followers, username, extra=None):
+        message = "{} did {} and got {} followers".format(
+            username, action_type, followers
+        )
+        if action_type == "go_live":  # go_live gets deleted out of player_moves
+            message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(
                 username, followers
             )
-            message2 = "{} posted a selfie. cool i guess. she now has {} followers".format(username, updated_followers)
-            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(username, followers)
-            message = random.choice([message1, message2, message3])
-            if len(player_moves["go_live"]) == 1:
-                message = "{} lost {} followers because she posted a selfie while another girl was going live!".format(username, followers)
-        if id in player_moves["post_group_selfie"]:
-            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(username, followers)
-            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(username, followers)
-            message = random.choice([message1, message2])
-        if id in player_moves["post_story"]:
-            message1 = "{} posted a story for {} followers. i hope she got some views".format(username, followers)
-            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(username, followers)
-            message = random.choice([message1, message2])
-        if id in player_moves["leave_comment"]:
-            message = "{} decided to be petty and left a mean comment, ruining some girl's self esteem".format(username)
-        Message.objects.create(message=message, message_type="round_recap", username=username, game=self.game)
-
-    def generate_new_message(action_type, followers, username, extra_user=None):
-        message = "{} did {} and got {} followers".format(username, action_type, followers)
-        if action_type == "go_live": # go_live gets deleted out of player_moves
-            message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(username, followers)
         elif action_type == "dont_post":
-            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(username, followers)
-            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(username, followers)
+            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(
+                username, followers
+            )
+            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(
+                username, followers
+            )
             message = random.choice([message1, message2])
         elif action_type == "no_move":
-            message = "{} was so lazy that she forgot to move. she lost {} followers".format(username, followers)
+            message = "{} was so lazy that she forgot to move. she lost {} followers".format(
+                username, followers
+            )
         elif action_type == "post_selfie":
             message1 = "{} posted a selfie. how original. she gained {} followers".format(
                 username, followers
             )
-            message2 = "{} posted a selfie. cool i guess. she got {} followers".format(username, followers)
-            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(username, followers)
+            message2 = "{} posted a selfie. cool i guess. she got {} followers".format(
+                username, followers
+            )
+            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(
+                username, followers
+            )
             message = random.choice([message1, message2, message3])
         elif action_type == "post_group_selfie":
-            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(username, followers)
-            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(username, followers)
+            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(
+                username, followers
+            )
+            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
+                username, followers
+            )
             message = random.choice([message1, message2])
         elif action_type == "post_story":
-            message1 = "{} posted a story for {} followers. i hope she got some views".format(username, followers)
-            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(username, followers)
+            message1 = "{} posted a story for {} followers. i hope she got some views".format(
+                username, followers
+            )
+            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
+                username, followers
+            )
             message = random.choice([message1, message2])
         elif action_type == "leave_comment":
-            message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(username, extra_user)
+            message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
+                username, extra
+            )
         elif action_type == "one_group_selfie":
-            message = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(username, followers)
+            message = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
+                username, followers
+            )
         elif action_type == "go_live_damage":
-            message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(username, extra_user, username, followers)
+            message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(
+                username, extra, username, followers
+            )
         elif action_type == "many_went_live":
             message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers"
         elif action_type == "selfie_victim":
-            message = "{} got teased relentlessly for her ugly selfie and lost {} followers".format(username, followers)
+            message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
+                username, extra, followers
+            )
         elif action_type == "no_move_victim":
-            message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(username, followers)
+            message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(
+                username, followers
+            )
         return message
 
     def no_one_moved(self):
@@ -213,6 +214,17 @@ class Round(models.Model):
             if move.action_type != "no_move":
                 return False
         return True
+
+    def update_user_message(self, id, action_type, points, extra=None):
+        gp = GamePlayer.objects.get(id=id)
+        msg = Message.objects.get(
+            game=self.game, message_type="round_recap", username=gp.user.username
+        )
+        generated_message = self.generate_new_message(
+            action_type, points, gp.user.username, extra
+        )
+        msg.message = generated_message
+        msg.save()
 
     def tabulate_round(self):
         POST_SELFIE = "post_selfie"
@@ -268,39 +280,63 @@ class Round(models.Model):
             if move.action_type == move.POST_SELFIE:
                 PLAYER_MOVES[POST_SELFIE].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
-                message = self.generate_new_message(move.POST_SELFIE, POINTS[POST_SELFIE], move.player.user.username)
+                message = self.generate_new_message(
+                    move.POST_SELFIE, POINTS[POST_SELFIE], move.player.user.username
+                )
                 # dont update these points until the end
             elif move.action_type == move.POST_GROUP_SELFIE:
                 PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
                 PLAYER_POINTS[move.player.id] = POINTS[POST_GROUP_SELFIE]
-                message = self.generate_new_message(move.POST_GROUP_SELFIE, POINTS[POST_GROUP_SELFIE], move.player.user.username)
+                message = self.generate_new_message(
+                    move.POST_GROUP_SELFIE,
+                    POINTS[POST_GROUP_SELFIE],
+                    move.player.user.username,
+                )
             elif move.action_type == move.POST_STORY:
                 PLAYER_MOVES[POST_STORY].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
                 PLAYER_POINTS[move.player.id] = POINTS[POST_STORY]
-                message = self.generate_new_message(move.POST_STORY, POINTS[POST_STORY], move.player.user.username)
+                message = self.generate_new_message(
+                    move.POST_STORY, POINTS[POST_STORY], move.player.user.username
+                )
                 # decrement the number of stories the player has
-                game_player = GamePlayer.objects.get(user_id=move.player.user_id, game=self.game)
+                game_player = GamePlayer.objects.get(
+                    user_id=move.player.user_id, game=self.game
+                )
                 game_player.stories = game_player.stories - 1
                 game_player.save()
             elif move.action_type == move.GO_LIVE:
                 PLAYER_MOVES[GO_LIVE].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
                 PLAYER_POINTS[move.player.id] = POINTS[GO_LIVE]
-                message = self.generate_new_message(move.GO_LIVE, POINTS[GO_LIVE], move.player.user.username)
+                message = self.generate_new_message(
+                    move.GO_LIVE, POINTS[GO_LIVE], move.player.user.username
+                )
             elif move.action_type == move.LEAVE_COMMENT:
                 PLAYER_MOVES[LEAVE_COMMENT].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
-                message = self.generate_new_message(move.LEAVE_COMMENT, POINTS[LEAVE_COMMENT], move.player.user.username, move.victim.user.username)
+                message = self.generate_new_message(
+                    move.LEAVE_COMMENT,
+                    POINTS[LEAVE_COMMENT],
+                    move.player.user.username,
+                    move.victim.user.username,
+                )
                 VICTIMS[move.victim.id] += 1
                 PLAYER_POINTS[move.player.id] = POINTS[LEAVE_COMMENT]
             elif move.action_type == move.DONT_POST:
                 PLAYER_MOVES[DONT_POST].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
                 PLAYER_POINTS[move.player.id] = POINTS[DONT_POST]
-                message = self.generate_new_message(move.DONT_POST, POINTS[DONT_POST], move.player.user.username)
-            Message.objects.create(message=message, message_type="round_recap", username=move.player.user.username, game=self.game)
+                message = self.generate_new_message(
+                    move.DONT_POST, POINTS[DONT_POST], move.player.user.username
+                )
+            Message.objects.create(
+                message=message,
+                message_type="round_recap",
+                username=move.player.user.username,
+                game=self.game,
+            )
 
         # see if any of the players didnt move and add a no_move action
         for player in self.game.game_players.all():
@@ -308,18 +344,25 @@ class Round(models.Model):
                 PLAYER_MOVES[NO_MOVE].append(player.id)
                 PLAYER_POINTS[player.id] = POINTS[NO_MOVE]
                 Move.objects.create(round=self, action_type=NO_MOVE, player=player)
-                message = self.generate_new_message(move.DONT_POST, POINTS[DONT_POST], move.player.user.username)
-                Message.objects.create(message=message, message_type="round_recap", username=player.user.username, game=self.game)
+                message = self.generate_new_message(
+                    move.DONT_POST, POINTS[DONT_POST], move.player.user.username
+                )
+                Message.objects.create(
+                    message=message,
+                    message_type="round_recap",
+                    username=player.user.username,
+                    game=self.game,
+                )
         # convert a group selfie into a regular selfie if there's just 1
         if len(PLAYER_MOVES[POST_GROUP_SELFIE]) == 1:
             # we need to update the message now
-            gp = GamePlayer.objects.get(id=PLAYER_MOVES[POST_GROUP_SELFIE][0])
-            msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-            generated_message = self.generate_new_message("one_group_selfie", POINTS[POST_SELFIE], gp.user.username)
-            msg.message = generated_message
-            msg.save()
+            self.update_user_message(
+                PLAYER_MOVES[POST_GROUP_SELFIE][0],
+                "one_group_selfie",
+                POINTS[POST_SELFIE],
+            )
             # update that players points to be the selfie points
-            PLAYER_POINTS[PLAYER_MOVES[POST_GROUP_SELFIE][0]] = POINTS[POST_SELFIE]
+            PLAYER_POINTS[PLAYER_MOVES[POST_GROUP_SELFIE][0]] = 0
             # add them to the post_selfie array
             PLAYER_MOVES[POST_SELFIE].append(PLAYER_MOVES[POST_GROUP_SELFIE][0])
             # update the post_group_selfie array
@@ -335,39 +378,39 @@ class Round(models.Model):
             for user in PLAYER_MOVES[POST_STORY]:
                 # UPDATE their points
                 PLAYER_POINTS[user] = POINTS[GO_LIVE_DAMAGE]
-                gp = GamePlayer.objects.get(id=user)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("go_live_damage", POINTS[GO_LIVE_DAMAGE], gp.user.username, girl_who_went_live.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    id=user,
+                    action_type="go_live_damage",
+                    points=POINTS[GO_LIVE_DAMAGE],
+                    extra=girl_who_went_live.user.username,
+                )
+
             # everyone loses 15 followers who posted a selfie
             for user in PLAYER_MOVES[POST_SELFIE]:
                 # UPDATE their points
                 PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
-                gp = GamePlayer.objects.get(id=user)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("go_live_damage", PLAYER_POINTS[user], gp.user.username, girl_who_went_live.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    user,
+                    "go_live_damage",
+                    PLAYER_POINTS[user],
+                    girl_who_went_live.user.username,
+                )
             # everyone loses 15 followers who posted a group selfie
             for user in PLAYER_MOVES[POST_GROUP_SELFIE]:
                 # add points to existing total of 0
                 PLAYER_POINTS[user] = POINTS[GO_LIVE_DAMAGE]
-                gp = GamePlayer.objects.get(id=user)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("go_live_damage", POINTS[GO_LIVE_DAMAGE], gp.user.username, girl_who_went_live.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    user,
+                    "go_live_damage",
+                    PLAYER_POINTS[user],
+                    girl_who_went_live.user.username,
+                )
         elif len(PLAYER_MOVES[GO_LIVE]) > 1:
             # if more than one player went live they all lose 20 points
             for user in PLAYER_MOVES[GO_LIVE]:
                 # UPDATE their points
                 PLAYER_POINTS[user] = -POINTS[GO_LIVE]
-                gp = GamePlayer.objects.get(id=user)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("many_went_live", POINTS[GO_LIVE], gp.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(user, "many_went_live", PLAYER_POINTS[user])
 
         # calculate the points lost by any victims
         for v in VICTIMS:
@@ -376,35 +419,32 @@ class Round(models.Model):
                 # POINTS[LEAVE_COMMENT] is -5
                 # Don't update points, subtract from existing points
                 PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT] * VICTIMS[v]
-                gp = GamePlayer.objects.get(id=v)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("selfie_victim", PLAYER_POINTS[v], gp.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    v, "selfie_victim", -PLAYER_POINTS[v], VICTIMS[v]
+                )
+
             if v in PLAYER_MOVES[NO_MOVE]:
                 # POINTS[LEAVE_COMMENT_NO_MOVE] is -10
                 # UPDATE their points
                 PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_NO_MOVE] * VICTIMS[v]
-                gp = GamePlayer.objects.get(id=v)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("no_move_victim", PLAYER_POINTS[v], gp.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    v, "no_move_victim", -PLAYER_POINTS[v], VICTIMS[v]
+                )
+
             if v in PLAYER_MOVES[POST_GROUP_SELFIE]:
                 # POINTS[LEAVE_COMMENT_GROUP_SELFIE] is -15
                 # UPDATE their points
                 PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
-                gp = GamePlayer.objects.get(id=v)
-                msg = Message.objects.get(game=self.game, message_type="round_recap", username=gp.user.username)
-                generated_message = self.generate_new_message("selfie_victim", PLAYER_POINTS[v], gp.user.username)
-                msg.message = generated_message
-                msg.save()
+                self.update_user_message(
+                    v, "selfie_victim", -PLAYER_POINTS[v], VICTIMS[v]
+                )
+
         # finally tabulate the post_selfies move
         for user in PLAYER_MOVES[POST_SELFIE]:
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
         print(PLAYER_POINTS, PLAYER_MOVES, VICTIMS)
-        return [PLAYER_POINTS, PLAYER_MOVES, VICTIMS]
+        return PLAYER_POINTS
 
 
 class Move(models.Model):

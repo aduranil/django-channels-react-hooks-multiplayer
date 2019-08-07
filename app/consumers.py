@@ -44,7 +44,7 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
 
     def leave_game(self, data=None):
-        print('in leave game')
+        print("in leave game")
         user = self.scope["user"]
         game_player = GamePlayer.objects.get(user=user, game=self.game)
         # retrieve the updated game
@@ -111,12 +111,11 @@ class GameConsumer(WebsocketConsumer):
         # TODO i need to move this somewhere else
         round = Round.objects.get_or_none(game=self.game, started=True)
         if round:
-            player_points, player_moves, victims = round.tabulate_round()
+            player_points = round.tabulate_round()
             winner = None
             for player in self.game.game_players.all():
                 points = player_points[player.id]
                 updated_points = points + player.followers
-                move = Move.objects.get(round=round, player=player)
 
                 # the floor is zero
                 if updated_points < 0:
@@ -125,15 +124,7 @@ class GameConsumer(WebsocketConsumer):
                     winner = player
                 player.followers = updated_points
                 player.save()
-                round.generate_message(
-                    move.action_type,
-                    player.user.username,
-                    points,
-                    updated_points,
-                    player_moves,
-                    player.id,
-                    victims,
-                )
+
             if round.no_one_moved():
                 print("no one moved")
                 # the below 4 things can be combined into one reset_game method
@@ -179,9 +170,7 @@ class GameConsumer(WebsocketConsumer):
             )
         # save the victim if they are there
         if data["move"]["victim"]:
-            victim = GamePlayer.objects.get(
-                id=data["move"]["victim"], game=self.game
-            )
+            victim = GamePlayer.objects.get(id=data["move"]["victim"], game=self.game)
             move.victim = victim
             move.save()
 

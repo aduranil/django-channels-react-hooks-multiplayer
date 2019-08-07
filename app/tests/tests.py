@@ -29,6 +29,7 @@ POINTS = dict(
     ]
 )
 
+
 @pytest.mark.django_db
 def test_when_one_player_goes_live(
     game_factory, user_factory, game_player_factory, round_factory, move_factory
@@ -45,4 +46,23 @@ def test_when_one_player_goes_live(
     move_factory(round=round, action_type=Move.POST_GROUP_SELFIE, player=gp3)
     round.tabulate_round()
     message = Message.objects.get(game=game, username=gp.user.username)
-    assert message.message == "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(gp.user.username, POINTS[GO_LIVE])
+    assert (
+        message.message
+        == "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(
+            gp.user.username, POINTS[GO_LIVE]
+        )
+    )
+    comment_message = Message.objects.get(game=game, username=gp2.user.username)
+    assert (
+        comment_message.message
+        == "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
+            gp2.user.username, gp3.user.username
+        )
+    )
+    group_selfie_message = Message.objects.get(game=game, username=gp3.user.username)
+    assert (
+        group_selfie_message.message
+        == "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
+            gp3.user.username, 1, 20
+        )
+    )
