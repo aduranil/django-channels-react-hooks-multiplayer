@@ -26,7 +26,7 @@ function ChatBox({ game, dispatch }) {
         marginRight: '1%',
         marginLeft: '1%',
         marginBottom: '1%',
-        marginTop: '2%',
+        marginTop: '1%',
         padding: '2%',
         maxHeight: '500px',
         width: '25%',

@@ -61,26 +61,29 @@ function Game({
     return (
       <React.Fragment>
         <Navigation />
-        <h1 style={{ textAlign: 'center' }}>
-          {' '}
-          {game.room_name}
-        </h1>
         <div
           style={{
             background: '#ff70a6',
             boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
             borderRadius: '20px',
             flexGrow: '1',
+            marginLeft: '1%',
             marginRight: '1%',
-            marginBottom: '1%',
-            marginTop: '2%',
-            width: '100%',
-            padding: '3%',
-            maxHeight: '500px',
+            marginTop: '1%',
+            width: '98%',
+            padding: '1%',
+            minHeight: '150px',
+            maxHeight: '150px',
           }}
         >
           {' '}
-          <h1 style={{ textAlign: 'center' }}> Round History</h1>
+          <h3 style={{ textAlign: 'center' }}>
+            {' '}
+            {game.room_name}
+            {' '}
+Round History
+          </h3>
+          {game.round_history.map(msg => <div key={msg.id}>{msg.message}</div>)}
         </div>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           <ChatBox game={game} />
@@ -92,7 +95,7 @@ function Game({
               flexGrow: '1',
               marginRight: '1%',
               marginBottom: '1%',
-              marginTop: '2%',
+              marginTop: '1%',
               width: '50%',
               padding: '2%',
               maxHeight: '500px',
