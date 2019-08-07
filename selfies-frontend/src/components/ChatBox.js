@@ -7,7 +7,7 @@ function ChatBox({ game, dispatch }) {
   const [message, setMessage] = useState('');
   let messagesRef = useRef();
   useEffect(() => {
-    messagesRef.scrollIntoView({ behavior: 'smooth' });
+    messagesRef.scrollIntoView(false);
   });
 
   const handleSubmit = () => {

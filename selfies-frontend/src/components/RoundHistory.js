@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 function RoundHistory({ game }) {
   let messagesNewRef = useRef();
   useEffect(() => {
-    messagesNewRef.scrollIntoView({ behavior: 'smooth' });
-  });
+    messagesNewRef.scrollIntoView(false);
+  }, []);
 
   return (
     <div
@@ -13,7 +13,6 @@ function RoundHistory({ game }) {
         background: '#ff70a6',
         boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
         borderRadius: '20px',
-        flexGrow: '1',
         marginLeft: '1%',
         marginRight: '1%',
         marginTop: '1%',
@@ -39,9 +38,11 @@ Round History
         }}
       >
         {game.round_history.map(msg => (
-          <div key={msg.id}>{msg.message}</div>
+          <div key={msg.id}>
+            <span>{msg.message}</span>
+          </div>
         ))}
-        <div style={{ float: 'left', clear: 'both' }} ref={el => (messagesNewRef = el)} />
+        <div ref={el => (messagesNewRef = el)} />
       </div>
     </div>
   );

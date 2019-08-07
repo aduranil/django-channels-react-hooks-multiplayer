@@ -133,7 +133,7 @@ class Round(models.Model):
         # player_moves: {'post_selfie': [2], 'post_group_selfie': [], 'post_story': [], 'go_live': [], 'leave_comment': [], 'dont_post': [], 'no_move': []}
         # victims {33: 1} the player.id and the count of how many people left a mean comment
         message = "{} did {} and got {} followers".format(username, action_type, followers)
-        if id in player_moves["go_live"]:
+        if action_type == "go_live": # go_live gets deleted out of player_moves
             message = "{} went live and got {} followers, and now has {} followers. but for some reason she just played old town road on repeat the whole time".format(
                 username, followers, updated_followers
             )
@@ -167,6 +167,35 @@ class Round(models.Model):
         if id in player_moves["leave_comment"]:
             message = "{} decided to be petty and left a mean comment, ruining some girl's self esteem".format(username)
         Message.objects.create(message=message, message_type="round_recap", username=username, game=self.game)
+
+    def generate_new_message(action_type, followers, username, victim=None):
+        message = "{} did {} and got {} followers".format(username, action_type, followers)
+        if action_type == "go_live": # go_live gets deleted out of player_moves
+            message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(username, followers)
+        elif action_type == "dont_post":
+            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(username, followers)
+            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(username, followers)
+            message = random.choice([message1, message2])
+        elif action_type == "no_move":
+            message = "{} was so lazy that she forgot to move. she lost {} followers".format(username, followers)
+        elif action_type == "post_selfie":
+            message1 = "{} posted a selfie. how original. she gained {} followers".format(
+                username, followers
+            )
+            message2 = "{} posted a selfie. cool i guess. she now has {} followers".format(username, updated_followers)
+            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(username, followers)
+            message = random.choice([message1, message2, message3])
+        elif action_type == "post_group_selfie":
+            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(username, followers)
+            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(username, followers)
+            message = random.choice([message1, message2])
+        elif action_type == "post_story":
+            message1 = "{} posted a story for {} followers. i hope she got some views".format(username, followers)
+            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(username, followers)
+            message = random.choice([message1, message2])
+        elif action_type == "leave_comment":
+            message = "{} decided to be petty and left a mean comment, ruining some girl's self esteem".format(username)
+        return message
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"
@@ -223,6 +252,9 @@ class Round(models.Model):
         # initialize an empty dict of player points to keep track of
         PLAYER_POINTS = defaultdict(lambda: 0)
 
+        # update the messages that will be displayed for the round
+        PLAYER_MESSAGES = {}
+        # group_selfie message
         # populate what each player did and initial points for them
         for move in self.moves.all():
             print(move.action_type, move.player.id)
@@ -230,6 +262,7 @@ class Round(models.Model):
             if move.action_type == move.POST_SELFIE:
                 PLAYER_MOVES[POST_SELFIE].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
+                PLAYER_MESSAGES[move.player.id] =
                 # dont update these points until the end
             elif move.action_type == move.POST_GROUP_SELFIE:
                 PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.id)
@@ -276,7 +309,6 @@ class Round(models.Model):
 
         # calculate the points for go live
         if len(PLAYER_MOVES[GO_LIVE]) == 1:
-
             # delete the user from the array now that their action is resolved
             del PLAYER_MOVES[GO_LIVE][0]
 
