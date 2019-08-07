@@ -12,7 +12,7 @@ function Navigation({ dispatch, history, loggedIn }) {
 
   return (
     <div className="container">
-      <h1> Selfies 2020 </h1>
+      <h1 style={{ paddingRight: '5px' }}> Selfies 2020 </h1>
       {loggedIn && (
         <button type="button" style={{ width: '100px' }} onClick={onLogout}>
           logout

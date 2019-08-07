@@ -134,15 +134,17 @@ class Round(models.Model):
         # victims {33: 1} the player.id and the count of how many people left a mean comment
         message = "{} did {} and got {} points".format(username, action_type, points)
         if id in player_moves["go_live"]:
-            message = "{} went live and got {} points, and now has {}".format(
+            message = "{} went live and got {} points, and now has {} points. but for some reason she just played old town road on repeat the whole time".format(
                 username, points, updated_points
             )
             if len(player_moves["go_live"]) > 1:
-                message = "{} went live while other girls also went live. what a dummy! She lost {} points and now has {} points".format(
+                message = "{} went live while other girls also went live. what a dummy! she lost {} points and now has {} points".format(
                     username, points, updated_points
                 )
         if id in player_moves["dont_post"]:
-            message = "{} didn't post and lost {} points. i dont know why since she had nothing better to do.".format(username, points)
+            message1 = "{} didn't post and lost {} points. i dont know why since she had nothing better to do.".format(username, points)
+            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} points".format(username, points)
+            message = random.choice([message1, message2])
         if id in player_moves["no_move"]:
             message = "{} was so lazy that she forgot to move. she lost {} points".format(username, points)
         if id in player_moves["post_selfie"]:
@@ -154,6 +156,10 @@ class Round(models.Model):
             message = random.choice([message1, message2, message3])
             if len(player_moves["go_live"]) == 1:
                 message = "{} lost {} points because she posted a selfie while another girl was going live!".format(username, points)
+        if id in player_moves["post_group_selfie"]:
+            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} points".format(username, points)
+            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} points anyway".format(username, points)
+            message = random.choice([message1, message2])
         Message.objects.create(message=message, message_type="round_recap", username=username, game=self.game)
 
     def no_one_moved(self):

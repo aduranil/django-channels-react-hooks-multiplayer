@@ -25,7 +25,6 @@ const Entrance = () => (
           background: '#ff70a6',
           boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
           borderRadius: '20px',
-          flexGrow: '1',
           margin: '30px auto 100px auto',
           width: '50%',
           padding: '1%',
@@ -43,8 +42,8 @@ const Entrance = () => (
             <div
               style={{
                 top: '35%',
-                left: '41.5%',
-                width: '17%',
+                left: '41%',
+                width: '18%',
                 height: '14%',
                 borderRadius: '15px',
                 backgroundColor: 'white',
