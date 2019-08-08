@@ -12,6 +12,7 @@ NO_MOVE = "no_move"
 LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
 LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 GO_LIVE_DAMAGE = "go_live_damage"
+LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
 
 @pytest.fixture()
 def game(game_factory):
@@ -31,6 +32,18 @@ def p_2(game, user_factory, game_player_factory):
 
 @pytest.fixture()
 def p_3(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+@pytest.fixture()
+def p_4(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+@pytest.fixture()
+def p_5(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+@pytest.fixture()
+def p_6(game, user_factory, game_player_factory):
     return game_player_factory(game=game, user=user_factory(), started=True)
 
 def post_selfie(username, followers):
@@ -209,3 +222,97 @@ def test_group_selfie_selfies_story(game, rnd, p_1, p_2, p_3, move_factory):
 
     assert message(game=game, username=p_3.user.username) in post_story(p_3.user.username, 10)
     assert round[p_3.id] == 10
+
+@pytest.mark.django_db
+def test_leave_comment_group_selfie(game, rnd, p_1, p_2, p_3, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_3, victim=p_2)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in post_group_selfie(p_1.user.username, 20)
+    assert round[p_1.id] == 20
+
+    assert message(game=game, username=p_2.user.username) in selfie_victim(p_2.user.username, 15, 1)
+    assert round[p_2.id] == -15
+
+    assert message(game=game, username=p_3.user.username) in leave_comment(p_3.user.username, p_2.user.username)
+    assert round[p_3.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+@pytest.mark.django_db
+def test_leave_comment_group_selfie_go_live(game, rnd, p_1, p_2, p_3, p_4, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_3, victim=p_2)
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_4)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in go_live_damage(p_1.user.username, -POINTS[GO_LIVE_DAMAGE], p_4.user.username)
+    assert round[p_1.id] == POINTS[GO_LIVE_DAMAGE]
+
+    total_points = POINTS[LEAVE_COMMENT_GROUP_SELFIE] + POINTS[GO_LIVE_DAMAGE]
+    assert message(game=game, username=p_2.user.username) in selfie_victim(p_2.user.username, -total_points, 1)
+    assert round[p_2.id] == total_points
+
+    assert message(game=game, username=p_3.user.username) in leave_comment(p_3.user.username, p_2.user.username)
+    assert round[p_3.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_4.user.username) in go_live(p_4.user.username, POINTS[GO_LIVE])
+    assert round[p_4.id] == POINTS[GO_LIVE]
+
+@pytest.mark.django_db
+def test_leave_comment_group_selfie_two_go_live(game, rnd, p_1, p_2, p_3, p_4, p_5, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_3, victim=p_2)
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_4)
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_5)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in post_group_selfie(p_1.user.username, POINTS[POST_GROUP_SELFIE])
+    assert round[p_1.id] == POINTS[POST_GROUP_SELFIE]
+
+    assert message(game=game, username=p_2.user.username) in selfie_victim(p_2.user.username, -POINTS[LEAVE_COMMENT_GROUP_SELFIE], 1)
+    assert round[p_2.id] == POINTS[LEAVE_COMMENT_GROUP_SELFIE]
+
+    assert message(game=game, username=p_3.user.username) in leave_comment(p_3.user.username, p_2.user.username)
+    assert round[p_3.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_4.user.username) in many_went_live(p_4.user.username, POINTS[GO_LIVE])
+    assert round[p_4.id] == -POINTS[GO_LIVE]
+
+    assert message(game=game, username=p_5.user.username) in many_went_live(p_5.user.username, POINTS[GO_LIVE])
+    assert round[p_5.id] == -POINTS[GO_LIVE]
+
+@pytest.mark.django_db
+def test_2leave_comment_group_selfie_go_live(game, rnd, p_1, p_2, p_3, p_4, p_5, p_6,move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_3, victim=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_6, victim=p_2)
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_4)
+    move_factory(round=rnd, action_type=Move.DONT_POST, player=p_5)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in go_live_damage(p_1.user.username, -POINTS[GO_LIVE_DAMAGE], p_4.user.username)
+    assert round[p_1.id] == POINTS[GO_LIVE_DAMAGE]
+
+    total_points = (POINTS[LEAVE_COMMENT_GROUP_SELFIE] * 2) + POINTS[GO_LIVE_DAMAGE]
+    assert message(game=game, username=p_2.user.username) in selfie_victim(p_2.user.username, -total_points, 2)
+    assert round[p_2.id] == total_points
+
+    assert message(game=game, username=p_3.user.username) in leave_comment(p_3.user.username, p_2.user.username)
+    assert round[p_3.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_6.user.username) in leave_comment(p_6.user.username, p_2.user.username)
+    assert round[p_6.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_4.user.username) in go_live(p_4.user.username, POINTS[GO_LIVE])
+    assert round[p_4.id] == POINTS[GO_LIVE]
+
+    assert message(game=game, username=p_5.user.username) in dont_post(p_5.user.username, POINTS[DONT_POST])
+    assert round[p_5.id] == POINTS[DONT_POST]

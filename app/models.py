@@ -15,6 +15,7 @@ LEAVE_COMMENT = "leave_comment"
 DONT_POST = "dont_post"
 NO_MOVE = "no_move"
 GO_LIVE_DAMAGE = "go_live_damage"
+LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
 LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
 LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 
@@ -24,6 +25,7 @@ POINTS = dict(
         (POST_GROUP_SELFIE, 20),
         (POST_STORY, 10),
         (GO_LIVE, 20),
+        (LEAVE_COMMENT_SELF_POINTS, 0),
         (LEAVE_COMMENT, -5),
         (LEAVE_COMMENT_NO_MOVE, -10),
         (LEAVE_COMMENT_GROUP_SELFIE, -15),
@@ -287,7 +289,6 @@ class Round(models.Model):
             elif move.action_type == move.POST_GROUP_SELFIE:
                 PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
-                PLAYER_POINTS[move.player.id] = POINTS[POST_GROUP_SELFIE]
                 message = self.generate_new_message(
                     move.POST_GROUP_SELFIE,
                     POINTS[POST_GROUP_SELFIE],
@@ -381,7 +382,7 @@ class Round(models.Model):
                 self.update_user_message(
                     id=user,
                     action_type="go_live_damage",
-                    points=POINTS[GO_LIVE_DAMAGE],
+                    points=-PLAYER_POINTS[user],
                     extra=girl_who_went_live.user.username,
                 )
 
@@ -392,17 +393,17 @@ class Round(models.Model):
                 self.update_user_message(
                     user,
                     "go_live_damage",
-                    PLAYER_POINTS[user],
+                    -PLAYER_POINTS[user],
                     girl_who_went_live.user.username,
                 )
             # everyone loses 15 followers who posted a group selfie
             for user in PLAYER_MOVES[POST_GROUP_SELFIE]:
                 # add points to existing total of 0
-                PLAYER_POINTS[user] = POINTS[GO_LIVE_DAMAGE]
+                PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
                 self.update_user_message(
                     user,
                     "go_live_damage",
-                    PLAYER_POINTS[user],
+                    -PLAYER_POINTS[user],
                     girl_who_went_live.user.username,
                 )
         elif len(PLAYER_MOVES[GO_LIVE]) > 1:
@@ -434,7 +435,7 @@ class Round(models.Model):
             if v in PLAYER_MOVES[POST_GROUP_SELFIE]:
                 # POINTS[LEAVE_COMMENT_GROUP_SELFIE] is -15
                 # UPDATE their points
-                PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
+                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
                 self.update_user_message(
                     v, "selfie_victim", -PLAYER_POINTS[v], VICTIMS[v]
                 )
@@ -443,6 +444,9 @@ class Round(models.Model):
         for user in PLAYER_MOVES[POST_SELFIE]:
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
+        for user in PLAYER_MOVES[POST_GROUP_SELFIE]:
+            if PLAYER_POINTS[user] == 0:
+                PLAYER_POINTS[user] = POINTS[POST_GROUP_SELFIE]
         print(PLAYER_POINTS)
         return PLAYER_POINTS
 
