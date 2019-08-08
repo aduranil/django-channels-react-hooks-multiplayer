@@ -25,12 +25,7 @@ function RoundHistory({ game }) {
       }}
     >
       {' '}
-      <h3 style={{ textAlign: 'center' }}>
-        {' '}
-        {game.room_name}
-        {' '}
-Round History
-      </h3>
+      <h3 style={{ textAlign: 'center' }}>Round History</h3>
       <div
         style={{
           overflowY: 'scroll',

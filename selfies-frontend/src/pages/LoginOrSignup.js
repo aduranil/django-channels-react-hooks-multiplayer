@@ -56,6 +56,7 @@ class LoginOrSignup extends React.Component {
     return (
       <React.Fragment>
         <Navigation />
+        <HalfRectangle color="#70D6FF" />
         <div
           style={{
             display: 'flex',
@@ -65,7 +66,6 @@ class LoginOrSignup extends React.Component {
             minHeight: '80vh',
           }}
         >
-          <HalfRectangle color="#70D6FF" />
           <div
             style={{
               alignSelf: 'center',

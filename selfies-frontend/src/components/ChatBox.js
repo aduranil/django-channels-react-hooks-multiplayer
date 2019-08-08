@@ -32,6 +32,7 @@ function ChatBox({ game, dispatch }) {
         width: '40%',
       }}
     >
+      <h3 style={{ textAlign: 'center' }}>Group Chat</h3>
       <div
         style={{
           overflowY: 'scroll',
@@ -59,12 +60,12 @@ function ChatBox({ game, dispatch }) {
         }}
       >
         <input
-          style={{ width: '68%', marginRight: '5px' }}
+          style={{ width: '100%', marginRight: '10px' }}
           onChange={e => setMessage(e.target.value)}
           value={message}
           onKeyPress={e => e.key === 'Enter' && handleSubmit()}
         />
-        <button style={{ width: '20%' }} type="button" onClick={handleSubmit}>
+        <button style={{ width: '10%' }} type="button" onClick={handleSubmit}>
           send
           {' '}
         </button>

@@ -38,24 +38,26 @@ const Entrance = () => (
             marginBottom: '15px',
           }}
         >
-          <Link to="/loginorsignup">
-            <div
-              style={{
-                top: '35%',
-                left: '41%',
-                width: '18%',
-                height: '14%',
-                borderRadius: '15px',
-                backgroundColor: 'white',
-                opacity: '0.5',
-                position: 'absolute',
-                alignSelf: 'center',
-              }}
-            >
-              <Message />
-            </div>
-          </Link>
-          <EntrancePhone />
+          <div className="rollIn animated">
+            <Link to="/loginorsignup">
+              <div
+                style={{
+                  top: '35%',
+                  left: '41%',
+                  width: '18%',
+                  height: '14%',
+                  borderRadius: '15px',
+                  backgroundColor: 'white',
+                  opacity: '0.5',
+                  position: 'absolute',
+                  alignSelf: 'center',
+                }}
+              >
+                <Message />
+              </div>
+            </Link>
+            <EntrancePhone />
+          </div>
         </div>
       </div>
     </div>

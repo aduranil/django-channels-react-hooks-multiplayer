@@ -242,15 +242,20 @@ class Round(models.Model):
                 return False
         return True
 
+    def everyone_moved(self):
+        "use this function to know if we need to update the clock"
+        if self.moves.all().count() == self.game.game_players.all().count():
+            return True
+        return False
+        
     def update_user_message(self, id, action_type, points, extra=None):
         gp = GamePlayer.objects.get(id=id)
         msg = Message.objects.filter(
             game=self.game, message_type="round_recap", username=gp.user.username
         ).last()
-        generated_message = self.generate_new_message(
+        msg.message = self.generate_new_message(
             action_type, points, gp.user.username, extra
         )
-        msg.message = generated_message
         msg.save()
 
     def tabulate_round(self):

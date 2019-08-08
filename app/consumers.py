@@ -44,17 +44,13 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
 
     def leave_game(self, data=None):
-        print("in leave game")
         user = self.scope["user"]
         game_player = GamePlayer.objects.get(user=user, game=self.game)
         # retrieve the updated game
-        print(self.game.game_players.all().count())
         if self.game.game_players.all().count() <= 1:
-            print("game was deleted")
             game_player.delete()
             self.game.delete()
         else:
-            print("someone self")
             message = "{} left".format(user.username)
             Message.objects.create(
                 message=message,
@@ -97,11 +93,20 @@ class GameConsumer(WebsocketConsumer):
 
     def update_timer_data(self):
         """countdown the timer for the game"""
-        i = 5
-        while i >= 0:
+        i = 90
+        while i > 0:
             time.sleep(1)
             self.send_time(str(i))
             i -= 1
+            round = Round.objects.get_or_none(game=self.game, started=True)
+            if round.everyone_moved():
+                i = 0
+                j = 10
+                while j > 0:
+                    time.sleep(1)
+                    self.send_time(str(j))
+                    j -= 1
+
         # reset timer back to null
         self.send_time(None)
         self.new_round_or_determine_winner()

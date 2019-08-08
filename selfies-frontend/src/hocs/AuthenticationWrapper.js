@@ -33,7 +33,8 @@ const WithAuth = (WrappedComponent) => {
       }
       return (
         <React.Fragment>
-          <div
+          <h1
+            className="animated infinite bounce"
             style={{
               textAlign: 'center',
               margin: 'auto',
@@ -47,7 +48,7 @@ const WithAuth = (WrappedComponent) => {
             }}
           >
             Loading
-          </div>
+          </h1>
         </React.Fragment>
       );
     }

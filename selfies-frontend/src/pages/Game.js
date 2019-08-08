@@ -21,7 +21,7 @@ function Game({
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
   useEffect(() => {
-    if (time === '5') {
+    if (time === '90') {
       setCurrentMove(null);
     }
   }, [time]);
@@ -53,6 +53,11 @@ function Game({
     return (
       <React.Fragment>
         <Navigation inGame />
+        <h1 style={{ textAlign: 'center' }}>
+          {' '}
+          {game.room_name}
+          {' '}
+        </h1>
         <div
           style={{
             background: '#ff70a6',
