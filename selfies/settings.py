@@ -64,6 +64,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
+    'EXCEPTION_HANDLER': ('app.exceptions.base_exception_handler'),
     # Authentication backends
 }
 

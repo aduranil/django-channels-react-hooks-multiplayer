@@ -38,6 +38,16 @@ class LoginOrSignup extends React.Component {
     return history.push('/games');
   };
 
+  componentWillUnmount() {
+    this.setState({ error: null });
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.route !== this.props.route) {
+      this.setState({ error: null });
+    }
+  }
+
   render() {
     const {
       username, email, password, error,

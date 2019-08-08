@@ -316,3 +316,33 @@ def test_2leave_comment_group_selfie_go_live(game, rnd, p_1, p_2, p_3, p_4, p_5,
 
     assert message(game=game, username=p_5.user.username) in dont_post(p_5.user.username, POINTS[DONT_POST])
     assert round[p_5.id] == POINTS[DONT_POST]
+
+@pytest.mark.django_db
+def test_everyone_leaves_a_mean_comment(game, rnd, p_1, p_2, p_3, p_4, p_5, p_6,move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_1, victim=p_2)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_2, victim=p_1)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_3, victim=p_3)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_4, victim=p_5)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_5, victim=p_6)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_6, victim=p_5)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in leave_comment(p_1.user.username, p_2.user.username)
+    assert round[p_1.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_2.user.username) in leave_comment(p_2.user.username, p_1.user.username)
+    assert round[p_2.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_3.user.username) in leave_comment(p_3.user.username, p_3.user.username)
+    assert round[p_3.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_4.user.username) in leave_comment(p_4.user.username, p_5.user.username)
+    assert round[p_4.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_5.user.username) in leave_comment(p_5.user.username, p_6.user.username)
+    assert round[p_5.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]
+
+    assert message(game=game, username=p_6.user.username) in leave_comment(p_6.user.username, p_5.user.username)
+    assert round[p_6.id] == POINTS[LEAVE_COMMENT_SELF_POINTS]

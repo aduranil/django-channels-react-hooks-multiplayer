@@ -244,9 +244,9 @@ class Round(models.Model):
 
     def update_user_message(self, id, action_type, points, extra=None):
         gp = GamePlayer.objects.get(id=id)
-        msg = Message.objects.get(
+        msg = Message.objects.filter(
             game=self.game, message_type="round_recap", username=gp.user.username
-        )
+        ).last()
         generated_message = self.generate_new_message(
             action_type, points, gp.user.username, extra
         )

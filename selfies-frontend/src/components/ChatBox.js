@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { newMessage } from '../modules/game';
 
 function ChatBox({ game, dispatch }) {
-  const [message, setMessage] = useState('');
   let messagesRef = useRef();
+  const [message, setMessage] = useState('');
   useEffect(() => {
-    messagesRef.scrollIntoView(false);
+    messagesRef.scrollIntoView({ behavior: 'smooth' });
   });
 
   const handleSubmit = () => {
@@ -29,7 +29,7 @@ function ChatBox({ game, dispatch }) {
         marginTop: '1%',
         padding: '2%',
         maxHeight: '500px',
-        width: '25%',
+        width: '40%',
       }}
     >
       <div

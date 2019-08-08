@@ -1,12 +1,13 @@
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';
 const API_ROOT = 'http://localhost:8000';
 
-function status(res) {
+const status = async (res) => {
   if (!res.ok) {
-    throw new Error(res.statusText);
+    const response = await res.json();
+    throw new Error(response);
   }
   return res;
-}
+};
 
 export const getCurrentUser = () => dispatch => fetch(`${API_ROOT}/app/user/`, {
   method: 'GET',

@@ -34,7 +34,7 @@ const Form = ({
     style={{
       padding: '5%',
       width: '500px',
-      height: '350px',
+      height: '375px',
     }}
   >
     <form>
