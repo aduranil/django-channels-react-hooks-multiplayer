@@ -1,7 +1,6 @@
 import pytest
 
-from .factories import RoundFactory
-from app.models import Move, Round, GamePlayer, Message
+from app.models import Move, Round, GamePlayer, Message, POINTS
 
 POST_SELFIE = "post_selfie"
 POST_GROUP_SELFIE = "post_group_selfie"
@@ -14,55 +13,199 @@ LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
 LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 GO_LIVE_DAMAGE = "go_live_damage"
 
-POINTS = dict(
-    [
-        (POST_SELFIE, 10),
-        (POST_GROUP_SELFIE, 20),
-        (POST_STORY, 10),
-        (GO_LIVE, 20),
-        (LEAVE_COMMENT, -5),
-        (LEAVE_COMMENT_NO_MOVE, -10),
-        (LEAVE_COMMENT_GROUP_SELFIE, -15),
-        (DONT_POST, 0),
-        (NO_MOVE, -5),
-        (GO_LIVE_DAMAGE, -15),
-    ]
-)
+@pytest.fixture()
+def game(game_factory):
+    return game_factory()
 
+@pytest.fixture()
+def rnd(game, round_factory):
+    return round_factory(game=game, started=True)
+
+@pytest.fixture()
+def p_1(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+@pytest.fixture()
+def p_2(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+@pytest.fixture()
+def p_3(game, user_factory, game_player_factory):
+    return game_player_factory(game=game, user=user_factory(), started=True)
+
+def post_selfie(username, followers):
+    message1 = "{} posted a selfie. how original. she gained {} followers".format(
+        username, followers
+    )
+    message2 = "{} posted a selfie. cool i guess. she got {} followers".format(
+        username, followers
+    )
+    message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(
+        username, followers
+    )
+    return [message1, message2, message3]
+
+def go_live(username, followers):
+    message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(username, followers)
+    return [message]
+
+def many_went_live(username, followers):
+    message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
+    return [message]
+
+def dont_post(username, followers):
+    message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(
+        username, followers
+    )
+    message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(
+        username, followers
+    )
+    return [message1, message2]
+
+def no_move(username, followers):
+    message = "{} was so lazy that she forgot to move. she lost {} followers".format(
+        username, followers
+    )
+    return [message]
+
+def post_group_selfie(username, followers):
+    message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(
+        username, followers
+    )
+    message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
+        username, followers
+    )
+    return [message1, message2]
+
+def post_story(username, followers):
+    message1 = "{} posted a story for {} followers. i hope she got some views".format(
+        username, followers
+    )
+    message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
+        username, followers
+    )
+    return [message1, message2]
+
+def leave_comment(username, extra):
+    message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
+        username, extra
+    )
+    return [message]
+
+def one_group_selfie(username, followers):
+    message = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
+        username, followers
+    )
+    return [message]
+
+def go_live_damage(username, followers, extra):
+    message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(
+        username, extra, username, followers
+    )
+    return [message]
+
+def many_went_live(username, followers):
+    message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
+    return [message]
+
+def selfie_victim(username, followers, extra):
+    message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
+        username, extra, followers
+    )
+    return [message]
+
+def no_move_victim(username, followers):
+    message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(
+        username, followers)
+    return [message]
+
+def message(game, username):
+    return Message.objects.get(game=game, username=username).message
 
 @pytest.mark.django_db
-def test_when_one_player_goes_live(
-    game_factory, user_factory, game_player_factory, round_factory, move_factory
-):
+def test_when_one_player_goes_live(game, rnd, p_1, p_2, p_3, move_factory):
     # make sure the dictionary of arrays with player ids by move is correct
-    game = game_factory()
-    round = round_factory(game=game, started=True)
-    users = [user_factory(), user_factory(), user_factory()]
-    gp = game_player_factory(game=game, user=users[0], started=True)
-    gp2 = game_player_factory(game=game, user=users[1], started=True)
-    gp3 = game_player_factory(game=game, user=users[2], started=True)
-    move_factory(round=round, action_type=Move.GO_LIVE, player=gp)
-    move_factory(round=round, action_type=Move.LEAVE_COMMENT, player=gp2, victim=gp3)
-    move_factory(round=round, action_type=Move.POST_GROUP_SELFIE, player=gp3)
-    round.tabulate_round()
-    message = Message.objects.get(game=game, username=gp.user.username)
-    assert (
-        message.message
-        == "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(
-            gp.user.username, POINTS[GO_LIVE]
-        )
-    )
-    comment_message = Message.objects.get(game=game, username=gp2.user.username)
-    assert (
-        comment_message.message
-        == "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
-            gp2.user.username, gp3.user.username
-        )
-    )
-    group_selfie_message = Message.objects.get(game=game, username=gp3.user.username)
-    assert (
-        group_selfie_message.message
-        == "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
-            gp3.user.username, 1, 20
-        )
-    )
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_1)
+    move_factory(round=rnd, action_type=Move.LEAVE_COMMENT, player=p_2, victim=p_3)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_3)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in go_live(p_1.user.username, POINTS[GO_LIVE])
+    assert round[p_1.id] == 20
+
+    assert message(game=game, username=p_2.user.username) in leave_comment(p_2.user.username, p_3.user.username)
+    assert round[p_2.id] == 0
+
+    assert message(game=game, username=p_3.user.username) in selfie_victim(p_3.user.username, 20, 1)
+    # lost 15 points for taking a selfie during a go_live, and 5 points for getting teased
+    assert round[p_3.id] == -20
+
+@pytest.mark.django_db
+def test_when_two_players_go_live(game, rnd, p_1, p_2, p_3, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_1)
+    move_factory(round=rnd, action_type=Move.GO_LIVE, player=p_2)
+    move_factory(round=rnd, action_type=Move.POST_SELFIE, player=p_3)
+    round = rnd.tabulate_round()
+
+    message = Message.objects.get(game=game, username=p_1.user.username)
+    assert message.message in many_went_live(p_1.user.username, 20)
+    assert round[p_1.id] == -20
+
+    message_two = Message.objects.get(game=game, username=p_2.user.username)
+    assert message_two.message in many_went_live(p_2.user.username, 20)
+    assert round[p_2.id] == -20
+
+    post_selfie_message = Message.objects.get(game=game, username=p_3.user.username)
+    assert post_selfie_message.message in post_selfie(p_3.user.username, 10)
+    assert round[p_3.id] == 10
+
+@pytest.mark.django_db
+def test_no_move_and_story(game, rnd, p_1, p_2, p_3, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+
+    move_factory(round=rnd, action_type=Move.POST_STORY, player=p_3)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in no_move(p_1.user.username, 5)
+    assert round[p_1.id] == -5
+
+    assert message(game=game, username=p_2.user.username) in no_move(p_2.user.username, 5)
+    assert round[p_2.id] == -5
+
+    assert message(game=game, username=p_3.user.username) in post_story(p_3.user.username, 10)
+    assert round[p_3.id] == 10
+
+@pytest.mark.django_db
+def test_group_selfie_everyone(game, rnd, p_1, p_2, p_3, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_3)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in post_group_selfie(p_1.user.username, 20)
+    assert round[p_1.id] == 20
+
+    assert message(game=game, username=p_2.user.username) in post_group_selfie(p_2.user.username, 20)
+    assert round[p_2.id] == 20
+
+    assert message(game=game, username=p_3.user.username) in post_group_selfie(p_3.user.username, 20)
+    assert round[p_3.id] == 20
+
+@pytest.mark.django_db
+def test_group_selfie_selfies_story(game, rnd, p_1, p_2, p_3, move_factory):
+    # make sure the dictionary of arrays with player ids by move is correct
+    move_factory(round=rnd, action_type=Move.POST_GROUP_SELFIE, player=p_1)
+    move_factory(round=rnd, action_type=Move.POST_SELFIE, player=p_2)
+    move_factory(round=rnd, action_type=Move.POST_STORY, player=p_3)
+    round = rnd.tabulate_round()
+
+    assert message(game=game, username=p_1.user.username) in one_group_selfie(p_1.user.username, 10)
+    assert round[p_1.id] == 10
+
+    assert message(game=game, username=p_2.user.username) in post_selfie(p_2.user.username, 10)
+    assert round[p_2.id] == 10
+
+    assert message(game=game, username=p_3.user.username) in post_story(p_3.user.username, 10)
+    assert round[p_3.id] == 10

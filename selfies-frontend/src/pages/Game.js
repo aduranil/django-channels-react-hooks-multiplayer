@@ -20,11 +20,14 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), []);
 
-  useEffect(() => {
-    if (time === '5') {
-      setCurrentMove(null);
-    }
-  }, [time]);
+  useEffect(
+    () => {
+      if (time === '5') {
+        setCurrentMove(null);
+      }
+    },
+    [time],
+  );
 
   const exitGame = async () => {
     await dispatch(leaveGame());
@@ -55,7 +58,6 @@ function Game({
   };
 
   if (id && game) {
-    console.log(game);
     return (
       <React.Fragment>
         <Navigation />

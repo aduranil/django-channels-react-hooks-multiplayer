@@ -7,6 +7,31 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.contrib.auth.models import User
 
+POST_SELFIE = "post_selfie"
+POST_GROUP_SELFIE = "post_group_selfie"
+POST_STORY = "post_story"
+GO_LIVE = "go_live"
+LEAVE_COMMENT = "leave_comment"
+DONT_POST = "dont_post"
+NO_MOVE = "no_move"
+GO_LIVE_DAMAGE = "go_live_damage"
+LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
+LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
+
+POINTS = dict(
+    [
+        (POST_SELFIE, 10),
+        (POST_GROUP_SELFIE, 20),
+        (POST_STORY, 10),
+        (GO_LIVE, 20),
+        (LEAVE_COMMENT, -5),
+        (LEAVE_COMMENT_NO_MOVE, -10),
+        (LEAVE_COMMENT_GROUP_SELFIE, -15),
+        (DONT_POST, 0),
+        (NO_MOVE, -5),
+        (GO_LIVE_DAMAGE, -15),
+    ]
+)
 
 class GetOrNoneManager(models.Manager):
     """Adds get_or_none method to objects"""
@@ -197,7 +222,7 @@ class Round(models.Model):
                 username, extra, username, followers
             )
         elif action_type == "many_went_live":
-            message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers"
+            message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
         elif action_type == "selfie_victim":
             message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
                 username, extra, followers
@@ -227,31 +252,6 @@ class Round(models.Model):
         msg.save()
 
     def tabulate_round(self):
-        POST_SELFIE = "post_selfie"
-        POST_GROUP_SELFIE = "post_group_selfie"
-        POST_STORY = "post_story"
-        GO_LIVE = "go_live"
-        LEAVE_COMMENT = "leave_comment"
-        DONT_POST = "dont_post"
-        NO_MOVE = "no_move"
-        GO_LIVE_DAMAGE = "go_live_damage"
-        LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
-        LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
-
-        POINTS = dict(
-            [
-                (POST_SELFIE, 10),
-                (POST_GROUP_SELFIE, 20),
-                (POST_STORY, 10),
-                (GO_LIVE, 20),
-                (LEAVE_COMMENT, -5),
-                (LEAVE_COMMENT_NO_MOVE, -10),
-                (LEAVE_COMMENT_GROUP_SELFIE, -15),
-                (DONT_POST, 0),
-                (NO_MOVE, -5),
-                (GO_LIVE_DAMAGE, -15),
-            ]
-        )
 
         # the list has the id of the player who performed that move
         PLAYER_MOVES = dict(
@@ -323,7 +323,7 @@ class Round(models.Model):
                     move.victim.user.username,
                 )
                 VICTIMS[move.victim.id] += 1
-                PLAYER_POINTS[move.player.id] = POINTS[LEAVE_COMMENT]
+                PLAYER_POINTS[move.player.id] = 0
             elif move.action_type == move.DONT_POST:
                 PLAYER_MOVES[DONT_POST].append(move.player.id)
                 PLAYERS_WHO_MOVED.append(move.player.id)
@@ -345,7 +345,7 @@ class Round(models.Model):
                 PLAYER_POINTS[player.id] = POINTS[NO_MOVE]
                 Move.objects.create(round=self, action_type=NO_MOVE, player=player)
                 message = self.generate_new_message(
-                    move.DONT_POST, POINTS[DONT_POST], move.player.user.username
+                    NO_MOVE, -POINTS[NO_MOVE], player.user.username
                 )
                 Message.objects.create(
                     message=message,
@@ -410,7 +410,7 @@ class Round(models.Model):
             for user in PLAYER_MOVES[GO_LIVE]:
                 # UPDATE their points
                 PLAYER_POINTS[user] = -POINTS[GO_LIVE]
-                self.update_user_message(user, "many_went_live", PLAYER_POINTS[user])
+                self.update_user_message(user, "many_went_live", -PLAYER_POINTS[user])
 
         # calculate the points lost by any victims
         for v in VICTIMS:
@@ -443,7 +443,7 @@ class Round(models.Model):
         for user in PLAYER_MOVES[POST_SELFIE]:
             if PLAYER_POINTS[user] == 0:
                 PLAYER_POINTS[user] = POINTS[POST_SELFIE]
-        print(PLAYER_POINTS, PLAYER_MOVES, VICTIMS)
+        print(PLAYER_POINTS)
         return PLAYER_POINTS
 
 
