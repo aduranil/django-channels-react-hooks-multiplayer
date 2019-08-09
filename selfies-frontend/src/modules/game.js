@@ -5,7 +5,7 @@ export const startRound = () => ({ type: 'START_ROUND' });
 export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
 export const makeMove = move => ({ type: 'MAKE_MOVE', move });
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';
-const API_ROOT = 'http://localhost:8000';
+const API_ROOT = process.env.REACT_APP_HOST;
 
 export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`, {
   method: 'POST',

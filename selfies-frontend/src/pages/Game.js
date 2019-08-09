@@ -9,8 +9,7 @@ import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import { Phone } from '../images/iPhone';
 
-const HOST = 'localhost:8000';
-// const HOST = 'selfies-2020.herokuapp.com';
+const HOST = process.env.REACT_APP_WS_HOST;
 
 function Game({
   id, time, dispatch, game, currentPlayer,

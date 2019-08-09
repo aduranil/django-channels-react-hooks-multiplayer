@@ -1,5 +1,5 @@
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';
-const API_ROOT = 'http://localhost:8000';
+const API_ROOT = process.env.REACT_APP_HOST;
 
 const status = async (res) => {
   if (!res.ok) {
