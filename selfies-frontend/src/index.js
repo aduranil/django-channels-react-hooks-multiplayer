@@ -7,6 +7,8 @@ import reduxThunk from 'redux-thunk';
 import rootReducer from './modules/reducers';
 import wsMiddleware from './middleware/middleware';
 import App from './App';
+import ErrorBoundary from './Error';
+import './App.css';
 
 const middleware = [reduxThunk, wsMiddleware];
 const store = createStore(
@@ -18,9 +20,11 @@ const store = createStore(
 );
 const Root = ({ store }) => (
   <Router>
-    <Provider store={store}>
-      <Route path="/" component={App} />
-    </Provider>
+    <ErrorBoundary>
+      <Provider store={store}>
+        <Route path="/" component={App} />
+      </Provider>
+    </ErrorBoundary>
   </Router>
 );
 

@@ -19,14 +19,11 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
-  useEffect(
-    () => {
-      if (time === '90') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '90') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const beginRound = () => {
     dispatch(startRound());
@@ -53,7 +50,7 @@ function Game({
 
   if (id && game) {
     return (
-      <React.Fragment>
+      <div style={{ height: '100vh', width: '100%' }}>
         <Navigation inGame />
         <h1 style={{ textAlign: 'center' }}>
           {' '}
@@ -173,7 +170,7 @@ function Game({
           <ChatBox game={game} />
           <RoundHistory game={game} />
         </div>
-      </React.Fragment>
+      </div>
     );
   }
   return `${<span> LOADING </span>}`;

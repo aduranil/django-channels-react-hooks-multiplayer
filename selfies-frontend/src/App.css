@@ -4,10 +4,22 @@
   box-sizing: border-box;
   font-family: 'Roboto Mono', monospace;
   color: #464655;
+  overflow: hidden;
 }
 
-.entrance {
-  overflow: hidden !important;
+::-webkit-scrollbar {
+  width: 1em;
+  background: #44ffd1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: black;
+  outline: 1px solid slategrey;
+}
+
+a {
+  text-decoration: none;
+  color: white;
 }
 
 button {

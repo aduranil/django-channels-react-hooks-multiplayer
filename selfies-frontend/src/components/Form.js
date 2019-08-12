@@ -61,6 +61,15 @@ const Form = ({
 to create your user!
       </div>
     )}
+    {route === '/signup' && (
+      <div>
+        Click
+        {' '}
+        <Link to="/loginorsignup">here</Link>
+        {' '}
+to login!
+      </div>
+    )}
   </div>
 );
 

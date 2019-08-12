@@ -4,10 +4,9 @@ import { connect } from 'react-redux';
 import HalfRectangle from '../images/Rectangle';
 import { EntrancePhone } from '../images/EntrancePhone';
 import { Message } from '../images/iMessage';
-import './App.css';
 
 const Entrance = () => (
-  <div className="entrance" style={{ minWidth: '100vw', minHeight: '100vh' }}>
+  <div>
     <HalfRectangle color="#70D6FF" />
     <div style={{ textAlign: 'center' }}>
       <span className="entrance-title">Selfies 2020</span>
@@ -39,7 +38,7 @@ const Entrance = () => (
           }}
         >
           <div className="rollIn animated">
-            <Link to="/loginorsignup">
+            <Link to="/signup">
               <div
                 style={{
                   top: '35%',
@@ -51,6 +50,7 @@ const Entrance = () => (
                   opacity: '0.5',
                   position: 'absolute',
                   alignSelf: 'center',
+                  overflow: 'hidden',
                 }}
               >
                 <Message />
