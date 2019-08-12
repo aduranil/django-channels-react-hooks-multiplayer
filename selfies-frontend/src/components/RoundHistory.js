@@ -20,7 +20,7 @@ function RoundHistory({ game }) {
         marginBottom: '1%',
         marginTop: '1%',
         padding: '2%',
-        maxHeight: '500px',
+        maxHeight: '50vh',
         width: '60%',
       }}
     >
@@ -30,8 +30,8 @@ function RoundHistory({ game }) {
         style={{
           overflowY: 'scroll',
           marginTop: '5px',
-          minHeight: '350px',
-          maxHeight: '350px',
+          minHeight: '30vh',
+          maxHeight: '30vh',
         }}
       >
         {game.round_history.map(msg => (

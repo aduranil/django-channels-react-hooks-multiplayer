@@ -64,7 +64,7 @@ function Games({
               </div>
             ))}
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex', padding: '2px' }}>
           <button type="button" style={{ width: '30%' }} onClick={onClick}>
             create game
           </button>

@@ -9,7 +9,7 @@
 
 ::-webkit-scrollbar {
   width: 1em;
-  background: #44ffd1;
+  background: none;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -43,6 +43,10 @@ button[disabled] {
   color: white;
 }
 
+.gamebutton {
+  background-color: none;
+}
+
 .landingbox {
   background: #ff70a6;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
@@ -52,14 +56,6 @@ button[disabled] {
   width: 50%;
   padding: 3%;
   max-height: 450px;
-}
-
-.container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-top: 5px;
-  margin-left: 5px;
 }
 
 .entrance-title {

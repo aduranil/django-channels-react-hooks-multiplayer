@@ -19,7 +19,16 @@ function Navigation({
   };
 
   return (
-    <div className="container">
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-Between',
+        paddingBottom: '5px',
+        marginTop: '5px',
+        marginLeft: '5px',
+      }}
+    >
       {' '}
       <Link to="/">
         <h1 style={{ paddingRight: '5px' }}>Selfies 2020 </h1>
