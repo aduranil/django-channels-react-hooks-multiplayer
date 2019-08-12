@@ -111,6 +111,8 @@ class Game(models.Model):
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=0)
     stories = models.IntegerField(default=3)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
         User,
         related_name="game_players",
@@ -154,6 +156,8 @@ class Message(models.Model):
 class Round(models.Model):
     game = models.ForeignKey(Game, related_name="rounds", on_delete=models.CASCADE)
     started = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     objects = GetOrNoneManager()
 
@@ -489,6 +493,8 @@ class Move(models.Model):
         null=True,
         on_delete=models.CASCADE,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def as_json(self):
         return dict(

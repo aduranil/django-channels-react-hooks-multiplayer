@@ -92,18 +92,18 @@ WSGI_APPLICATION = "selfies.wsgi.application"
 
 # redis_host = os.environ.get("REDIS_URL")
 redis_host = os.environ.get("REDIS_URL", "localhost")
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {"hosts": [(redis_host, 6379)]},
-    }
-}
 # CHANNEL_LAYERS = {
 #     "default": {
 #         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {"hosts": [os.environ.get("REDIS_URL", 'redis://redis:6379')]},
+#         "CONFIG": {"hosts": [(redis_host, 6379)]},
 #     }
 # }
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [os.environ.get("REDIS_URL", 'redis://redis:6379')]},
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
