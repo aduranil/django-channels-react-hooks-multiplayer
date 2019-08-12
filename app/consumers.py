@@ -117,7 +117,7 @@ class GameConsumer(WebsocketConsumer):
         round = Round.objects.get_or_none(game=self.game, started=True)
         if round:
             player_points = round.tabulate_round()
-            winner = None
+            winners = []
             for player in self.game.game_players.all():
                 points = player_points[player.id]
                 updated_points = points + player.followers
@@ -126,7 +126,7 @@ class GameConsumer(WebsocketConsumer):
                 if updated_points < 0:
                     updated_points = 0
                 if updated_points >= 100:
-                    winner = player
+                    winners.append(player)
                 player.followers = updated_points
                 player.save()
 
@@ -145,15 +145,23 @@ class GameConsumer(WebsocketConsumer):
             round.started = False
             round.save()
             Round.objects.create(game=self.game, started=True)
-            if not winner:
+            if len(winners) == 0:
                 self.start_round_and_timer()
             else:
-                # TODO disconnect when this happens
-                self.when_someone_wins()
+                self.game.game_status = "inactive"
+                self.game.save()
+                for winner in winners:
+                    Message.objects.create(
+                        message="{} won!".format(winner.user.username),
+                        message_type="round_recap",
+                        game=self.game,
+                        username=winner.user.username,
+                    )
+                self.send_update_game_players()
+                async_to_sync(self.channel_layer.group_discard)(
+                    self.room_group_name, self.channel_name
+                )
 
-    def when_someone_wins(self):
-        # placeholder method for now
-        return
 
     def make_move(self, data):
         user = self.scope["user"]

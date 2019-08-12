@@ -9,6 +9,7 @@ const FormField = ({
     style={{
       marginTop: '10px',
       marginBottom: '10px',
+      padding: '2px',
     }}
   >
     <label>{labelName}</label>
@@ -33,8 +34,8 @@ const Form = ({
   <div
     style={{
       padding: '5%',
-      width: '500px',
-      height: '375px',
+      width: '50vh',
+      maxHeight: '45vh',
     }}
   >
     <form>

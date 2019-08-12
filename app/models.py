@@ -80,7 +80,7 @@ class Game(models.Model):
         """See if the round can be started. Requires at least 3 players and
         that all players in the room have started"""
 
-        if self.game_players.all().count() < 2:
+        if self.game_players.all().count() < 0:
             self.round_started = False
             self.save()
             return False
@@ -124,11 +124,13 @@ class GamePlayer(models.Model):
     game = models.ForeignKey(
         Game, related_name="game_players", on_delete=models.CASCADE
     )
+    winner = models.BooleanField(default=False)
     objects = GetOrNoneManager()
 
     def as_json(self):
         return dict(
             id=self.id,
+            winner=self.winner,
             followers=self.followers,
             stories=self.stories,
             username=self.user.username,
