@@ -232,27 +232,38 @@ class Round(models.Model):
             message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
                 username, followers
             )
-            message = random.choice([message1, message2])
+            message3 = "{} used way too many filters on the story she just posted. her {} new followers must not have noticed"
+            message = random.choice([message1, message2, message3])
         elif action_type == "leave_comment":
-            message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
+            message1 = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
                 username, extra
             )
+            message2 = "{} absolutely destroyed {}'s new selfie. she's a total hater!".format(
+                username, extra
+            )
+            message3 = "{} called {}'s bag cheap and tacky. what a mean comment".format(username, extra)
+            message = random.choice([message1, message2, message3])
         elif action_type == "one_group_selfie":
-            message = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
+            message1 = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
                 username, followers
             )
+            message2 = "{} posed for a group selfie. alone. pathetic. {} dummies still like it though".format(username, followers)
+            message3 = "{} has no friends, which is why her sad group selfie attempt failed. her solo selfie got {} followers".format(username, followers)
+            message = random.choice([message1, message2, message3])
         elif action_type == "go_live_damage":
             message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(
                 username, extra, username, followers
             )
         elif action_type == "many_went_live":
-            message = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
+            message1 = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
+            message2 = "{} went live! she timed it poorly though and lost {} followers".format(username, followers)
+            message = random.choice([message1, message2, message3])
         elif action_type == "selfie_victim":
             message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
                 username, extra, followers
             )
         elif action_type == "no_move_victim":
-            message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(
+            message = "{} didnt do anything, but she still got flamed and lost {} followers".format(
                 username, followers
             )
         return message
