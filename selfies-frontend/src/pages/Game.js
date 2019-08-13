@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { wsConnect } from '../modules/websocket';
@@ -9,6 +9,7 @@ import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import GameInfo from '../components/GameInfo';
 import GameMoves from '../components/GameMoves';
+import { leaveGame } from '../modules/game';
 
 const HOST = process.env.REACT_APP_WS_HOST;
 
@@ -18,6 +19,16 @@ function Game({
   const host = `ws://${HOST}/ws/game/${id}?token=${localStorage.getItem('token')}`;
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
+
+  useEffect(() => {
+    window.addEventListener('close', () => {
+      dispatch(leaveGame());
+    });
+
+    return () => window.removeEventListener('close', () => {
+      dispatch(leaveGame());
+    });
+  }, [dispatch]);
 
   if (id && game) {
     return (

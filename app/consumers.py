@@ -43,8 +43,10 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
 
     def leave_game(self, data=None):
+        print('in leave game')
+        game_player = GamePlayer.objects.get_or_none(user=self.user, game=self.game)
         if self.game.game_players.all().count() <= 1:
-            self.game_player.delete()
+            game_player.delete()
             self.game.delete()
         else:
             Message.objects.create(
@@ -53,7 +55,7 @@ class GameConsumer(WebsocketConsumer):
                 username=self.user.username,
                 message_type="action",
             )
-            self.game_player.delete()
+            game_player.delete()
             self.game.check_joinability()
             self.send_update_game_players()
             async_to_sync(self.channel_layer.group_discard)(

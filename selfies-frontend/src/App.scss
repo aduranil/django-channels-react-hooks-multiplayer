@@ -20,9 +20,12 @@ a {
   text-decoration: none;
   color: white;
 }
-body {
+body,
+html {
   max-height: 100vh;
   overflow: hidden;
+  height: 100%;
+  width: 100%;
 }
 
 button {
