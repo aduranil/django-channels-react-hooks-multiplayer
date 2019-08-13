@@ -67,6 +67,7 @@ const socketMiddleware = () => {
         );
         break;
       default:
+        console.log(action);
         return next(action);
     }
   };
