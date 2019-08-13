@@ -22,10 +22,6 @@ a {
   color: white;
 }
 
-.entrance {
-  overflow: hidden !important;
-}
-
 button {
   border-radius: 20px;
   margin-right: 10px;

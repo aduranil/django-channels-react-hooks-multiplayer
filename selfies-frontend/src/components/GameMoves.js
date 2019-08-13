@@ -42,63 +42,68 @@ function GameMoves({
         marginRight: '1%',
         marginLeft: '1%',
         marginBottom: '1%',
+        marginTop: '1%',
         padding: '1%',
         maxHeight: '50vh',
         width: '15vw',
         justifyContent: 'space-Between',
       }}
     >
-      {game.round_started && (
-        <React.Fragment>
-          <button
-            className={currentMove === 'post_selfie' ? 'button-color' : null}
-            type="button"
-            style={{ padding: '20px' }}
-            value="post_selfie"
-            onClick={newMove}
-          >
-            post a selfie
-          </button>
-          <button
-            className={currentMove === 'post_group_selfie' ? 'button-color' : null}
-            type="button"
-            value="post_group_selfie"
-            style={{ padding: '20px' }}
-            onClick={newMove}
-          >
-            post group selfie
-          </button>
-          <button
-            type="button"
-            className={currentMove === 'post_story' ? 'button-color' : null}
-            disabled={currentPlayer && currentPlayer.stories === 0}
-            value="post_story"
-            style={{ padding: '20px' }}
-            onClick={newMove}
-          >
-            post story
-          </button>
-          <button
-            className={currentMove === 'dont_post' ? 'button-color' : null}
-            type="button"
-            value="dont_post"
-            style={{ padding: '20px' }}
-            onClick={newMove}
-          >
-            {"don't post"}
-          </button>
-          <button
-            className={currentMove === 'go_live' ? 'button-color' : null}
-            type="button"
-            value="go_live"
-            style={{ padding: '20px' }}
-            onClick={newMove}
-          >
-            go live
-          </button>
-          {' '}
-        </React.Fragment>
-      )}
+      <React.Fragment>
+        <button
+          className={currentMove === 'post_selfie' ? 'button-color' : null}
+          type="button"
+          style={{ padding: '20px' }}
+          value="post_selfie"
+          onClick={newMove}
+          disabled={!game.round_started}
+        >
+          post a selfie
+        </button>
+        <button
+          className={currentMove === 'post_group_selfie' ? 'button-color' : null}
+          type="button"
+          value="post_group_selfie"
+          style={{ padding: '20px' }}
+          onClick={newMove}
+          disabled={!game.round_started}
+        >
+          post group selfie
+          {!game.round_started}
+        </button>
+        <button
+          type="button"
+          className={currentMove === 'post_story' ? 'button-color' : null}
+          disabled={currentPlayer && currentPlayer.stories === 0}
+          value="post_story"
+          style={{ padding: '20px' }}
+          onClick={newMove}
+          disabled={!game.round_started}
+        >
+          post story
+        </button>
+        <button
+          className={currentMove === 'dont_post' ? 'button-color' : null}
+          type="button"
+          value="dont_post"
+          style={{ padding: '20px' }}
+          onClick={newMove}
+          disabled={!game.round_started}
+        >
+          {"don't post"}
+        </button>
+        <button
+          className={currentMove === 'go_live' ? 'button-color' : null}
+          type="button"
+          value="go_live"
+          style={{ padding: '20px' }}
+          onClick={newMove}
+          disabled={!game.round_started}
+        >
+          go live
+        </button>
+        {' '}
+      </React.Fragment>
     </div>
   );
 }
