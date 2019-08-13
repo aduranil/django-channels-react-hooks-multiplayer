@@ -49,6 +49,7 @@ const socketMiddleware = () => {
         socket = null;
         break;
       case 'LEAVE_GAME':
+        console.log('leave game');
         socket.send(JSON.stringify({ command: 'LEAVE_GAME' }));
         break;
       case 'NEW_MESSAGE':

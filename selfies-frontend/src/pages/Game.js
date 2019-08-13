@@ -21,14 +21,11 @@ function Game({
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
   useEffect(() => {
-    window.addEventListener('close', () => {
-      dispatch(leaveGame());
-    });
+    const exitGame = () => dispatch(leaveGame());
+    window.addEventListener('beforeunload', exitGame);
 
-    return () => window.removeEventListener('close', () => {
-      dispatch(leaveGame());
-    });
-  }, [dispatch]);
+    return () => window.removeEventListener('beforeunload', exitGame);
+  }, []);
 
   if (id && game) {
     return (
