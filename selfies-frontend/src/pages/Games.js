@@ -44,12 +44,16 @@ function Games({
           {Array.isArray(games.games)
             && games.games.map(game => (
               <div
-                style={{ marginTop: '10px', marginBottom: '10px', padding: '2px' }}
+                style={{
+                  marginTop: '10px',
+                  marginBottom: '5px',
+                }}
                 key={game.id}
               >
                 <button
                   type="button"
                   onClick={onJoin}
+                  style={{ marginRight: '10px' }}
                   value={game.id}
                   disabled={game.is_joinable === false}
                 >

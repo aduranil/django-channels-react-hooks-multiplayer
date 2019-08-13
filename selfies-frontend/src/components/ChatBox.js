@@ -23,10 +23,6 @@ function ChatBox({ game, dispatch }) {
         background: '#70d6ff',
         boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
         borderRadius: '20px',
-        marginRight: '1%',
-        marginLeft: '1%',
-        marginBottom: '1%',
-        marginTop: '1%',
         padding: '2%',
         maxHeight: '40vh',
         width: '40vw',
@@ -55,20 +51,23 @@ function ChatBox({ game, dispatch }) {
       <div
         style={{
           display: 'flex',
-          marginTop: '5px',
+          margxinTop: '5px',
           padding: '5px',
           width: '100%',
         }}
       >
         <input
-          style={{ width: '100%', marginRight: '10px' }}
+          style={{
+            marginRight: '10px',
+            display: 'block',
+            flexGrow: 1,
+          }}
           onChange={e => setMessage(e.target.value)}
           value={message}
           onKeyPress={e => e.key === 'Enter' && handleSubmit()}
         />
-        <button style={{ width: '20%' }} type="button" onClick={handleSubmit}>
+        <button style={{ padding: '10px', display: 'block' }} type="button" onClick={handleSubmit}>
           send
-          {' '}
         </button>
       </div>
     </div>

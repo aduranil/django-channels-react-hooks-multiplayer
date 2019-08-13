@@ -14,13 +14,11 @@ function GameInfo({ game, dispatch, time }) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        marginRight: '1%',
-        marginLeft: '1%',
-        marginBottom: '1%',
         padding: '1%',
-        maxHeight: '50vh',
-        width: '10vw',
+        // maxHeight: '50vh',
+        // width: '10vw',
         justifyContent: 'center',
+        marginRight: '5px',
       }}
     >
       {!game.round_started && (

@@ -8,7 +8,7 @@ import rootReducer from './modules/reducers';
 import wsMiddleware from './middleware/middleware';
 import App from './App';
 import ErrorBoundary from './Error';
-import './App.css';
+import './App.scss';
 
 const middleware = [reduxThunk, wsMiddleware];
 const store = createStore(

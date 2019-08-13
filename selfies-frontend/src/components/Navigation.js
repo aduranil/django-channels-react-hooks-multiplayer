@@ -24,8 +24,8 @@ function Navigation({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-Between',
-        marginTop: '5px',
-        marginLeft: '5px',
+        padding: '5px 1%',
+        // marginLeft: '5px',
       }}
     >
       {' '}
@@ -40,7 +40,7 @@ function Navigation({
       )}
       {loggedIn
         && inGame && (
-          <button type="button" style={{ width: '7vw' }} onClick={exitGame}>
+          <button type="button" onClick={exitGame}>
             leave game
           </button>
       )}

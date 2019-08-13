@@ -39,10 +39,7 @@ function GameMoves({
       style={{
         display: 'flex',
         flexDirection: 'column',
-        marginRight: '1%',
-        marginLeft: '1%',
-        marginBottom: '1%',
-        marginTop: '1%',
+        marginRight: '5px',
         padding: '1%',
         maxHeight: '50vh',
         width: '15vw',
@@ -53,7 +50,7 @@ function GameMoves({
         <button
           className={currentMove === 'post_selfie' ? 'button-color' : null}
           type="button"
-          style={{ padding: '20px' }}
+          style={{ padding: '10px' }}
           value="post_selfie"
           onClick={newMove}
           disabled={!game.round_started}
@@ -64,7 +61,7 @@ function GameMoves({
           className={currentMove === 'post_group_selfie' ? 'button-color' : null}
           type="button"
           value="post_group_selfie"
-          style={{ padding: '20px' }}
+          style={{ padding: '10px' }}
           onClick={newMove}
           disabled={!game.round_started}
         >
@@ -76,7 +73,7 @@ function GameMoves({
           className={currentMove === 'post_story' ? 'button-color' : null}
           disabled={currentPlayer && currentPlayer.stories === 0}
           value="post_story"
-          style={{ padding: '20px' }}
+          style={{ padding: '10px' }}
           onClick={newMove}
           disabled={!game.round_started}
         >
@@ -86,7 +83,7 @@ function GameMoves({
           className={currentMove === 'dont_post' ? 'button-color' : null}
           type="button"
           value="dont_post"
-          style={{ padding: '20px' }}
+          style={{ padding: '10px' }}
           onClick={newMove}
           disabled={!game.round_started}
         >
@@ -96,7 +93,7 @@ function GameMoves({
           className={currentMove === 'go_live' ? 'button-color' : null}
           type="button"
           value="go_live"
-          style={{ padding: '20px' }}
+          style={{ padding: '10px' }}
           onClick={newMove}
           disabled={!game.round_started}
         >

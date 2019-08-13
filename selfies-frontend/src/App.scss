@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: 'Roboto Mono', monospace;
   color: #464655;
-  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
@@ -21,6 +20,10 @@ a {
   text-decoration: none;
   color: white;
 }
+body {
+  max-height: 100vh;
+  overflow: hidden;
+}
 
 .entrance {
   overflow: hidden !important;
@@ -28,12 +31,19 @@ a {
 
 button {
   border-radius: 20px;
-  margin-right: 10px;
+  // margin-right: 10px;
   padding: 7px;
   cursor: pointer;
-  border: 3px solid #44ffd1;
+  border: 3px solid darken(#44ffd1, 5%);
   background-color: #44ffd1;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0.5, 0.5);
+  font-size: 14px;
+  font-weight: 800;
+  // margin: 5px 0;
+  padding: 5px;
+  &:hover {
+    background-color: lighten(#44ffd1, 10%);
+  }
 }
 
 button[disabled] {
@@ -136,4 +146,8 @@ input {
 
 .rollIn {
   animation-name: rollIn;
+}
+
+.game-card {
+  padding: 1%;
 }
