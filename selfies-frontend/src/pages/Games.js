@@ -11,11 +11,14 @@ function Games({
 }) {
   const [roomName, setRoomName] = useState('');
 
-  useEffect(() => {
-    if (loggedIn) {
-      dispatch(getGames());
-    }
-  }, [dispatch, loggedIn]);
+  useEffect(
+    () => {
+      if (loggedIn) {
+        dispatch(getGames());
+      }
+    },
+    [dispatch, loggedIn],
+  );
 
   const onClick = () => {
     if (roomName.length === 0) {
@@ -40,7 +43,10 @@ function Games({
         <div style={{ overflowY: 'scroll', maxHeight: '250px', marginBottom: '10px' }}>
           {Array.isArray(games.games)
             && games.games.map(game => (
-              <div style={{ marginTop: '10px', marginBottom: '10px' }} key={game.id}>
+              <div
+                style={{ marginTop: '10px', marginBottom: '10px', padding: '2px' }}
+                key={game.id}
+              >
                 <button
                   type="button"
                   onClick={onJoin}
@@ -51,14 +57,14 @@ function Games({
                 </button>
                 <span>
                   {game.room_name}
-, players:
+                  , players:
                   {' '}
                 </span>
                 {game.users.map(user => (
                   <span key={user.username}>
                     {' '}
                     {user.username}
-,
+                    ,
                   </span>
                 ))}
               </div>

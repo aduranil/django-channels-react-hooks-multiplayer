@@ -24,7 +24,6 @@ function Navigation({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-Between',
-        paddingBottom: '5px',
         marginTop: '5px',
         marginLeft: '5px',
       }}
@@ -33,15 +32,17 @@ function Navigation({
       <Link to="/">
         <h1 style={{ paddingRight: '5px' }}>Selfies 2020 </h1>
       </Link>
-      {loggedIn && !inGame && (
-        <button type="button" style={{ width: '100px' }} onClick={onLogout}>
-          logout
-        </button>
+      {loggedIn
+        && !inGame && (
+          <button type="button" style={{ width: '5vw' }} onClick={onLogout}>
+            logout
+          </button>
       )}
-      {loggedIn && inGame && (
-        <button type="button" style={{ width: '100px' }} onClick={exitGame}>
-          leave game
-        </button>
+      {loggedIn
+        && inGame && (
+          <button type="button" style={{ width: '7vw' }} onClick={exitGame}>
+            leave game
+          </button>
       )}
     </div>
   );
