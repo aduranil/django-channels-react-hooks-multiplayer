@@ -6,14 +6,11 @@ function GameMoves({
   game, dispatch, time, currentPlayer,
 }) {
   const [currentMove, setCurrentMove] = useState('');
-  useEffect(
-    () => {
-      if (time === '90') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '90') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const newMove = (event) => {
     event.preventDefault();
@@ -47,58 +44,18 @@ function GameMoves({
       }}
     >
       <React.Fragment>
-        <button
-          className={currentMove === 'post_selfie' ? 'button-color' : null}
-          type="button"
-          style={{ padding: '10px' }}
-          value="post_selfie"
-          onClick={newMove}
-          disabled={!game.round_started}
-        >
-          post a selfie
-        </button>
-        <button
-          className={currentMove === 'post_group_selfie' ? 'button-color' : null}
-          type="button"
-          value="post_group_selfie"
-          style={{ padding: '10px' }}
-          onClick={newMove}
-          disabled={!game.round_started}
-        >
-          post group selfie
-          {!game.round_started}
-        </button>
-        <button
-          type="button"
-          className={currentMove === 'post_story' ? 'button-color' : null}
-          disabled={currentPlayer && currentPlayer.stories === 0}
-          value="post_story"
-          style={{ padding: '10px' }}
-          onClick={newMove}
-          disabled={!game.round_started}
-        >
-          post story
-        </button>
-        <button
-          className={currentMove === 'dont_post' ? 'button-color' : null}
-          type="button"
-          value="dont_post"
-          style={{ padding: '10px' }}
-          onClick={newMove}
-          disabled={!game.round_started}
-        >
-          {"don't post"}
-        </button>
-        <button
-          className={currentMove === 'go_live' ? 'button-color' : null}
-          type="button"
-          value="go_live"
-          style={{ padding: '10px' }}
-          onClick={newMove}
-          disabled={!game.round_started}
-        >
-          go live
-        </button>
+        {['post_selfie', 'post_group_selfie', 'post_story', 'dont_post', 'go_live'].map(item => (
+          <button
+            className={currentMove === item ? 'button-color' : null}
+            type="button"
+            style={{ padding: '10px' }}
+            value={item}
+            onClick={newMove}
+            disabled={!game.round_started}
+          >
+            {item.replace(/_/g, ' ')}
+          </button>
+        ))}
         {' '}
       </React.Fragment>
     </div>

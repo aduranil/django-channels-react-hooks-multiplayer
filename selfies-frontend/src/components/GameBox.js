@@ -6,14 +6,11 @@ import { makeMove } from '../modules/game';
 
 function GameBox({ game, dispatch, time }) {
   const [currentMove, setCurrentMove] = useState('');
-  useEffect(
-    () => {
-      if (time === '90') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '90') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const newMove = (event) => {
     event.preventDefault();
@@ -41,12 +38,7 @@ function GameBox({ game, dispatch, time }) {
         boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
         borderRadius: '20px',
         flexGrow: '1',
-        // marginLeft: '1%',
-        // marginRight: '1%',
-        // marginBottom: '1%',
         padding: '2%',
-        // minHeight: '30vh',
-        // maxHeight: '40vh',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'row' }}>

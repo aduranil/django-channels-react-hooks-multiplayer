@@ -37,6 +37,8 @@ function RoundHistory({ game }) {
                 Click on any girl's iPhone to leave a mean comment
               </span>
             </div>
+            {' '}
+            <br />
             <div key="exclamation">
               <span style={{ color: 'white' }}>
                 {' '}

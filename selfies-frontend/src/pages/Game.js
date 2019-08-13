@@ -46,7 +46,7 @@ function Game({
           </div>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }} className="game-card">
-          <GameInfo time={time} game={game} />
+          <GameInfo time={time} currentPlayer={currentPlayer} game={game} />
           <GameMoves time={time} currentPlayer={currentPlayer} game={game} />
           <GameBox time={time} currentPlayer={currentPlayer} game={game} />
         </div>
