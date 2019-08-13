@@ -174,33 +174,48 @@ class Round(models.Model):
         message = "{} did {} and got {} followers".format(
             username, action_type, followers
         )
-        if action_type == "go_live":  # go_live gets deleted out of player_moves
-            message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(
+        if action_type == "go_live":
+            message1 = "{} shared her political opinions while going live and got {} followers. chemtrails are real".format(
                 username, followers
             )
+            message2 = "{} went live and got {} followers, but she just played old town road on repeat the whole time".format(
+                username, followers
+            )
+            message3 = "{} got shady during her go live sesh. she was interesting enough to get {} followers".format(
+                username, followers
+            )
+            message4 = "{} shared photos of her food while going live. her {} new followers seemingly loved it".format(username, followers)
+            message = random.choice([message1, message2, message3, message4])
         elif action_type == "dont_post":
-            message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(
+            message1 = "{} didn't post and lost {} followers even though she had nothing better to do".format(
                 username, followers
             )
-            message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(
+            message2 = "{} didn't have time to post. doesn't she know the internet is more important than IRL? she lost {} followers".format(
                 username, followers
             )
-            message = random.choice([message1, message2])
+            message3 = "{} didn't post. was she getting fillers or something?"
+            message = random.choice([message1, message2, message3])
         elif action_type == "no_move":
-            message = "{} was so lazy that she forgot to move. she lost {} followers".format(
+            message1 = "{} was so lazy that she forgot to move. she lost {} followers".format(
                 username, followers
             )
+            message2 = "{} didn't move this round. honestly, i hate her. so do the {} followers she lost".format(username, followers)
+            message3 = "if {} forgets to move again, she's getting cancelled permanently! she lost {} followers".format(username, followers)
+            message = random.choice([message1, message2, message3])
         elif action_type == "post_selfie":
             message1 = "{} posted a selfie. how original. she gained {} followers".format(
                 username, followers
             )
-            message2 = "{} posted a selfie. cool i guess. she got {} followers".format(
+            message2 = "drumroll please...{} posted a selfie. cool i guess. she got {} followers".format(
                 username, followers
             )
             message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(
                 username, followers
             )
-            message = random.choice([message1, message2, message3])
+            message4 = "{} showed off a cute new outfit in a classic mirror selfie. her {} new followers loved it!".format(
+                username, followers
+            )
+            message = random.choice([message1, message2, message3, message4])
         elif action_type == "post_group_selfie":
             message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(
                 username, followers
@@ -208,7 +223,8 @@ class Round(models.Model):
             message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
                 username, followers
             )
-            message = random.choice([message1, message2])
+            message3 = "{} is in a selfie with other people? i guess anything is possible. she now has {} followers".format(username, followers)
+            message = random.choice([message1, message2, message3])
         elif action_type == "post_story":
             message1 = "{} posted a story for {} followers. i hope she got some views".format(
                 username, followers
