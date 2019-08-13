@@ -232,7 +232,7 @@ class Round(models.Model):
             message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
                 username, followers
             )
-            message3 = "{} used way too many filters on the story she just posted. her {} new followers must not have noticed"
+            message3 = "{} used way too many filters on the story she just posted. her {} new followers must not have noticed".format(username, followers)
             message = random.choice([message1, message2, message3])
         elif action_type == "leave_comment":
             message1 = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(

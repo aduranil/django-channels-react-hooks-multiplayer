@@ -25,7 +25,6 @@ function ChatBox({ game, dispatch }) {
         borderRadius: '20px',
         padding: '2%',
         maxHeight: '40vh',
-        width: '40vw',
       }}
     >
       <h3 style={{ textAlign: 'center' }}>Group Chat</h3>
@@ -33,8 +32,6 @@ function ChatBox({ game, dispatch }) {
         style={{
           overflowY: 'scroll',
           marginRight: '2px',
-          minHeight: '25vh',
-          maxHeight: '30vh',
         }}
       >
         {game.messages.map(msg => (
@@ -51,7 +48,7 @@ function ChatBox({ game, dispatch }) {
       <div
         style={{
           display: 'flex',
-          margxinTop: '5px',
+          marginTop: '5px',
           padding: '5px',
           width: '100%',
         }}

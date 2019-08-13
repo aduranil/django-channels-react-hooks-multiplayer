@@ -22,22 +22,26 @@ function RoundHistory({ game }) {
       }}
     >
       {' '}
-      <h3 style={{ textAlign: 'center' }}>Round History</h3>
+      <h3 style={{ textAlign: 'center' }}>News Feed</h3>
       <div
         style={{
           overflowY: 'scroll',
           marginTop: '5px',
-          minHeight: '30vh',
-          maxHeight: '40vh',
         }}
       >
         {!game.round_started && (
           <React.Fragment>
             <div key="instruction">
-              <span> Click on any player's iPhone during gameplay to leave a mean comment</span>
+              <span style={{ color: 'white' }}>
+                {' '}
+                Click on any girl's iPhone to leave a mean comment
+              </span>
             </div>
             <div key="exclamation">
-              <span> When the ? turns to !, that means the player has started</span>
+              <span style={{ color: 'white' }}>
+                {' '}
+                When the ? turns to !, that means the player has started
+              </span>
             </div>
           </React.Fragment>
         )}
