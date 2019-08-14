@@ -4,7 +4,20 @@ import { connect } from 'react-redux';
 import HalfRectangle from '../images/Rectangle';
 import { getCurrentUser } from '../modules/account';
 
-const Entrance = ({ dispatch }) => {
+const Image = () => (
+  <img
+    className="animated rollIn"
+    style={{
+      width: '50%',
+      minHeight: '100%',
+      maxHeight: '100%',
+      position: 'relative',
+    }}
+    src={require('../images/entrance-phone.svg')}
+    alt="entrance-phone"
+  />
+);
+const Entrance = ({ dispatch, loggedIn }) => {
   useEffect(() => {
     if (localStorage.getItem('token')) {
       dispatch(getCurrentUser());
@@ -34,19 +47,15 @@ const Entrance = ({ dispatch }) => {
           textAlign: 'center',
         }}
       >
-        <Link to="/signup">
-          <img
-            className="animated rollIn"
-            style={{
-              width: '50%',
-              minHeight: '100%',
-              maxHeight: '100%',
-              position: 'relative',
-            }}
-            src={require('../images/entrance-phone.svg')}
-            alt="entrance-phone"
-          />
-        </Link>
+        {loggedIn ? (
+          <Link to="/games">
+            <Image />
+          </Link>
+        ) : (
+          <Link to="/signup">
+            <Image />
+          </Link>
+        )}
       </div>
     </div>
   );

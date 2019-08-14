@@ -36,7 +36,7 @@ a {
     min-width: 90%;
   }
   .landingbox {
-    min-width: 95%;
+    min-width: 95% !important;
   }
   button {
     padding: 0 !important;
@@ -92,6 +92,13 @@ button[disabled] {
   }
 }
 
+.gamebutton {
+  border-radius: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
 .landingbox {
   background: #ff70a6;
   box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5);
@@ -99,8 +106,10 @@ button[disabled] {
   flex-grow: 1;
   margin: 30px auto 100px auto;
   width: 50%;
+  min-width: 50%;
+  height: 80vh;
+
   padding: 3%;
-  max-height: 450px;
 }
 
 .entrance-title {

@@ -1,8 +1,21 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Phone } from '../images/iPhone';
 import CurrentMoveUpdate from '../hooks/CurrentMove';
+
+const Phone = () => (
+  <img
+    className="animated rollIn"
+    style={{
+      width: '100%',
+      minHeight: '100%',
+      maxHeight: '100%',
+      position: 'relative',
+    }}
+    src={require('../images/iphone.svg')}
+    alt="entrance-phone"
+  />
+);
 
 function GameBox({
   game, dispatch, time, currentPlayer,
@@ -12,6 +25,7 @@ function GameBox({
   return (
     <React.Fragment>
       <div
+        className="phone-gamebox"
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -24,7 +38,6 @@ function GameBox({
           <button
             className={currentMove === item ? 'button-color' : null}
             type="button"
-            style={{ padding: '10px' }}
             value={item}
             onClick={newMove}
             disabled={
@@ -65,7 +78,9 @@ function GameBox({
                 id={player.id}
                 disabled={!game.round_started}
                 value={`leave_comment_${player.id}`}
-                className={currentMove === `leave_comment_${player.id}` ? 'button-color' : null}
+                className={
+                  currentMove === `leave_comment_${player.id}` ? 'button-color' : 'gamebutton'
+                }
                 type="button"
               >
                 <Phone />

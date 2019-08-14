@@ -11,14 +11,11 @@ function Games({
 }) {
   const [roomName, setRoomName] = useState('');
 
-  useEffect(
-    () => {
-      if (loggedIn) {
-        dispatch(getGames());
-      }
-    },
-    [dispatch, loggedIn],
-  );
+  useEffect(() => {
+    if (loggedIn) {
+      dispatch(getGames());
+    }
+  }, [dispatch, loggedIn]);
 
   const onClick = () => {
     if (roomName.length === 0) {
@@ -40,7 +37,13 @@ function Games({
       <Navigation />
       <div className="landingbox">
         <h1 style={{ textAlign: 'center' }}>Active Games</h1>
-        <div style={{ overflowY: 'scroll', maxHeight: '250px', marginBottom: '10px' }}>
+        <div
+          style={{
+            overflowY: 'scroll',
+            height: '65vh',
+            maxHeight: '70vh',
+          }}
+        >
           {Array.isArray(games.games)
             && games.games.map(game => (
               <div
@@ -61,14 +64,14 @@ function Games({
                 </button>
                 <span>
                   {game.room_name}
-                  , players:
+, players:
                   {' '}
                 </span>
                 {game.users.map(user => (
                   <span key={user.username}>
                     {' '}
                     {user.username}
-                    ,
+,
                   </span>
                 ))}
               </div>

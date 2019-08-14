@@ -28,10 +28,29 @@ const WithAuth = (WrappedComponent) => {
     render() {
       const { authCompleted } = this.state;
       const { loggedIn } = this.props;
-      if (authCompleted && loggedIn) {
-        return <WrappedComponent {...this.props} />;
+      if (authCompleted) {
+        return loggedIn ? <WrappedComponent {...this.props} /> : <Redirect to="/loginorsignup" />;
       }
-      return <Redirect to="/loginorsignup" />;
+      return (
+        <React.Fragment>
+          <h1
+            className="animated infinite bounce"
+            style={{
+              textAlign: 'center',
+              margin: 'auto',
+              position: 'absolute',
+              height: '100px',
+              width: '100px',
+              top: '0px',
+              bottom: '0px',
+              left: '0px',
+              right: '0px',
+            }}
+          >
+            Loading
+          </h1>
+        </React.Fragment>
+      );
     }
   }
 
