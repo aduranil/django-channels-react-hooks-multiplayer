@@ -8,6 +8,7 @@ import GameBox from '../components/GameBox';
 import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import GameInfo from '../components/GameInfo';
+import { leaveGame } from '../modules/game';
 
 const HOST = process.env.REACT_APP_WS_HOST;
 
@@ -17,6 +18,13 @@ function Game({
   const host = `ws://${HOST}/ws/game/${id}?token=${localStorage.getItem('token')}`;
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
+
+  useEffect(() => {
+    const exitGame = () => dispatch(leaveGame());
+    window.addEventListener('beforeunload', exitGame);
+
+    return () => window.removeEventListener('beforeunload', exitGame);
+  }, []);
 
   if (id && game) {
     return (

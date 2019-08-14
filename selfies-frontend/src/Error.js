@@ -38,7 +38,7 @@ class ErrorBoundary extends React.Component {
               right: '0px',
             }}
           >
-            Loading
+            Something went wrong
           </h1>
         </React.Fragment>
       );
