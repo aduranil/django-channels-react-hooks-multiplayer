@@ -20,9 +20,29 @@ a {
   text-decoration: none;
   color: white;
   &:hover {
-    background-color: lighten(#44ffd1, 10%);
+    background-color: #ff70a6;
+    color: white;
   }
 }
+
+@media (max-width: 600px) {
+  .entrance-title {
+    font-size: 70px !important;
+  }
+  .phone-signup {
+    min-width: 85vw;
+  }
+  .phone-entrance {
+    min-width: 90%;
+  }
+  .landingbox {
+    min-width: 95%;
+  }
+  button {
+    padding: 0 !important;
+  }
+}
+
 body,
 html {
   max-height: 100vh;
@@ -85,7 +105,7 @@ button[disabled] {
 
 .entrance-title {
   font-family: 'Lobster', cursive;
-  font-size: 100px;
+  font-size: 8vw;
   color: #464655;
 }
 

@@ -31,7 +31,7 @@ const WithAuth = (WrappedComponent) => {
       if (authCompleted && loggedIn) {
         return <WrappedComponent {...this.props} />;
       }
-      return <Redirect to="/loginOrsignup" />;
+      return <Redirect to="/loginorsignup" />;
     }
   }
 

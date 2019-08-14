@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { handleLogin, handleSignup } from '../modules/account';
 import Form from '../components/Form';
 import HalfRectangle from '../images/Rectangle';
+import Navigation from '../components/Navigation';
 
 class LoginOrSignup extends React.Component {
   state = {
@@ -55,26 +55,7 @@ class LoginOrSignup extends React.Component {
     const { route } = this.props;
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-Between',
-            padding: '5px 1%',
-            // marginLeft: '5px',
-          }}
-        >
-          <div>
-            <Link to="/">
-              <h1>Selfies 2020 </h1>
-            </Link>
-          </div>
-          <div style={{ display: 'inline-block' }}>
-            <Link to="/rules">
-              <span style={{ fontColor: 'black' }}>Rules </span>
-            </Link>
-          </div>
-        </div>
+        <Navigation path="login" />
         <React.Fragment>
           <HalfRectangle color="#70D6FF" />
           <div
@@ -86,6 +67,7 @@ class LoginOrSignup extends React.Component {
             }}
           >
             <div
+              className="phone-signup"
               style={{
                 alignSelf: 'center',
                 boxShadow:
@@ -93,6 +75,7 @@ class LoginOrSignup extends React.Component {
                 borderRadius: '20px',
                 backgroundColor: '#ff70a6',
                 width: '30%',
+                minWidth: '300px',
               }}
             >
               <h1 style={{ textAlign: 'center', marginTop: '15px' }}>

@@ -24,7 +24,7 @@ function Game({
     window.addEventListener('beforeunload', exitGame);
 
     return () => window.removeEventListener('beforeunload', exitGame);
-  }, []);
+  }, [dispatch]);
 
   if (id && game) {
     return (

@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { logoutUser } from '../modules/account';
+import { logoutUser, getCurrentUser } from '../modules/account';
 import { leaveGame } from '../modules/game';
-import WithAuth from '../hocs/AuthenticationWrapper';
 
 function Navigation({
   path, dispatch, history, loggedIn, inGame = false,
@@ -19,6 +18,12 @@ function Navigation({
     history.push('/games');
   };
 
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch]);
+
   return (
     <div
       style={{
@@ -26,7 +31,6 @@ function Navigation({
         flexDirection: 'row',
         justifyContent: 'space-Between',
         padding: '5px 1%',
-        // marginLeft: '5px',
       }}
     >
       <div>
@@ -38,32 +42,29 @@ function Navigation({
         <div style={{ marginRight: '30px', display: 'inline-block' }}>
           {path !== 'rules' && (
             <Link to="/rules">
-              <span style={{ fontColor: 'black' }}>Rules </span>
+              <span>Rules </span>
             </Link>
           )}
         </div>
 
         <div style={{ display: 'inline-block' }}>
-          {loggedIn
-            && path === 'rules' && (
-              <Link to="/games">
-                {' '}
-                <span style={{ fontColor: 'black' }}>Games </span>
-              </Link>
+          {loggedIn && path === 'rules' && (
+            <Link to="/games">
+              {' '}
+              <span>Games </span>
+            </Link>
           )}
-          {loggedIn
-            && !inGame && (
-              <button type="button" className="linkbutton" onClick={onLogout}>
-                Logout
-              </button>
+          {loggedIn && !inGame && (
+            <button type="button" className="linkbutton" onClick={onLogout}>
+              Logout
+            </button>
           )}
-          {loggedIn
-            && inGame && (
-              <button type="button" className="linkbutton" onClick={exitGame}>
-                Exit Game
-              </button>
+          {loggedIn && inGame && (
+            <button type="button" className="linkbutton" onClick={exitGame}>
+              Exit Game
+            </button>
           )}
-          {!loggedIn && (
+          {!loggedIn && path !== 'login' && (
             <Link to="/signup">
               {' '}
               <span style={{ fontColor: 'black' }}>Signup </span>
@@ -92,4 +93,4 @@ Navigation.defaultProps = {
   loggedIn: PropTypes.undefined,
   inGame: PropTypes.undefined,
 };
-export default WithAuth(connect(s2p)(withRouter(Navigation)));
+export default connect(s2p)(withRouter(Navigation));
