@@ -75,7 +75,7 @@ function Games({
             ))}
         </div>
         <div style={{ display: 'flex', padding: '2px' }}>
-          <button type="button" style={{ width: '30%' }} onClick={onClick}>
+          <button type="button" style={{ marginRight: '10px' }} onClick={onClick}>
             create game
           </button>
           <input
@@ -83,7 +83,7 @@ function Games({
             onChange={event => setRoomName(event.target.value)}
             placeholder="room name"
             onKeyPress={e => e.key === 'Enter' && onClick()}
-            style={{ width: '100%' }}
+            style={{ flexGrow: '1' }}
           />
         </div>
       </div>

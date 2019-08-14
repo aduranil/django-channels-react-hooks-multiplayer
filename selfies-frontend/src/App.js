@@ -5,6 +5,7 @@ import LoginOrSignup from './pages/LoginOrSignup';
 import Entrance from './pages/Entrance';
 import Games from './pages/Games';
 import Game from './pages/Game';
+import Rules from './pages/Rules';
 
 const App = () => (
   <React.Fragment>
@@ -14,6 +15,7 @@ const App = () => (
       <Route path="/game/:id" component={Game} />
       <Route exact path="/loginorsignup" component={LoginOrSignup} />
       <Route exact path="/signup" component={LoginOrSignup} />
+      <Route exact path="/rules" component={Rules} />
     </Switch>
   </React.Fragment>
 );

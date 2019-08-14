@@ -42,9 +42,10 @@ const Entrance = () => (
               <div
                 style={{
                   top: '35%',
-                  left: '41%',
-                  width: '18%',
-                  height: '14%',
+                  left: '32.5%',
+                  width: '215px',
+                  minWidth: '215px',
+                  height: '30%',
                   borderRadius: '15px',
                   backgroundColor: 'white',
                   opacity: '0.5',

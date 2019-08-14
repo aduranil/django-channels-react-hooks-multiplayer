@@ -4,9 +4,10 @@ import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { logoutUser } from '../modules/account';
 import { leaveGame } from '../modules/game';
+import WithAuth from '../hocs/AuthenticationWrapper';
 
 function Navigation({
-  dispatch, history, loggedIn, inGame,
+  path, dispatch, history, loggedIn, inGame = false,
 }) {
   const onLogout = async () => {
     await dispatch(logoutUser());
@@ -28,22 +29,48 @@ function Navigation({
         // marginLeft: '5px',
       }}
     >
-      {' '}
-      <Link to="/">
-        <h1 style={{ paddingRight: '5px' }}>Selfies 2020 </h1>
-      </Link>
-      {loggedIn
-        && !inGame && (
-          <button type="button" style={{ width: '5vw' }} onClick={onLogout}>
-            logout
-          </button>
-      )}
-      {loggedIn
-        && inGame && (
-          <button type="button" onClick={exitGame}>
-            leave game
-          </button>
-      )}
+      <div>
+        <Link to="/">
+          <h1 style={{ paddingRight: '5px' }}>Selfies 2020 </h1>
+        </Link>
+      </div>
+      <div>
+        <div style={{ marginRight: '30px', display: 'inline-block' }}>
+          {path !== 'rules' && (
+            <Link to="/rules">
+              <span style={{ fontColor: 'black' }}>Rules </span>
+            </Link>
+          )}
+        </div>
+
+        <div style={{ display: 'inline-block' }}>
+          {loggedIn
+            && path === 'rules' && (
+              <Link to="/games">
+                {' '}
+                <span style={{ fontColor: 'black' }}>Games </span>
+              </Link>
+          )}
+          {loggedIn
+            && !inGame && (
+              <button type="button" className="linkbutton" onClick={onLogout}>
+                Logout
+              </button>
+          )}
+          {loggedIn
+            && inGame && (
+              <button type="button" className="linkbutton" onClick={exitGame}>
+                Exit Game
+              </button>
+          )}
+          {!loggedIn && (
+            <Link to="/signup">
+              {' '}
+              <span style={{ fontColor: 'black' }}>Signup </span>
+            </Link>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -65,4 +92,4 @@ Navigation.defaultProps = {
   loggedIn: PropTypes.undefined,
   inGame: PropTypes.undefined,
 };
-export default connect(s2p)(withRouter(Navigation));
+export default WithAuth(connect(s2p)(withRouter(Navigation)));

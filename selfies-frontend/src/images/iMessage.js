@@ -1,7 +1,7 @@
 import React from 'react';
 
 export const Message = () => (
-  <svg width="212px" height="70px" viewBox="0 0 212 70">
+  <svg width="212px" height="140px" viewBox="0 0 212 140">
     <defs>
       <text
         id="text-1"
@@ -52,8 +52,21 @@ export const Message = () => (
             letterSpacing="-0.23999999"
             fill="#000000"
           >
-            <tspan x="12" y="54">
-              enter!!!!
+            <tspan x="12" y="55">
+              Selfies 2020 is a
+            </tspan>
+            <tspan x="12" y="75">
+              multiplayer game where
+            </tspan>
+            <tspan x="12" y="95">
+              you compete to gain
+            </tspan>
+            <tspan x="12" y="115">
+              followers! Click to
+            </tspan>
+            <tspan x="12" y="135">
+              play!
+              {' '}
             </tspan>
           </text>
           <g

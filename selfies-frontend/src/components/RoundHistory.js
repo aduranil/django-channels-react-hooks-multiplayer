@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 
 function RoundHistory({ game }) {
-  let messagesNewRef = useRef();
+  const messagesNewRef = useRef(null);
   useEffect(() => {
-    messagesNewRef.scrollIntoView({ behavior: 'smooth' });
+    messagesNewRef.current.scrollIntoView(false);
   });
 
   return (
@@ -16,9 +16,8 @@ function RoundHistory({ game }) {
         boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
         borderRadius: '20px',
         padding: '2%',
-        // width: '60vw',
-        height: '100%',
-        maxHeight: '100%',
+        maxHeight: '36vh',
+        minHeight: '36vh',
       }}
     >
       {' '}
@@ -34,15 +33,21 @@ function RoundHistory({ game }) {
             <div key="instruction">
               <span style={{ color: 'white' }}>
                 {' '}
-                Click on any girl's iPhone to leave a mean comment
+                -Click on any girl's iPhone to leave her a mean comment
               </span>
             </div>
             {' '}
-            <br />
             <div key="exclamation">
               <span style={{ color: 'white' }}>
                 {' '}
-                When the ? turns to !, that means the player has started
+                -When the ? turns to !, that means the player has started
+              </span>
+            </div>
+            <div key="exclamation">
+              <span style={{ color: 'white' }}>
+                {' '}
+                -There are 90 seconds per round. The timer goes down to 10 seconds once everyone has
+                moved
               </span>
             </div>
           </React.Fragment>
@@ -52,7 +57,7 @@ function RoundHistory({ game }) {
             <span>{msg.message}</span>
           </div>
         ))}
-        <div style={{ float: 'left', clear: 'both' }} ref={el => (messagesNewRef = el)} />
+        <div style={{ float: 'left', clear: 'both' }} ref={messagesNewRef} />
       </div>
     </div>
   );

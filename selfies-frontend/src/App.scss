@@ -19,31 +19,27 @@
 a {
   text-decoration: none;
   color: white;
+  &:hover {
+    background-color: lighten(#44ffd1, 10%);
+  }
 }
 body,
 html {
   max-height: 100vh;
-  overflow: hidden;
   height: 100%;
   width: 100%;
-}
-
-.entrance {
-  overflow: hidden !important;
+  overflow: hidden;
 }
 
 button {
   border-radius: 20px;
-  // margin-right: 10px;
-  padding: 7px;
   cursor: pointer;
   border: 3px solid darken(#44ffd1, 5%);
   background-color: #44ffd1;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0.5, 0.5);
   font-size: 14px;
-  font-weight: 800;
-  // margin: 5px 0;
   padding: 5px;
+  outline: none;
   &:hover {
     background-color: lighten(#44ffd1, 10%);
   }
@@ -54,14 +50,26 @@ button[disabled] {
   cursor: default;
 }
 
+.linkbutton {
+  background-color: Transparent;
+  background-repeat: no-repeat;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 16px;
+  &:hover {
+    background-color: none;
+  }
+}
+
 .button-color {
   background-color: #a06cd5;
   border: 3px solid #a06cd5;
   color: white;
-}
-
-.gamebutton {
-  background-color: none;
+  &:hover {
+    background-color: #a06cd5;
+  }
 }
 
 .landingbox {

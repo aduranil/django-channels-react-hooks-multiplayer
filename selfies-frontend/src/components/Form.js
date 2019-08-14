@@ -34,8 +34,6 @@ const Form = ({
   <div
     style={{
       padding: '5%',
-      width: '50vh',
-      maxHeight: '45vh',
     }}
   >
     <form>

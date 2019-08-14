@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 import { newMessage } from '../modules/game';
 
 function ChatBox({ game, dispatch }) {
-  let messagesRef = useRef();
+  const messagesRef = useRef(null);
   const [message, setMessage] = useState('');
   useEffect(() => {
-    messagesRef.scrollIntoView({ behavior: 'smooth' });
-  });
+    if (messagesRef) {
+      messagesRef.current.scrollIntoView(false);
+    }
+  }, []);
 
   const handleSubmit = () => {
     dispatch(newMessage(message));
@@ -24,7 +26,9 @@ function ChatBox({ game, dispatch }) {
         boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
         borderRadius: '20px',
         padding: '2%',
-        maxHeight: '40vh',
+        maxHeight: '36vh',
+        minHeight: '36vh',
+        minWidth: '40vw',
       }}
     >
       <h3 style={{ textAlign: 'center' }}>Group Chat</h3>
@@ -32,6 +36,7 @@ function ChatBox({ game, dispatch }) {
         style={{
           overflowY: 'scroll',
           marginRight: '2px',
+          minHeight: '22vh',
         }}
       >
         {game.messages.map(msg => (
@@ -43,7 +48,7 @@ function ChatBox({ game, dispatch }) {
             </span>
           </div>
         ))}
-        <div style={{ float: 'left', clear: 'both' }} ref={el => (messagesRef = el)} />
+        <div style={{ float: 'left', clear: 'both' }} ref={messagesRef} />
       </div>
       <div
         style={{

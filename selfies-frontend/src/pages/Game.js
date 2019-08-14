@@ -8,8 +8,6 @@ import GameBox from '../components/GameBox';
 import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import GameInfo from '../components/GameInfo';
-import GameMoves from '../components/GameMoves';
-import { leaveGame } from '../modules/game';
 
 const HOST = process.env.REACT_APP_WS_HOST;
 
@@ -20,13 +18,6 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
-  useEffect(() => {
-    const exitGame = () => dispatch(leaveGame());
-    window.addEventListener('beforeunload', exitGame);
-
-    return () => window.removeEventListener('beforeunload', exitGame);
-  }, []);
-
   if (id && game) {
     return (
       <div
@@ -34,7 +25,6 @@ function Game({
           height: '100vh',
           maxHeight: '100vh',
           width: '100vw',
-          backgroundColor: '#E1EFF6',
           display: 'flex',
           flexDirection: 'column',
         }}
@@ -46,16 +36,15 @@ function Game({
           <h1 style={{ textAlign: 'center', marginBottom: '5px' }}>{game.room_name}</h1>
         </div>
         <div style={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-          <div className="game-card">
+          <div className="game-card" style={{ maxHeight: '40vh' }}>
             <ChatBox game={game} />
           </div>
           <div className="game-card">
             <RoundHistory game={game} />
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flexGrow: 1 }} className="game-card">
+        <div style={{ display: 'flex', flexDirection: 'row', padding: '0.5%' }}>
           <GameInfo time={time} currentPlayer={currentPlayer} game={game} />
-          <GameMoves time={time} currentPlayer={currentPlayer} game={game} />
           <GameBox time={time} currentPlayer={currentPlayer} game={game} />
         </div>
       </div>

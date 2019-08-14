@@ -22,7 +22,26 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <h1>Something went wrong.</h1>;
+      return (
+        <React.Fragment>
+          <h1
+            className="animated infinite bounce"
+            style={{
+              textAlign: 'center',
+              margin: 'auto',
+              position: 'absolute',
+              height: '100px',
+              width: '100px',
+              top: '0px',
+              bottom: '0px',
+              left: '0px',
+              right: '0px',
+            }}
+          >
+            Loading
+          </h1>
+        </React.Fragment>
+      );
     }
 
     return this.props.children;

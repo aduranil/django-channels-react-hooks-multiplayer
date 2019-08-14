@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { handleLogin, handleSignup } from '../modules/account';
 import Form from '../components/Form';
 import HalfRectangle from '../images/Rectangle';
-import Navigation from '../components/Navigation';
 
 class LoginOrSignup extends React.Component {
   state = {
@@ -54,41 +54,63 @@ class LoginOrSignup extends React.Component {
     } = this.state;
     const { route } = this.props;
     return (
-      <React.Fragment>
-        <Navigation />
-        <HalfRectangle color="#70D6FF" />
+      <div>
         <div
           style={{
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            minWidth: '100vw',
-            minHeight: '80vh',
+            flexDirection: 'row',
+            justifyContent: 'space-Between',
+            padding: '5px 1%',
+            // marginLeft: '5px',
           }}
         >
-          <div
-            style={{
-              alignSelf: 'center',
-              boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.25), inset 0 1px 3px 0 rgba(0, 0, 0, 0.25)',
-              borderRadius: '20px',
-              backgroundColor: '#ff70a6',
-            }}
-          >
-            <h1 style={{ textAlign: 'center', marginTop: '15px' }}>
-              {route === '/loginorsignup' ? 'Returning Users' : 'New Users'}
-            </h1>
-            <Form
-              route={route}
-              username={username}
-              password={password}
-              email={email}
-              error={error}
-              handleChange={this.handleChange}
-              handleSubmit={this.handleSubmit}
-            />
+          <div>
+            <Link to="/">
+              <h1>Selfies 2020 </h1>
+            </Link>
+          </div>
+          <div style={{ display: 'inline-block' }}>
+            <Link to="/rules">
+              <span style={{ fontColor: 'black' }}>Rules </span>
+            </Link>
           </div>
         </div>
-      </React.Fragment>
+        <React.Fragment>
+          <HalfRectangle color="#70D6FF" />
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              minHeight: '80vh',
+            }}
+          >
+            <div
+              style={{
+                alignSelf: 'center',
+                boxShadow:
+                  '0 2px 10px 0 rgba(0, 0, 0, 0.25), inset 0 1px 3px 0 rgba(0, 0, 0, 0.25)',
+                borderRadius: '20px',
+                backgroundColor: '#ff70a6',
+                width: '30%',
+              }}
+            >
+              <h1 style={{ textAlign: 'center', marginTop: '15px' }}>
+                {route === '/loginorsignup' ? 'Returning Users' : 'New Users'}
+              </h1>
+              <Form
+                route={route}
+                username={username}
+                password={password}
+                email={email}
+                error={error}
+                handleChange={this.handleChange}
+                handleSubmit={this.handleSubmit}
+              />
+            </div>
+          </div>
+        </React.Fragment>
+      </div>
     );
   }
 }

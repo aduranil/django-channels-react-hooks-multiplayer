@@ -4,49 +4,78 @@ import PropTypes from 'prop-types';
 import { Phone } from '../images/iPhone';
 import CurrentMoveUpdate from '../hooks/CurrentMove';
 
-function GameBox({ game, dispatch, time }) {
+function GameBox({
+  game, dispatch, time, currentPlayer,
+}) {
   const [currentMove, newMove] = CurrentMoveUpdate(dispatch, time);
 
   return (
-    <div
-      style={{
-        background: '#ff70a6',
-        boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
-        borderRadius: '20px',
-        flexGrow: '1',
-        padding: '2%',
-      }}
-    >
-      <div style={{ display: 'flex', flexDirection: 'row' }}>
-        {game.users.map(player => (
-          <div style={{ margin: '1%' }} key={player.username}>
-            {player.username}
-            {!game.round_started && (player.started ? '!' : ' ?')}
-            <div>
-              {player.followers}
-              {' '}
-              {player.followers === 1 ? 'follower' : 'followers'}
-            </div>
-            <div style={{ marginBottom: '3px' }}>
-              {player.stories}
-              {' '}
-              {player.stories === 1 ? 'story' : 'stories'}
-            </div>
-            <button
-              onClick={newMove}
-              id={player.id}
-              disabled={!game.round_started}
-              value={`leave_comment_${player.id}`}
-              className={currentMove === `leave_comment_${player.id}` ? 'button-color' : null}
-              type="button"
-            >
-              <Phone />
-            </button>
-            {' '}
-          </div>
+    <React.Fragment>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginRight: '5px',
+          padding: '2%',
+          justifyContent: 'space-Between',
+        }}
+      >
+        {['post_selfie', 'post_group_selfie', 'post_story', 'dont_post', 'go_live'].map(item => (
+          <button
+            className={currentMove === item ? 'button-color' : null}
+            type="button"
+            style={{ padding: '10px' }}
+            value={item}
+            onClick={newMove}
+            disabled={
+              (item === 'post_story' && currentPlayer && currentPlayer.stories === 0)
+              || !game.round_started
+            }
+          >
+            {item.replace(/_/g, ' ')}
+          </button>
         ))}
       </div>
-    </div>
+      <div
+        style={{
+          background: '#ff70a6',
+          boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
+          borderRadius: '20px',
+          flexGrow: '1',
+          padding: '1%',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
+          {game.users.map(player => (
+            <div style={{ margin: '1%' }} key={player.username}>
+              {player.username}
+              {!game.round_started && (player.started ? '!' : ' ?')}
+              <div>
+                {player.followers}
+                {' '}
+                {player.followers === 1 ? 'follower' : 'followers'}
+              </div>
+              <div style={{ marginBottom: '3px' }}>
+                {player.stories}
+                {' '}
+                {player.stories === 1 ? 'story' : 'stories'}
+              </div>
+              <button
+                onClick={newMove}
+                id={player.id}
+                disabled={!game.round_started}
+                value={`leave_comment_${player.id}`}
+                className={currentMove === `leave_comment_${player.id}` ? 'button-color' : null}
+                type="button"
+              >
+                <Phone />
+              </button>
+              {' '}
+            </div>
+          ))}
+        </div>
+      </div>
+    </React.Fragment>
   );
 }
 
