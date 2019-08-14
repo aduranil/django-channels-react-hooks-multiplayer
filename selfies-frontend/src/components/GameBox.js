@@ -10,7 +10,6 @@ const Phone = () => (
       width: '100%',
       minHeight: '100%',
       maxHeight: '100%',
-      position: 'relative',
     }}
     src={require('../images/iphone.svg')}
     alt="entrance-phone"
@@ -25,40 +24,38 @@ function GameBox({
   return (
     <React.Fragment>
       <div
-        className="phone-gamebox"
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          marginRight: '5px',
-          padding: '2%',
-          justifyContent: 'space-Between',
-        }}
-      >
-        {['post_selfie', 'post_group_selfie', 'post_story', 'dont_post', 'go_live'].map(item => (
-          <button
-            className={currentMove === item ? 'button-color' : null}
-            type="button"
-            value={item}
-            onClick={newMove}
-            disabled={
-              (item === 'post_story' && currentPlayer && currentPlayer.stories === 0)
-              || !game.round_started
-            }
-          >
-            {item.replace(/_/g, ' ')}
-          </button>
-        ))}
-      </div>
-      <div
         style={{
           background: '#ff70a6',
           boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
           borderRadius: '20px',
           flexGrow: '1',
-          padding: '1%',
+          padding: '2%',
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div
+          className="phone-gamebox"
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+          }}
+        >
+          {['post_selfie', 'post_group_selfie', 'post_story', 'dont_post', 'go_live'].map(item => (
+            <button
+              className={currentMove === item ? 'button-color' : null}
+              type="button"
+              value={item}
+              onClick={newMove}
+              style={{ marginRight: '3px', marginBottom: '2px' }}
+              disabled={
+                (item === 'post_story' && currentPlayer && currentPlayer.stories === 0)
+                || !game.round_started
+              }
+            >
+              {item.replace(/_/g, ' ')}
+            </button>
+          ))}
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
           {game.users.map(player => (
             <div style={{ margin: '1%' }} key={player.username}>
               {player.username}

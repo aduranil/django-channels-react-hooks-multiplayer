@@ -30,7 +30,9 @@ function GameInfo({
         <div style={{ textAlign: 'center' }}>
           seconds left
           <br />
-          <h1 style={{ fontSize: '100px' }}>{time}</h1>
+          <h1 className="entrance-title" style={{ fontSize: '100px' }}>
+            {time}
+          </h1>
         </div>
       )}
     </div>

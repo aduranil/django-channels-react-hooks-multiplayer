@@ -51,7 +51,14 @@ function Game({
             <RoundHistory game={game} />
           </div>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', padding: '0.5%' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            padding: '0.5%',
+            flexWrap: 'wrap',
+          }}
+        >
           <GameInfo time={time} currentPlayer={currentPlayer} game={game} />
           <GameBox time={time} currentPlayer={currentPlayer} game={game} />
         </div>
