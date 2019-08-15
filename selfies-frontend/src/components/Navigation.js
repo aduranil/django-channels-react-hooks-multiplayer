@@ -18,11 +18,14 @@ function Navigation({
     history.push('/games');
   };
 
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      dispatch(getCurrentUser());
-    }
-  }, [dispatch]);
+  useEffect(
+    () => {
+      if (localStorage.getItem('token')) {
+        dispatch(getCurrentUser());
+      }
+    },
+    [dispatch],
+  );
 
   return (
     <div
@@ -39,7 +42,7 @@ function Navigation({
         </Link>
       </div>
       <div>
-        <div style={{ marginRight: '30px', display: 'inline-block' }}>
+        <div style={{ marginRight: '10px', display: 'inline-block' }}>
           {path !== 'rules' && (
             <Link to="/rules">
               <span>Rules </span>
@@ -48,27 +51,31 @@ function Navigation({
         </div>
 
         <div style={{ display: 'inline-block' }}>
-          {loggedIn && path === 'rules' && (
-            <Link to="/games">
-              {' '}
-              <span>Games </span>
-            </Link>
+          {loggedIn
+            && path === 'rules' && (
+              <Link to="/games">
+                {' '}
+                <span>Games </span>
+              </Link>
           )}
-          {loggedIn && !inGame && (
-            <button type="button" className="linkbutton" onClick={onLogout}>
-              Logout
-            </button>
+          {loggedIn
+            && !inGame && (
+              <button type="button" className="linkbutton" onClick={onLogout}>
+                Logout
+              </button>
           )}
-          {loggedIn && inGame && (
-            <button type="button" className="linkbutton" onClick={exitGame}>
-              Exit Game
-            </button>
+          {loggedIn
+            && inGame && (
+              <button type="button" className="linkbutton" onClick={exitGame}>
+                Exit Game
+              </button>
           )}
-          {!loggedIn && path !== 'login' && (
-            <Link to="/signup">
-              {' '}
-              <span style={{ fontColor: 'black' }}>Signup </span>
-            </Link>
+          {!loggedIn
+            && path !== 'login' && (
+              <Link to="/signup">
+                {' '}
+                <span style={{ fontColor: 'black' }}>Signup </span>
+              </Link>
           )}
         </div>
       </div>

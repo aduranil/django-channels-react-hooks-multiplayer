@@ -21,18 +21,18 @@ function GameInfo({
         marginRight: '5px',
       }}
     >
-      {!game.round_started && currentPlayer && !currentPlayer.started && (
-        <button className={className} type="button" onClick={beginRound}>
-          START GAME!
-        </button>
+      {!game.round_started
+        && currentPlayer
+        && !currentPlayer.started && (
+          <button className={className} type="button" onClick={beginRound}>
+            START GAME!
+          </button>
       )}
       {game.round_started && (
         <div style={{ textAlign: 'center' }}>
           seconds left
           <br />
-          <h1 className="entrance-title" style={{ fontSize: '100px' }}>
-            {time}
-          </h1>
+          <h1 className="entrance-title phone-time">{time}</h1>
         </div>
       )}
     </div>
