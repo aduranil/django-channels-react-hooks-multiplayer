@@ -38,7 +38,7 @@ function Games({
     <React.Fragment>
       <HalfRectangle color="#70D6FF" />
       <Navigation />
-      <h1 style={{ textAlign: 'center', fontSize: '3vw' }}>Active Games</h1>
+      <h1 style={{ textAlign: 'center' }}>Active Games</h1>
       <div className="landingbox">
         <div style={{ display: 'flex', padding: '2px' }}>
           <button type="button" style={{ marginRight: '10px' }} onClick={onClick}>

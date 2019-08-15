@@ -6,12 +6,7 @@ import CurrentMoveUpdate from '../hooks/CurrentMove';
 const Phone = () => (
   <img
     className="animated rollIn"
-    style={{
-      width: '100%',
-      minHeight: '100%',
-      maxHeight: '100%',
-    }}
-    src={require('../images/iphone.svg')}
+    src={require('../images/purpleiphone.png')}
     alt="entrance-phone"
   />
 );
@@ -55,7 +50,13 @@ function GameBox({
             </button>
           ))}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+          }}
+        >
           {game.users.map(player => (
             <div style={{ margin: '1%' }} key={player.username}>
               {player.username}

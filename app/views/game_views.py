@@ -23,7 +23,7 @@ class GameListView(APIView):
     def get(self, request):
         game_objects = Game.objects.all().filter(game_status="active")
         games = [g.as_json() for g in game_objects]
-        return HttpResponse(json.dumps(games), content_type="application/json")
+        return HttpResponse(json.dumps(games))
 
 
 class GameGetView(APIView):

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import * as Cookies from 'js-cookie';
 import { logoutUser, getCurrentUser } from '../modules/account';
 import { leaveGame } from '../modules/game';
 
@@ -20,7 +21,7 @@ function Navigation({
 
   useEffect(
     () => {
-      if (localStorage.getItem('token')) {
+      if (Cookies.get('token')) {
         dispatch(getCurrentUser());
       }
     },
@@ -38,7 +39,7 @@ function Navigation({
     >
       <div>
         <Link to="/">
-          <h1 style={{ paddingRight: '5px' }}>Selfies 2020 </h1>
+          <h3 style={{ paddingRight: '5px' }}>Selfies 2020 </h3>
         </Link>
       </div>
       <div>

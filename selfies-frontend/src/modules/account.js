@@ -1,4 +1,3 @@
-// const API_ROOT = 'https://selfies-2020.herokuapp.com';
 import * as Cookies from 'js-cookie';
 
 const API_ROOT = process.env.REACT_APP_HOST;

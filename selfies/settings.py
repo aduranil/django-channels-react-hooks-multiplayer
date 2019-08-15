@@ -68,7 +68,7 @@ REST_FRAMEWORK = {
     # Authentication backends
 }
 
-CORS_ORIGIN_WHITELIST = ("localhost:1234", "localhost:3000", "selfies.surge.sh")
+CORS_ORIGIN_WHITELIST = ("localhost:1234", "localhost:3000", 'http://localhost:3000',"selfies.surge.sh", "selfies-22b79.firebaseapp.com")
 
 ROOT_URLCONF = "selfies.urls"
 

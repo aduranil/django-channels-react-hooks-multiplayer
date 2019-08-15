@@ -23,7 +23,7 @@ export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`,
     return `/game/${json.id}`;
   });
 
-export const getGames = () => dispatch => fetch(`${API_ROOT}/app/games`, {
+export const getGames = () => dispatch => fetch(`${API_ROOT}/app/games/`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',

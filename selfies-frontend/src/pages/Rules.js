@@ -14,7 +14,7 @@ function Rules() {
         }}
       >
         {' '}
-        <h1 style={{ textAlign: 'center', fontSize: '4vw' }}>Rules</h1>
+        <h1 style={{ textAlign: 'center' }}>Rules</h1>
         <h3> Gameplay</h3>
         <div className="rulespage">
           The goal of the game is to get to 100 followers first. Use the chat to make strategic
@@ -80,6 +80,8 @@ Nothing happens to you. Defense against Go
           </a>
           {' '}
           Email lina.rudashevski@gmail.com with any questions or comments.
+          {' '}
+          <b style={{ color: '#ff70a6' }}>This game works best in Chrome.</b>
         </div>
       </div>
     </React.Fragment>
