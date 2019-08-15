@@ -80,7 +80,7 @@ class Game(models.Model):
         """See if the round can be started. Requires at least 3 players and
         that all players in the room have started"""
 
-        if self.game_players.all().count() < 0:
+        if self.game_players.all().count() < 3:
             self.round_started = False
             self.save()
             return False
