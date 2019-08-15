@@ -1,28 +1,33 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import * as Cookies from 'js-cookie';
 import HalfRectangle from '../images/Rectangle';
 import { getCurrentUser } from '../modules/account';
 
 const Image = () => (
-  <img
+  <object
+    type="image/svg+xml"
     className="animated rollIn"
     style={{
-      width: '50%',
+      width: '60%',
       minHeight: '100%',
       maxHeight: '100%',
-      position: 'relative',
+      pointerEvents: 'none',
     }}
-    src={require('../images/entrance-phone.svg')}
-    alt="entrance-phone"
+    aria-label="entrance-title"
+    data={require('../images/entrance-phone.svg')}
   />
 );
 const Entrance = ({ dispatch, loggedIn }) => {
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-      dispatch(getCurrentUser());
-    }
-  }, [dispatch]);
+  useEffect(
+    () => {
+      if (Cookies.get('token')) {
+        dispatch(getCurrentUser());
+      }
+    },
+    [dispatch],
+  );
   return (
     <div>
       <HalfRectangle color="#70D6FF" />
@@ -36,10 +41,10 @@ const Entrance = ({ dispatch, loggedIn }) => {
           boxShadow: '0 2px 10px 0 rgba(0, 0, 0, 0.5), inset 0 1px 3px 0 rgba(0, 0, 0, 0.5)',
           borderRadius: '20px',
           margin: 'auto',
-          width: '50%',
+          width: '60%',
           padding: '1%',
           position: 'absolute',
-          height: '50%',
+          height: '60%',
           top: '0px',
           bottom: '0px',
           left: '0px',
@@ -48,11 +53,11 @@ const Entrance = ({ dispatch, loggedIn }) => {
         }}
       >
         {loggedIn ? (
-          <Link to="/games">
+          <Link style={{ display: 'inline-block' }} to="/games">
             <Image />
           </Link>
         ) : (
-          <Link to="/signup">
+          <Link style={{ display: 'inline-block' }} to="/signup">
             <Image />
           </Link>
         )}

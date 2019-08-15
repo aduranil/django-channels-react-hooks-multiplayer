@@ -11,11 +11,14 @@ function Games({
 }) {
   const [roomName, setRoomName] = useState('');
 
-  useEffect(() => {
-    if (loggedIn) {
-      dispatch(getGames());
-    }
-  }, [dispatch, loggedIn]);
+  useEffect(
+    () => {
+      if (loggedIn) {
+        dispatch(getGames());
+      }
+    },
+    [dispatch, loggedIn],
+  );
 
   const onClick = () => {
     if (roomName.length === 0) {
@@ -35,8 +38,20 @@ function Games({
     <React.Fragment>
       <HalfRectangle color="#70D6FF" />
       <Navigation />
+      <h1 style={{ textAlign: 'center' }}>Active Games</h1>
       <div className="landingbox">
-        <h1 style={{ textAlign: 'center' }}>Active Games</h1>
+        <div style={{ display: 'flex', padding: '2px' }}>
+          <button type="button" style={{ marginRight: '10px' }} onClick={onClick}>
+            create game
+          </button>
+          <input
+            value={roomName}
+            onChange={event => setRoomName(event.target.value)}
+            placeholder="room name"
+            onKeyPress={e => e.key === 'Enter' && onClick()}
+            style={{ flexGrow: '1' }}
+          />
+        </div>
         <div
           style={{
             overflowY: 'scroll',
@@ -64,30 +79,18 @@ function Games({
                 </button>
                 <span>
                   {game.room_name}
-, players:
+                  , players:
                   {' '}
                 </span>
                 {game.users.map(user => (
                   <span key={user.username}>
                     {' '}
                     {user.username}
-,
+                    ,
                   </span>
                 ))}
               </div>
             ))}
-        </div>
-        <div style={{ display: 'flex', padding: '2px' }}>
-          <button type="button" style={{ marginRight: '10px' }} onClick={onClick}>
-            create game
-          </button>
-          <input
-            value={roomName}
-            onChange={event => setRoomName(event.target.value)}
-            placeholder="room name"
-            onKeyPress={e => e.key === 'Enter' && onClick()}
-            style={{ flexGrow: '1' }}
-          />
         </div>
       </div>
     </React.Fragment>

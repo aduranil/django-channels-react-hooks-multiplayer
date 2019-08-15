@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import * as Cookies from 'js-cookie';
 import { wsConnect } from '../modules/websocket';
 import WithAuth from '../hocs/AuthenticationWrapper';
 import ChatBox from '../components/ChatBox';
@@ -15,16 +16,19 @@ const HOST = process.env.REACT_APP_WS_HOST;
 function Game({
   id, time, dispatch, game, currentPlayer,
 }) {
-  const host = `ws://${HOST}/ws/game/${id}?token=${localStorage.getItem('token')}`;
+  const host = `ws://${HOST}/ws/game/${id}?token=${Cookies.get('token')}`;
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
-  useEffect(() => {
-    const exitGame = () => dispatch(leaveGame());
-    window.addEventListener('beforeunload', exitGame);
+  useEffect(
+    () => {
+      const exitGame = () => dispatch(leaveGame());
+      window.addEventListener('beforeunload', exitGame);
 
-    return () => window.removeEventListener('beforeunload', exitGame);
-  }, [dispatch]);
+      return () => window.removeEventListener('beforeunload', exitGame);
+    },
+    [dispatch],
+  );
 
   if (id && game) {
     return (

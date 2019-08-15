@@ -3,6 +3,12 @@
     <title>Group 2</title>
     <desc>Created with Sketch.</desc>
     <defs>
+        <style type="text/css">
+          @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+          text {
+            font-family: "Roboto Mono";
+          }
+        </style>
         <linearGradient x1="65.6871091%" y1="26.7054116%" x2="33.6059014%" y2="74.591908%" id="linearGradient-1">
             <stop stop-color="#FF9770" offset="0%"></stop>
             <stop stop-color="#F3E5E5" offset="100%"></stop>
@@ -33,7 +39,7 @@
                     </g>
                 </g>
                 <path d="M23.3833112,159 L204.616689,159 C209.965801,159 211.905519,159.556954 213.861074,160.602796 C215.81663,161.648639 217.351361,163.18337 218.397204,165.138926 C219.443046,167.094481 220,169.034199 220,174.383311 L220,284.616689 C220,289.965801 219.443046,291.905519 218.397204,293.861074 C217.351361,295.81663 215.81663,297.351361 213.861074,298.397204 C211.905519,299.443046 209.965801,300 204.616689,300 L23.3833112,300 C18.0341988,300 16.0944813,299.443046 14.1389258,298.397204 C12.1833702,297.351361 10.6486388,295.81663 9.60279622,293.861074 C8.55695367,291.905519 8,289.965801 8,284.616689 L8,174.383311 C8,169.034199 8.55695367,167.094481 9.60279622,165.138926 C10.6486388,163.18337 12.1833702,161.648639 14.1389258,160.602796 C16.0944813,159.556954 18.0341988,159 23.3833112,159 Z" id="Background" fill-opacity="0.5" fill="#FFFFFF"></path>
-                <text id="Selfies-2020-is-a-mu" font-family="RobotoMono-Regular, Roboto Mono" font-size="15" font-weight="normal" line-spacing="18" letter-spacing="-0.23999999" fill="#000000">
+                <text id="Selfies-2020-is-a-mu" font-family="Roboto Mono" font-size="15" font-weight="normal" line-spacing="18" letter-spacing="-0.23999999" fill="#000000">
                     <tspan x="20" y="212">Selfies 2020 is a </tspan>
                     <tspan x="20" y="230">multiplayer game </tspan>
                     <tspan x="20" y="248">where you complete to </tspan>

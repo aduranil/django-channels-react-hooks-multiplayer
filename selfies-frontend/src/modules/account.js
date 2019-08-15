@@ -1,4 +1,6 @@
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';
+import * as Cookies from 'js-cookie';
+
 const API_ROOT = process.env.REACT_APP_HOST;
 
 const status = async (res) => {
@@ -13,7 +15,7 @@ export const getCurrentUser = () => dispatch => fetch(`${API_ROOT}/app/user/`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Token ${localStorage.getItem('token')}`,
+    Authorization: `Token ${Cookies.get('token')}`,
   },
 })
   .then(status)
@@ -36,7 +38,7 @@ export const handleLogin = data => dispatch => fetch(`${API_ROOT}/app/login/`, {
   .then(status)
   .then(res => res.json())
   .then((json) => {
-    localStorage.setItem('token', json.token);
+    Cookies.set('token', json.token);
     return dispatch({ type: 'SET_CURRENT_USER', data: json });
   })
   .catch(e => dispatch({ type: 'SET_ERROR', data: e.message }));
@@ -52,13 +54,13 @@ export const handleSignup = jsonData => dispatch => fetch(`${API_ROOT}/app/users
   .then(status)
   .then(res => res.json())
   .then((json) => {
-    localStorage.setItem('token', json.token);
+    Cookies.set('token', json.token);
     dispatch({ type: 'SET_CURRENT_USER', data: json });
   })
   .catch(e => dispatch({ type: 'SET_ERROR', data: e.message }));
 
 export const logoutUser = () => (dispatch) => {
-  localStorage.removeItem('token');
+  Cookies.remove('token');
   return dispatch({ type: 'LOGOUT_USER' });
 };
 

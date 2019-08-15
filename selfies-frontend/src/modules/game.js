@@ -1,3 +1,5 @@
+import * as Cookies from 'js-cookie';
+
 export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
 export const updateGame = (json, player) => ({ type: 'SET_GAME', data: json, player });
 export const leaveGame = () => ({ type: 'LEAVE_GAME' });
@@ -11,7 +13,7 @@ export const createGame = roomName => dispatch => fetch(`${API_ROOT}/app/game/`,
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Token ${localStorage.getItem('token')}`,
+    Authorization: `Token ${Cookies.get('token')}`,
   },
   body: JSON.stringify({ room_name: roomName }),
 })
@@ -25,7 +27,7 @@ export const getGames = () => dispatch => fetch(`${API_ROOT}/app/games`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Token ${localStorage.getItem('token')}`,
+    Authorization: `Token ${Cookies.get('token')}`,
   },
 })
   .then(res => res.json())
@@ -37,7 +39,7 @@ export const getGame = id => dispatch => fetch(`${API_ROOT}/app/game/${id}`, {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Token ${localStorage.getItem('token')}`,
+    Authorization: `Token ${Cookies.get('token')}`,
   },
 })
   .then(res => res.json())
