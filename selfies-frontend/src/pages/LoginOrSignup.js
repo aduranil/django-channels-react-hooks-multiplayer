@@ -12,6 +12,7 @@ class LoginOrSignup extends React.Component {
     password: '',
     username: '',
     error: null,
+    isLoading: false,
   };
 
   handleChange = (e) => {
@@ -27,11 +28,13 @@ class LoginOrSignup extends React.Component {
   handleSubmit = async () => {
     const { dispatch, history, route } = this.props;
     let response;
+    this.setState({ isLoading: true });
     if (route === '/loginorsignup') {
       response = await dispatch(handleLogin(this.state));
     } else {
       response = await dispatch(handleSignup(this.state));
     }
+    this.setState({ isLoading: false });
     if (response && response.type === 'SET_ERROR') {
       return this.setState({ error: response.data });
     }
@@ -50,7 +53,7 @@ class LoginOrSignup extends React.Component {
 
   render() {
     const {
-      username, email, password, error,
+      username, email, password, error, isLoading,
     } = this.state;
     const { route } = this.props;
     return (
@@ -83,6 +86,7 @@ class LoginOrSignup extends React.Component {
               </h1>
               <Form
                 route={route}
+                isLoading={isLoading}
                 username={username}
                 password={password}
                 email={email}

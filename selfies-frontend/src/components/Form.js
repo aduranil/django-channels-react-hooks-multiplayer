@@ -29,7 +29,14 @@ const FormField = ({
 );
 
 const Form = ({
-  handleSubmit, email, password, username, route, handleChange, error,
+  handleSubmit,
+  email,
+  password,
+  username,
+  route,
+  handleChange,
+  error,
+  isLoading,
 }) => (
   <div
     style={{
@@ -45,6 +52,7 @@ const Form = ({
       <button
         onClick={handleSubmit}
         type="button"
+        className={isLoading ? 'bounce animated infinite' : null}
         style={{ width: '100%', marginTop: '10px', marginBottom: '10px' }}
       >
         <span style={{ fontSize: '20px' }}>Submit</span>
@@ -86,6 +94,7 @@ Form.propTypes = {
   username: PropTypes.string.isRequired,
   error: PropTypes.string,
   route: PropTypes.string,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 Form.defaultProps = {

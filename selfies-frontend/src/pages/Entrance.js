@@ -6,28 +6,19 @@ import HalfRectangle from '../images/Rectangle';
 import { getCurrentUser } from '../modules/account';
 
 const Image = () => (
-  <object
-    type="image/svg+xml"
+  <img
     className="animated rollIn"
-    style={{
-      width: '60%',
-      minHeight: '100%',
-      maxHeight: '100%',
-      pointerEvents: 'none',
-    }}
-    aria-label="entrance-title"
-    data={require('../images/entrance-phone.svg')}
+    style={{ width: '60%', height: '100%', display: 'inline' }}
+    src={require('../images/entrancephone.png')}
+    alt="entrance-phone"
   />
 );
 const Entrance = ({ dispatch, loggedIn }) => {
-  useEffect(
-    () => {
-      if (Cookies.get('token')) {
-        dispatch(getCurrentUser());
-      }
-    },
-    [dispatch],
-  );
+  useEffect(() => {
+    if (Cookies.get('token')) {
+      dispatch(getCurrentUser());
+    }
+  }, [dispatch]);
   return (
     <div>
       <HalfRectangle color="#70D6FF" />
@@ -49,15 +40,23 @@ const Entrance = ({ dispatch, loggedIn }) => {
           bottom: '0px',
           left: '0px',
           right: '0px',
-          textAlign: 'center',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
         {loggedIn ? (
-          <Link style={{ display: 'inline-block' }} to="/games">
+          <Link
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            to="/games"
+          >
             <Image />
           </Link>
         ) : (
-          <Link style={{ display: 'inline-block' }} to="/signup">
+          <Link
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            to="/signup"
+          >
             <Image />
           </Link>
         )}

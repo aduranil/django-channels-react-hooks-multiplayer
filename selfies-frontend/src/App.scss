@@ -6,16 +6,13 @@
   color: #464655;
 }
 
-::-webkit-scrollbar {
-  width: 1em;
-  background: none;
+body,
+html {
+  max-height: 100vh;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
 }
-
-::-webkit-scrollbar-thumb {
-  background: black;
-  outline: 1px solid slategrey;
-}
-
 
 a {
   text-decoration: none;
@@ -24,35 +21,6 @@ a {
     background-color: #ff70a6;
     color: white;
   }
-}
-
-@media (max-width: 600px) {
-  .entrance-title {
-    font-size: 70px !important;
-  }
-  .phone-time {
-    font-size: 20px !important;
-  }
-  .phone-signup {
-    min-width: 85vw;
-  }
-  .phone-entrance {
-    min-width: 90%;
-  }
-  .landingbox {
-    min-width: 95% !important;
-  }
-  button {
-    padding: 0 !important;
-  }
-}
-
-body,
-html {
-  max-height: 100vh;
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
 }
 
 button {
@@ -73,6 +41,38 @@ button {
   }
 }
 
+h1,
+h3 {
+  font-family: 'Lobster', cursive;
+}
+
+input {
+  height: 40px;
+  padding: 7px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0.5, 0.5);
+}
+
+::-webkit-scrollbar {
+  width: 1em;
+  background: none;
+}
+
+::-webkit-scrollbar-thumb {
+  background: black;
+  outline: 1px solid slategrey;
+}
+
+.game-card {
+  padding: 0.5%;
+  flex-grow: 1;
+}
+
+.rulespage {
+  margin-bottom: 10px;
+}
 .linkbutton {
   background-color: Transparent;
   background-repeat: no-repeat;
@@ -120,20 +120,28 @@ button {
   color: #464655;
 }
 
-h1,
-h3 {
-  font-family: 'Lobster', cursive;
+@media (max-width: 600px) {
+  .entrance-title {
+    font-size: 70px !important;
+  }
+  .phone-time {
+    font-size: 20px !important;
+  }
+  .phone-signup {
+    min-width: 85vw;
+  }
+  .phone-entrance {
+    min-width: 90%;
+  }
+  .landingbox {
+    min-width: 95% !important;
+  }
+  button {
+    padding: 0 !important;
+  }
 }
 
-input {
-  height: 40px;
-  padding: 7px;
-  border: none;
-  border-radius: 20px;
-  outline: none;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0.5, 0.5);
-}
-
+// animations
 .animated {
   animation-duration: 1s;
   animation-fill-mode: both;
@@ -188,13 +196,4 @@ input {
 
 .rollIn {
   animation-name: rollIn;
-}
-
-.game-card {
-  padding: 0.5%;
-  flex-grow: 1;
-}
-
-.rulespage {
-  margin-bottom: 10px;
 }
