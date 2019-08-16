@@ -109,8 +109,9 @@ class Game(models.Model):
 
 
 class GamePlayer(models.Model):
-    followers = models.IntegerField(default=0)
-    stories = models.IntegerField(default=3)
+    followers = models.IntegerField(default=100)
+    selfies = models.IntegerField(default=3) # equivalent to licking a lolly
+    go_live = models.IntegerField(default=2) # equivalent to tattle
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
@@ -170,103 +171,6 @@ class Round(models.Model):
             moves=[m.as_json() for m in self.moves.all()],
         )
 
-    def generate_new_message(self, action_type, followers, username, extra=None):
-        message = "{} did {} and got {} followers".format(
-            username, action_type, followers
-        )
-        if action_type == "go_live":
-            message1 = "{} shared her political opinions while going live and got {} followers. chemtrails are real".format(
-                username, followers
-            )
-            message2 = "{} went live and got {} followers, but she just played old town road on repeat the whole time".format(
-                username, followers
-            )
-            message3 = "{} got shady during her go live sesh. she was interesting enough to get {} followers".format(
-                username, followers
-            )
-            message4 = "{} shared photos of her food while going live. her {} new followers seemingly loved it".format(username, followers)
-            message = random.choice([message1, message2, message3, message4])
-        elif action_type == "dont_post":
-            message1 = "{} didn't post and lost {} followers even though she had nothing better to do".format(
-                username, followers
-            )
-            message2 = "{} didn't have time to post. doesn't she know the internet is more important than IRL? she lost {} followers".format(
-                username, followers
-            )
-            message3 = "{} didn't post. was she getting fillers or something?"
-            message = random.choice([message1, message2, message3])
-        elif action_type == "no_move":
-            message1 = "{} was so lazy that she forgot to move. she lost {} followers".format(
-                username, followers
-            )
-            message2 = "{} didn't move this round. honestly, i hate her. so do the {} followers she lost".format(username, followers)
-            message3 = "if {} forgets to move again, she's getting cancelled permanently! she lost {} followers".format(username, followers)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "post_selfie":
-            message1 = "{} posted a selfie. how original. she gained {} followers".format(
-                username, followers
-            )
-            message2 = "drumroll please...{} posted a selfie. cool i guess. she got {} followers".format(
-                username, followers
-            )
-            message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(
-                username, followers
-            )
-            message4 = "{} showed off a cute new outfit in a classic mirror selfie. her {} new followers loved it!".format(
-                username, followers
-            )
-            message = random.choice([message1, message2, message3, message4])
-        elif action_type == "post_group_selfie":
-            message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(
-                username, followers
-            )
-            message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
-                username, followers
-            )
-            message3 = "{} is in a selfie with other people? i guess anything is possible. she now has {} followers".format(username, followers)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "post_story":
-            message1 = "{} posted a story for {} followers. i hope she got some views".format(
-                username, followers
-            )
-            message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
-                username, followers
-            )
-            message3 = "{} used way too many filters on the story she just posted. her {} new followers must not have noticed".format(username, followers)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "leave_comment":
-            message1 = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
-                username, extra
-            )
-            message2 = "{} absolutely destroyed {}'s new selfie. she's a total hater!".format(
-                username, extra
-            )
-            message3 = "{} called {}'s bag cheap and tacky. what a mean comment".format(username, extra)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "one_group_selfie":
-            message1 = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
-                username, followers
-            )
-            message2 = "{} posed for a group selfie. alone. pathetic. {} dummies still like it though".format(username, followers)
-            message3 = "{} has no friends, which is why her sad group selfie attempt failed. her solo selfie got {} followers".format(username, followers)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "go_live_damage":
-            message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(
-                username, extra, username, followers
-            )
-        elif action_type == "many_went_live":
-            message1 = "{} went live at the same time as other girls! how dumb was that? she lost {} followers".format(username, followers)
-            message2 = "{} went live! she timed it poorly though and lost {} followers".format(username, followers)
-            message = random.choice([message1, message2, message3])
-        elif action_type == "selfie_victim":
-            message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
-                username, extra, followers
-            )
-        elif action_type == "no_move_victim":
-            message = "{} didnt do anything, but she still got flamed and lost {} followers".format(
-                username, followers
-            )
-        return message
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"
