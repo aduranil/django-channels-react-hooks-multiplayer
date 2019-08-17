@@ -36,6 +36,7 @@ class LoginUser(ObtainAuthToken):
         except User.DoesNotExist:
             return Response("this user does not exist", status=400)
 
+
 class GetUser(ObtainAuthToken):
     authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)

@@ -18,7 +18,9 @@ class GameConsumer(WebsocketConsumer):
         self.room_group_name = "game_%s" % self.id
         self.game = Game.objects.get(id=game_id)
         self.user = self.scope["user"]
-        self.game_player = GamePlayer.objects.get_or_none(user=self.user, game=self.game)
+        self.game_player = GamePlayer.objects.get_or_none(
+            user=self.user, game=self.game
+        )
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name, self.channel_name
         )
@@ -43,7 +45,7 @@ class GameConsumer(WebsocketConsumer):
         self.send_update_game_players()
 
     def leave_game(self, data=None):
-        print('in leave game')
+        print("in leave game")
         game_player = GamePlayer.objects.get_or_none(user=self.user, game=self.game)
         if self.game.game_players.all().count() <= 1:
             game_player.delete()
@@ -98,7 +100,9 @@ class GameConsumer(WebsocketConsumer):
             try:
                 round = Round.objects.get_or_none(game=self.game, started=True)
             except Exception:
-                round = Round.objects.filter(game=self.game, started=True).latest('created_at')
+                round = Round.objects.filter(game=self.game, started=True).latest(
+                    "created_at"
+                )
             if round.everyone_moved():
                 i = 0
                 j = 10
@@ -116,7 +120,9 @@ class GameConsumer(WebsocketConsumer):
         try:
             round = Round.objects.get_or_none(game=self.game, started=True)
         except Exception:
-            round = Round.objects.filter(game=self.game, started=True).latest('created_at')
+            round = Round.objects.filter(game=self.game, started=True).latest(
+                "created_at"
+            )
         if round:
             player_points = round.tabulate_round()
             winners = []
@@ -163,7 +169,6 @@ class GameConsumer(WebsocketConsumer):
                 async_to_sync(self.channel_layer.group_discard)(
                     self.room_group_name, self.channel_name
                 )
-
 
     def make_move(self, data):
         user = self.scope["user"]

@@ -88,7 +88,6 @@ class RoundTabulation(object):
                 self.victims[move.victim.id][move.action_type].append(
                     move.player.user.username
                 )
-
         return self.victims
 
     def determine_if_player_didnt_move(self):
@@ -107,19 +106,26 @@ class RoundTabulation(object):
 
     def tabulate_go_live(self, move):
         points = 0
+        calls = self.victims[move.player.id][CALL_IPHONE]
+        comments = self.victims[move.player.id][LEAVE_COMMENT]
+        dislikes = self.victims[move.player.id][DISLIKE]
         move.player.go_live = move.player.go_live - 1
         move.player.save()
-        if len(self.victims[move.player.id][CALL_IPHONE]) >= 1:
-            callers = self.victims[move.player.id][CALL_IPHONE]
-            message_service.iphone_msg(move, callers)
-            # delete them from the GO_LIVE array
-            self.player_moves[GO_LIVE].remove(move.player.id)
+
+        # see if they're still in the player moves array cause they could have been called
+        if move.player.id in self.player_moves[GO_LIVE]:
+            if len(self.player_moves[GO_LIVE]) > 1:
+                points += GO_LIVE_DM
+        else:
+            # if they're not in the player moves array
+            if len(self.player_moves[GO_LIVE]) == 1:
+                points += GO_LIVE_DM
 
         # determine any damage from any mean comments
-        points += len(self.victims[move.player.id][LEAVE_COMMENT]) * LEAVE_COMMENT_DM
+        points += len(comments) * LEAVE_COMMENT_DM
         # determine any damage from any dislikes
-        if len(self.victims[move.player.id][DISLIKE]) > 1:
-            points += len(self.victims[move.player.id][DISLIKE]) * DISLIKE_DM
+        if len(dislikes) > 1:
+            points += len(dislikes) * DISLIKE_DM
 
         self.player_points[move.player.id] = points
 
@@ -134,9 +140,16 @@ class RoundTabulation(object):
         if len(dislikes) > 1:
             points += len(dislikes) * DISLIKE_DM
 
-        no_post_last_round = Move.objects.get_or_none(id=move.id - 1, action_type=DONT_POST, player=move.player)
+        no_post_last_round = Move.objects.get_or_none(
+            id=move.id - 1, action_type=DONT_POST, player=move.player
+        )
         if no_post_last_round:
-            if not (len(dislikes) > 1 or len(calls) >= 1 or len(comments) >=1 or len(go_live) == 1):
+            if not (
+                len(dislikes) > 1
+                or len(calls) >= 1
+                or len(comments) >= 1
+                or len(go_live) == 1
+            ):
                 points += DONT_POST_DM
             message_service.dont_post_msg(move, repeat=True)
         else:
@@ -159,11 +172,78 @@ class RoundTabulation(object):
         # if someone leaves a comment, its double damage
         if len(comments) >= 1:
             points = len(comments) * POST_SELFIE_DM
-        message_service.post_selfie_msg(move.player.user.username)
+
+        message_service.post_selfie_msg(move)
+        self.player_points[move.player.id] = points
+
+    def tabulate_no_move(self, move):
+        points = NO_MOVE_DM
+        dislikes = self.victims[move.player.id][DISLIKE]
+        comments = self.victims[move.player.id][LEAVE_COMMENT]
+
+        if len(dislikes) > 1:
+            points += len(dislikes) * DISLIKE_DM
+
+        if len(comments) >= 1:
+            points += len(comments) * LEAVE_COMMENT_DM
+
+    def tabulate_call_iphone(self, move):
+        calls = self.victims[move.player.id][CALL_IPHONE]
+        # someone can call the player, which can prevent them from doing something
+        if len(calls) >= 1:
+            # if someone calls the player remove them from the array where they did
+            # something to someone else
+            if (
+                self.victims[move.victim.id].get(CALL_IPHONE, None)
+                and move.player.user.username
+                in self.victims[move.victim.id][CALL_IPHONE]
+            ):
+                self.victims[move.victim.id][CALL_IPHONE].remove(
+                    move.player.user.username
+                )
+            if (
+                self.victims[move.victim.id].get(POST_SELFIE, None)
+                and move.player.user.username
+                in self.victims[move.victim.id][POST_SELFIE]
+            ):
+                self.victims[move.victim.id][POST_SELFIE].remove(
+                    move.player.user.username
+                )
+            if (
+                self.victims[move.victim.id].get(GO_LIVE, None)
+                and move.player.user.username in self.victims[move.victim.id][GO_LIVE]
+            ):
+                self.victims[move.victim.id][GO_LIVE].remove(move.player.user.username)
+        else:
+            # otherwise check if they called someone who went live and
+            # remove them from the array so later we can see how many points
+            if move.victim.id in self.player_moves[GO_LIVE]:
+                message_service.iphone_msg(move, move.victim.user.username)
+                self.player_moves[GO_LIVE].remove(move.victim.id)
+
+    def tabulate_call_iphone_again(self, move):
+        points = 0
+        dislikes = self.victims[move.player.id][DISLIKE]
+        go_live = self.player_moves[GO_LIVE]
+        comments = self.victims[move.player.id][LEAVE_COMMENT]
+
+        if len(dislikes) > 1:
+            points += len(dislikes) * DISLIKE_DM
+
+        if len(comments) >= 1:
+            points += len(comments) * LEAVE_COMMENT_DM
+
+        if len(go_live) == 1:
+            points += GO_LIVE_DM
+
         self.player_points[move.player.id] = points
 
     def tabulate(self):
         self.populate_arrays_with_player_moves()
+        for move in self.round.moves.all():
+            if move.action_type == CALL_IPHONE:
+                self.tabulate_call_iphone(move)
+
         for move in self.round.moves.all():
             if move.action_type == GO_LIVE:
                 self.tabulate_go_live(move)
@@ -171,4 +251,6 @@ class RoundTabulation(object):
                 self.tabulate_dont_post(move)
             elif move.action_type == POST_SELFIE:
                 self.tabulate_post_selfie(move)
+            elif move.action_type == CALL_IPHONE:
+                self.tabulate_call_iphone_again(move)
         return self.player_points

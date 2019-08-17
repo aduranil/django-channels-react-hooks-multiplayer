@@ -35,6 +35,7 @@ POINTS = dict(
     ]
 )
 
+
 class GetOrNoneManager(models.Manager):
     """Adds get_or_none method to objects"""
 
@@ -110,8 +111,8 @@ class Game(models.Model):
 
 class GamePlayer(models.Model):
     followers = models.IntegerField(default=100)
-    selfies = models.IntegerField(default=3) # equivalent to licking a lolly
-    go_live = models.IntegerField(default=2) # equivalent to tattle
+    selfies = models.IntegerField(default=3)  # equivalent to licking a lolly
+    go_live = models.IntegerField(default=2)  # equivalent to tattle
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(
@@ -171,7 +172,6 @@ class Round(models.Model):
             started=self.started,
             moves=[m.as_json() for m in self.moves.all()],
         )
-
 
     def no_one_moved(self):
         "if no one moved, we want to end the game"

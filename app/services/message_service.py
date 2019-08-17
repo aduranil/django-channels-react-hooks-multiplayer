@@ -2,11 +2,12 @@ import random
 
 from app.models import Message
 
-def iphone_msg(move, callers):
-    girls_who_called = " "
-    for caller in callers:
-        girls_who_called = girls_who_called + "{}".format(caller)
-    message1 =  "{} tried to go live, but she was distracted by a phone call from".format(move.player.user.username) + girls_who_called
+
+def iphone_msg(move, victim):
+    username = move.player.user.username
+    message1 = "{} tried to go live, but she was distracted by a phone call from {}".format(
+        victim, username
+    )
     messages = [message1]
     Message.objects.create(
         message=random.choice(messages),
@@ -15,6 +16,7 @@ def iphone_msg(move, callers):
         game=move.round.game,
     )
     return messages
+
 
 def dont_post_msg(move, repeat=False):
     username = move.player.user.username
@@ -39,17 +41,12 @@ def dont_post_msg(move, repeat=False):
     )
     return messages
 
+
 def post_selfie_msg(move, called=False, comments=False):
     username = move.player.user.username
-    message1 = "{} posted a selfie. how original".format(
-        username
-    )
-    message2 = "{} posted a selfie. cool i guess".format(
-        username
-    )
-    message3 = "{} delighted her followers with a beautiful selfie".format(
-        username
-    )
+    message1 = "{} posted a selfie. how original".format(username)
+    message2 = "{} posted a selfie. cool i guess".format(username)
+    message3 = "{} delighted her followers with a beautiful selfie".format(username)
     messages = [message1, message2, message3]
     Message.objects.create(
         message=random.choice(messages),
