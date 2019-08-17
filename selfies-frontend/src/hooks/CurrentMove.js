@@ -3,19 +3,29 @@ import { makeMove } from '../modules/game';
 
 function CurrentMoveUpdate(dispatch, time) {
   const [currentMove, setCurrentMove] = useState('');
-  useEffect(() => {
-    if (time === '90') {
-      setCurrentMove(null);
-    }
-  }, [time]);
+  useEffect(
+    () => {
+      if (time === '90') {
+        setCurrentMove(null);
+      }
+    },
+    [time],
+  );
 
   const newMove = (event) => {
     event.preventDefault();
     let move = event.currentTarget.value;
     let theVictim = null;
-    // only the comment game move has another player that it impacts
     if (event.currentTarget.value.includes('leave_comment')) {
       move = 'leave_comment';
+      theVictim = event.currentTarget.id;
+    }
+    if (event.currentTarget.value.includes('dislike')) {
+      move = 'dislike';
+      theVictim = event.currentTarget.id;
+    }
+    if (event.currentTarget.value.includes('call_iphone')) {
+      move = 'call_iphone';
       theVictim = event.currentTarget.id;
       // victim = event.currentTarget.id;
     }

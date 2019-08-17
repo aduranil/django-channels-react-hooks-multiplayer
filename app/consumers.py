@@ -126,7 +126,6 @@ class GameConsumer(WebsocketConsumer):
         if round:
             player_points = RoundTabulation(round).tabulate()
             winners = self.game.update_player_status(player_points)
-            if self.game.game_players.all().filter()
 
             if round.no_one_moved():
                 print("no one moved")
@@ -143,7 +142,7 @@ class GameConsumer(WebsocketConsumer):
             round.started = False
             round.save()
             Round.objects.create(game=self.game, started=True)
-            if len(winners) == 2:
+            if len(winners) != 2:
                 self.start_round_and_timer()
             else:
                 self.game.game_status = "inactive"

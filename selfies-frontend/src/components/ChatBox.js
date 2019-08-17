@@ -10,7 +10,7 @@ function ChatBox({ game, dispatch }) {
     if (messagesRef) {
       messagesRef.current.scrollIntoView(false);
     }
-  }, []);
+  });
 
   const handleSubmit = () => {
     dispatch(newMessage(message));

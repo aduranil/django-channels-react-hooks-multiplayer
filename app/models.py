@@ -79,7 +79,7 @@ class Game(models.Model):
 
     def update_player_status(self, player_points):
         winners = []
-        for player in self.game.game_players.all():
+        for player in self.game_players.all():
             points = player_points[player.id]
             updated_points = points + player.followers
 

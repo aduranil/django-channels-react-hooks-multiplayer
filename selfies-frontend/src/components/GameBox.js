@@ -34,7 +34,7 @@ function GameBox({
             flexWrap: 'wrap',
           }}
         >
-          {['post_selfie', 'post_group_selfie', 'post_story', 'dont_post', 'go_live'].map(item => (
+          {['post_selfie', 'dont_post', 'go_live'].map(item => (
             <button
               className={currentMove === item ? 'button-color' : null}
               key={item}
@@ -43,7 +43,8 @@ function GameBox({
               onClick={newMove}
               style={{ marginRight: '3px', marginBottom: '2px' }}
               disabled={
-                (item === 'post_story' && currentPlayer && currentPlayer.stories === 0)
+                (item === 'post_selfie' && currentPlayer && currentPlayer.selfies === 0)
+                || (item === 'go_live' && currentPlayer && currentPlayer.go_live === 0)
                 || !game.round_started
               }
             >
@@ -59,32 +60,50 @@ function GameBox({
           }}
         >
           {game.users.map(player => (
-            <div style={{ margin: '1%' }} key={player.username}>
-              {player.username}
-              {!game.round_started && (player.started ? '!' : ' ?')}
+            <div
+              style={{ margin: '1%', display: 'flex', flexDirection: 'column' }}
+              key={player.username}
+            >
+              <div>
+                {player.username}
+                {!game.round_started && (player.started ? '!' : ' ?')}
+              </div>
+              {['leave_comment', 'dislike', 'call_iphone'].map(item => (
+                <div style={{ marginBottom: '5px' }}>
+                  <button
+                    onClick={newMove}
+                    id={player.id}
+                    style={{ width: '100%' }}
+                    disabled={!game.round_started}
+                    value={`${item}_${player.id}`}
+                    className={
+                      currentMove === `${item}_${player.id}` ? 'button-color' : 'gamebutton'
+                    }
+                    type="button"
+                  >
+                    {item.replace(/_/g, ' ')}
+                    {' '}
+                  </button>
+                </div>
+              ))}
+
+              <Phone />
+
               <div>
                 {player.followers}
                 {' '}
                 {player.followers === 1 ? 'follower' : 'followers'}
               </div>
               <div style={{ marginBottom: '3px' }}>
-                {player.stories}
+                {player.selfies}
                 {' '}
-                {player.stories === 1 ? 'story' : 'stories'}
+                {player.selfies === 1 ? 'selfie' : 'selfies'}
               </div>
-              <button
-                onClick={newMove}
-                id={player.id}
-                disabled={!game.round_started}
-                value={`leave_comment_${player.id}`}
-                className={
-                  currentMove === `leave_comment_${player.id}` ? 'button-color' : 'gamebutton'
-                }
-                type="button"
-              >
-                <Phone />
-              </button>
-              {' '}
+              <div style={{ marginBottom: '3px' }}>
+                {player.go_live}
+                {' '}
+                {player.go_live === 1 ? 'go live' : 'go lives'}
+              </div>
             </div>
           ))}
         </div>
