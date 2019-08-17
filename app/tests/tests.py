@@ -14,17 +14,6 @@ LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 GO_LIVE_DAMAGE = "go_live_damage"
 LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
 
-def post_selfie(username, followers):
-    message1 = "{} posted a selfie. how original. she gained {} followers".format(
-        username, followers
-    )
-    message2 = "{} posted a selfie. cool i guess. she got {} followers".format(
-        username, followers
-    )
-    message3 = "{} delighted her followers with a beautiful selfie and gained {} followers".format(
-        username, followers
-    )
-    return [message1, message2, message3]
 
 def go_live(username, followers):
     message = "{} went live and got {} followers. but for some reason she just played old town road on repeat the whole time".format(username, followers)
