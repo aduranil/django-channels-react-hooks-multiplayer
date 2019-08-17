@@ -9,6 +9,7 @@ from channels.generic.websocket import WebsocketConsumer
 from .models import Game, Message, GamePlayer, Round, Move
 from app.services.round_service import RoundTabulation
 
+
 class GameConsumer(WebsocketConsumer):
     """Websocket for inside of the game"""
 

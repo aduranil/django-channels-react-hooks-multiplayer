@@ -214,6 +214,7 @@ class Round(models.Model):
         )
         msg.save()
 
+
 class Move(models.Model):
     POST_SELFIE = "post_selfie"
     POST_GROUP_SELFIE = "post_group_selfie"

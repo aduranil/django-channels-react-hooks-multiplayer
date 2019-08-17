@@ -176,7 +176,9 @@ class RoundTabulation(object):
 
         # if someone leaves a comment, its double damage
         if len(comments) >= 1:
-            messages = message_service.post_selfie_msg(move, points, called=False, comments=True)
+            messages = message_service.post_selfie_msg(
+                move, points, called=False, comments=True
+            )
             points = len(comments) * POST_SELFIE_DM
 
         if not messages:
@@ -191,7 +193,9 @@ class RoundTabulation(object):
             # if someone calls the player remove them from the array where they did
             # something to someone else
             if move.player.user.username in self.victims[move.victim.id][CALL_IPHONE]:
-                self.victims[move.victim.id][CALL_IPHONE].remove(move.player.user.username)
+                self.victims[move.victim.id][CALL_IPHONE].remove(
+                    move.player.user.username
+                )
             # if move.player.user.username in self.victims[move.victim.id][LEAVE_COMMENT]:
             #     self.victims[move.victim.id][LEAVE_COMMENT].remove(move.player.user.username)
             # if move.player.user.username in self.victims[move.victim.id][DISLIKE]:
@@ -211,12 +215,13 @@ class RoundTabulation(object):
 
             for victim in self.victims:
                 if move.victim.user.username in self.victims[victim][LEAVE_COMMENT]:
-                    self.victims[victim][LEAVE_COMMENT].remove(move.victim.user.username)
+                    self.victims[victim][LEAVE_COMMENT].remove(
+                        move.victim.user.username
+                    )
                 if move.victim.user.username in self.victims[victim][DISLIKE]:
                     self.victims[victim][DISLIKE].remove(move.victim.user.username)
                 if move.victim.user.username in self.victims[victim][CALL_IPHONE]:
                     self.victims[victim][CALL_IPHONE].remove(move.victim.user.username)
-
 
     def tabulate_call_iphone_again(self, move):
         points = 0
@@ -275,11 +280,13 @@ class RoundTabulation(object):
             points += GO_LIVE_DM
 
         # check if the player was grabbed
-        grabbed=False
+        grabbed = False
         if move.player.id not in self.player_moves[LEAVE_COMMENT]:
-            grabbed=True
+            grabbed = True
             # they werent grabbed from doing the action
-        message_service.leave_comment_msg(move, move.victim.user.username, points, grabbed=grabbed)
+        message_service.leave_comment_msg(
+            move, move.victim.user.username, points, grabbed=grabbed
+        )
 
         self.player_points[move.player.id] = points
 
@@ -299,11 +306,13 @@ class RoundTabulation(object):
             points += GO_LIVE_DM
 
         # check if the player was grabbed
-        grabbed=False
+        grabbed = False
         if move.player.id not in self.player_moves[DISLIKE]:
-            grabbed=True
+            grabbed = True
             # they werent grabbed from doing the action
-        message_service.dislike_msg(move, move.victim.user.username, points, grabbed=grabbed)
+        message_service.dislike_msg(
+            move, move.victim.user.username, points, grabbed=grabbed
+        )
 
         self.player_points[move.player.id] = points
 

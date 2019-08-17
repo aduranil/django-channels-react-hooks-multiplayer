@@ -22,6 +22,7 @@ def no_move_msg(move, followers, comments=False):
     )
     return messages
 
+
 def iphone_msg(move, victim):
     username = move.player.user.username
     message1 = "{} tried to go live, but she was distracted by a phone call from {}".format(
@@ -56,6 +57,7 @@ def leave_comment_msg(move, victim, points, grabbed=False):
     )
     return messages
 
+
 def dislike_msg(move, victim, points, grabbed=False):
     username = move.player.user.username
     message = "{} decided to dislike, ruining {}'s self esteem. she got {} followers this round".format(
@@ -74,6 +76,7 @@ def dislike_msg(move, victim, points, grabbed=False):
         game=move.round.game,
     )
     return messages
+
 
 def dont_post_msg(move, repeat=False):
     username = move.player.user.username
@@ -101,9 +104,15 @@ def dont_post_msg(move, repeat=False):
 
 def post_selfie_msg(move, followers, called=False, comments=False):
     username = move.player.user.username
-    message1 = "{} posted a selfie. how original. here are {} new followers".format(username, followers)
-    message2 = "{} posted a selfie for {} new followers. cool i guess".format(username, followers)
-    message3 = "{} delighted her {} new followers with a beautiful selfie".format(username, followers)
+    message1 = "{} posted a selfie. how original. here are {} new followers".format(
+        username, followers
+    )
+    message2 = "{} posted a selfie for {} new followers. cool i guess".format(
+        username, followers
+    )
+    message3 = "{} delighted her {} new followers with a beautiful selfie".format(
+        username, followers
+    )
     message4 = "{} posted a selfie for {} followers. i hope she got some views".format(
         username, followers
     )
@@ -119,7 +128,16 @@ def post_selfie_msg(move, followers, called=False, comments=False):
     message8 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
         username, followers
     )
-    messages = [message1, message2, message3, message4, message5, message6, message7, message8]
+    messages = [
+        message1,
+        message2,
+        message3,
+        message4,
+        message5,
+        message6,
+        message7,
+        message8,
+    ]
     if comments:
         message = "{} got teased relentlessly for her ugly selfie. how cruel! she lost {} followers this round".format(
             username, followers

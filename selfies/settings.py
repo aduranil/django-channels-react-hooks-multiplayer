@@ -64,11 +64,17 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework.authentication.BasicAuthentication",
     ),
-    'EXCEPTION_HANDLER': ('app.exceptions.base_exception_handler'),
+    "EXCEPTION_HANDLER": ("app.exceptions.base_exception_handler"),
     # Authentication backends
 }
 
-CORS_ORIGIN_WHITELIST = ("localhost:1234", "localhost:3000", 'http://localhost:3000',"selfies.surge.sh", "selfies-22b79.firebaseapp.com")
+CORS_ORIGIN_WHITELIST = (
+    "localhost:1234",
+    "localhost:3000",
+    "http://localhost:3000",
+    "selfies.surge.sh",
+    "selfies-22b79.firebaseapp.com",
+)
 
 ROOT_URLCONF = "selfies.urls"
 
@@ -98,7 +104,7 @@ if DATABASE_URL:
     CHANNEL_LAYERS = {
         "default": {
             "BACKEND": "channels_redis.core.RedisChannelLayer",
-            "CONFIG": {"hosts": [os.environ.get("REDIS_URL", 'redis://redis:6379')]},
+            "CONFIG": {"hosts": [os.environ.get("REDIS_URL", "redis://redis:6379")]},
         }
     }
     DATABASES = {"default": dj_database_url.config(default=DATABASE_URL)}
