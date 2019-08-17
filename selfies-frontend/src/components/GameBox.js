@@ -43,8 +43,8 @@ function GameBox({
               onClick={newMove}
               style={{ marginRight: '3px', marginBottom: '2px' }}
               disabled={
-                (item === 'post_selfie' && currentPlayer.selfies === 0)
-                || (item === 'go_live' && currentPlayer.go_live === 0)
+                (item === 'post_selfie' && currentPlayer && currentPlayer.selfies === 0)
+                || (item === 'go_live' && currentPlayer && currentPlayer.go_live === 0)
                 || !game.round_started
               }
             >
