@@ -13,6 +13,7 @@ from app.services.round_service import (
     POST_SELFIE_PTS,
     POST_SELFIE_DM,
     GO_LIVE_DM,
+    NO_MOVE_DM
 )
 from app.services import round_service, message_service
 from app.models import Move, Message, GamePlayer
@@ -165,5 +166,37 @@ def test_message_when_leave_comment_grabbed(rnd, p_1, p_2, p_3, move_factory):
     move2 = move_factory(round=rnd, action_type=LEAVE_COMMENT, player=p_2, victim=p_1)
     move_factory(round=rnd, action_type=CALL_IPHONE, player=p_3, victim=p_2)
     tab = RoundTabulation(rnd).tabulate()
-    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move1, 20)
+    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move1, 20, False, False)
     assert message(rnd.game, p_2.user.username) in message_service.leave_comment_msg(move2, p_1.user.username, 0, True)
+
+@pytest.mark.django_db
+def test_message_when_leave_comment(rnd, p_1, p_2, move_factory):
+    """make sure the right message appears if the user was not blocked"""
+    move1 = move_factory(round=rnd, action_type=POST_SELFIE, player=p_1, victim=None)
+    move2 = move_factory(round=rnd, action_type=LEAVE_COMMENT, player=p_2, victim=p_1)
+    tab = RoundTabulation(rnd).tabulate()
+    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move1, 20, False, True)
+    assert message(rnd.game, p_2.user.username) in message_service.leave_comment_msg(move2, p_1.user.username, 0, False)
+
+@pytest.mark.django_db
+def test_message_when_dislike(rnd, p_1, p_2, p_3, p_4, move_factory):
+    """make sure the right message appears if the user was blocked"""
+    move1 = move_factory(round=rnd, action_type=NO_MOVE, player=p_1, victim=None)
+    move2 = move_factory(round=rnd, action_type=DISLIKE, player=p_2, victim=p_1)
+    move3 = move_factory(round=rnd, action_type=DISLIKE, player=p_3, victim=p_1)
+    move4 = move_factory(round=rnd, action_type=CALL_IPHONE, player=p_4, victim=p_3)
+    tab = RoundTabulation(rnd).tabulate()
+    assert message(rnd.game, p_1.user.username) in message_service.no_move_msg(move1, NO_MOVE_DM, False)
+    assert message(rnd.game, p_2.user.username) in message_service.dislike_msg(move2, p_1.user.username, 0, False)
+    assert message(rnd.game, p_3.user.username) in message_service.dislike_msg(move3, p_1.user.username, 0, True)
+
+@pytest.mark.django_db
+def test_message_when_dislike_not_block(rnd, p_1, p_2, p_3, p_4, move_factory):
+    """make sure the right message appears if the user was blocked"""
+    move1 = move_factory(round=rnd, action_type=NO_MOVE, player=p_1, victim=None)
+    move2 = move_factory(round=rnd, action_type=DISLIKE, player=p_2, victim=p_1)
+    move3 = move_factory(round=rnd, action_type=DISLIKE, player=p_3, victim=p_1)
+    tab = RoundTabulation(rnd).tabulate()
+    assert message(rnd.game, p_1.user.username) in message_service.no_move_msg(move1, NO_MOVE_DM + (DISLIKE_DM * 2), True)
+    assert message(rnd.game, p_2.user.username) in message_service.dislike_msg(move2, p_1.user.username, 0, False)
+    assert message(rnd.game, p_3.user.username) in message_service.dislike_msg(move3, p_1.user.username, 0, False)

@@ -56,6 +56,25 @@ def leave_comment_msg(move, victim, points, grabbed=False):
     )
     return messages
 
+def dislike_msg(move, victim, points, grabbed=False):
+    username = move.player.user.username
+    message = "{} decided to dislike, ruining {}'s self esteem. she got {} followers this round".format(
+        username, victim, points
+    )
+    messages = [message]
+    if grabbed:
+        message = "{} tried to dislike {}, but she was blocked! she got {} followers this round".format(
+            username, victim, points
+        )
+        messages = [message]
+    Message.objects.create(
+        message=random.choice(messages),
+        message_type="round_recap",
+        username=username,
+        game=move.round.game,
+    )
+    return messages
+
 def dont_post_msg(move, repeat=False):
     username = move.player.user.username
     messages = []

@@ -176,9 +176,11 @@ class RoundTabulation(object):
 
         # if someone leaves a comment, its double damage
         if len(comments) >= 1:
+            messages = message_service.post_selfie_msg(move, points, called=False, comments=True)
             points = len(comments) * POST_SELFIE_DM
 
-        message_service.post_selfie_msg(move, points)
+        if not messages:
+            message_service.post_selfie_msg(move, points)
 
         self.player_points[move.player.id] = points
 
@@ -190,10 +192,10 @@ class RoundTabulation(object):
             # something to someone else
             if move.player.user.username in self.victims[move.victim.id][CALL_IPHONE]:
                 self.victims[move.victim.id][CALL_IPHONE].remove(move.player.user.username)
-            if move.player.user.username in self.victims[move.victim.id][LEAVE_COMMENT]:
-                self.victims[move.victim.id][LEAVE_COMMENT].remove(move.player.user.username)
-            if move.player.user.username in self.victims[move.victim.id][DISLIKE]:
-                self.victims[move.victim.id][DISLIKE].remove(move.player.user.username)
+            # if move.player.user.username in self.victims[move.victim.id][LEAVE_COMMENT]:
+            #     self.victims[move.victim.id][LEAVE_COMMENT].remove(move.player.user.username)
+            # if move.player.user.username in self.victims[move.victim.id][DISLIKE]:
+            #     self.victims[move.victim.id][DISLIKE].remove(move.player.user.username)
         else:
             # otherwise check if they called someone who went live and
             # remove them from the array so later we can see how many points
@@ -204,9 +206,16 @@ class RoundTabulation(object):
             if move.victim.id in self.player_moves[LEAVE_COMMENT]:
                 self.player_moves[LEAVE_COMMENT].remove(move.victim.id)
 
+            if move.victim.id in self.player_moves[DISLIKE]:
+                self.player_moves[DISLIKE].remove(move.victim.id)
+
             for victim in self.victims:
                 if move.victim.user.username in self.victims[victim][LEAVE_COMMENT]:
                     self.victims[victim][LEAVE_COMMENT].remove(move.victim.user.username)
+                if move.victim.user.username in self.victims[victim][DISLIKE]:
+                    self.victims[victim][DISLIKE].remove(move.victim.user.username)
+                if move.victim.user.username in self.victims[victim][CALL_IPHONE]:
+                    self.victims[victim][CALL_IPHONE].remove(move.victim.user.username)
 
 
     def tabulate_call_iphone_again(self, move):
@@ -235,10 +244,12 @@ class RoundTabulation(object):
 
         if len(dislikes) > 1:
             points += len(dislikes) * DISLIKE_DM
+            messages = message_service.no_move_msg(move, points, comments=True)
 
         if len(comments) >= 1:
             points += len(comments) * LEAVE_COMMENT_DM
-            messages = message_service.no_move_msg(move, points, comments=True)
+            if not messages:
+                messages = message_service.no_move_msg(move, points, comments=True)
 
         if len(go_live) == 1:
             points += GO_LIVE_DM
@@ -272,6 +283,30 @@ class RoundTabulation(object):
 
         self.player_points[move.player.id] = points
 
+    def tabulate_dislike(self, move):
+        points = 0
+        dislikes = self.victims[move.player.id][DISLIKE]
+        comments = self.victims[move.player.id][LEAVE_COMMENT]
+        go_live = self.player_moves[GO_LIVE]
+
+        if len(dislikes) > 1:
+            points += len(dislikes) * DISLIKE_DM
+
+        if len(comments) >= 1:
+            points += len(comments) * LEAVE_COMMENT_DM
+
+        if len(go_live) == 1:
+            points += GO_LIVE_DM
+
+        # check if the player was grabbed
+        grabbed=False
+        if move.player.id not in self.player_moves[DISLIKE]:
+            grabbed=True
+            # they werent grabbed from doing the action
+        message_service.dislike_msg(move, move.victim.user.username, points, grabbed=grabbed)
+
+        self.player_points[move.player.id] = points
+
     def tabulate(self):
         self.populate_arrays_with_player_moves()
         for move in self.round.moves.all():
@@ -291,4 +326,6 @@ class RoundTabulation(object):
                 self.tabulate_no_move(move)
             elif move.action_type == LEAVE_COMMENT:
                 self.tabulate_leave_comment(move)
+            elif move.action_type == DISLIKE:
+                self.tabulate_dislike(move)
         return self.player_points
