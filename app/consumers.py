@@ -7,7 +7,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
 from .models import Game, Message, GamePlayer, Round, Move
-
+from app.services.round_service import RoundTabulation
 
 class GameConsumer(WebsocketConsumer):
     """Websocket for inside of the game"""
@@ -124,19 +124,9 @@ class GameConsumer(WebsocketConsumer):
                 "created_at"
             )
         if round:
-            player_points = round.tabulate_round()
-            winners = []
-            for player in self.game.game_players.all():
-                points = player_points[player.id]
-                updated_points = points + player.followers
-
-                # the floor is zero
-                if updated_points < 0:
-                    updated_points = 0
-                if updated_points >= 100:
-                    winners.append(player)
-                player.followers = updated_points
-                player.save()
+            player_points = RoundTabulation(round).tabulate()
+            winners = self.game.update_player_status(player_points)
+            if self.game.game_players.all().filter()
 
             if round.no_one_moved():
                 print("no one moved")
@@ -153,7 +143,7 @@ class GameConsumer(WebsocketConsumer):
             round.started = False
             round.save()
             Round.objects.create(game=self.game, started=True)
-            if len(winners) == 0:
+            if len(winners) == 2:
                 self.start_round_and_timer()
             else:
                 self.game.game_status = "inactive"

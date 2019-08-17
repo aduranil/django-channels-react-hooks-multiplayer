@@ -77,6 +77,21 @@ class Game(models.Model):
             current_round=[r.as_json() for r in self.rounds.all().filter(started=True)],
         )
 
+    def update_player_status(self, player_points):
+        winners = []
+        for player in self.game.game_players.all():
+            points = player_points[player.id]
+            updated_points = points + player.followers
+
+            # the floor is zero
+            if updated_points <= 0:
+                player.loser = True
+            else:
+                winners.append(player)
+            player.followers = updated_points
+            player.save()
+        return winners
+
     def can_start_game(self):
         """See if the round can be started. Requires at least 3 players and
         that all players in the room have started"""
@@ -115,6 +130,8 @@ class GamePlayer(models.Model):
     go_live = models.IntegerField(default=2)  # equivalent to tattle
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    loser = models.BooleanField(default=False)
+
     user = models.ForeignKey(
         User,
         related_name="game_players",
@@ -135,6 +152,7 @@ class GamePlayer(models.Model):
             winner=self.winner,
             followers=self.followers,
             selfies=self.selfies,
+            loser=self.loser,
             go_live=self.go_live,
             username=self.user.username,
             started=self.started,
@@ -195,204 +213,6 @@ class Round(models.Model):
             action_type, points, gp.user.username, extra
         )
         msg.save()
-
-    def tabulate_round(self):
-
-        # the list has the id of the player who performed that move
-        PLAYER_MOVES = dict(
-            [
-                (POST_SELFIE, []),
-                (POST_GROUP_SELFIE, []),
-                (POST_STORY, []),
-                (GO_LIVE, []),
-                (LEAVE_COMMENT, []),
-                (DONT_POST, []),
-                (NO_MOVE, []),
-            ]
-        )
-        # see which players completed a move during a round
-        PLAYERS_WHO_MOVED = []
-
-        # keep a running list of victims during the round
-        VICTIMS = defaultdict(lambda: 0)
-
-        # initialize an empty dict of player points to keep track of
-        PLAYER_POINTS = defaultdict(lambda: 0)
-
-        # group_selfie message
-        # populate what each player did and initial points for them
-        for move in self.moves.all():
-            if move.action_type == move.POST_SELFIE:
-                PLAYER_MOVES[POST_SELFIE].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                message = self.generate_new_message(
-                    move.POST_SELFIE, POINTS[POST_SELFIE], move.player.user.username
-                )
-                # dont update these points until the end
-            elif move.action_type == move.POST_GROUP_SELFIE:
-                PLAYER_MOVES[POST_GROUP_SELFIE].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                message = self.generate_new_message(
-                    move.POST_GROUP_SELFIE,
-                    POINTS[POST_GROUP_SELFIE],
-                    move.player.user.username,
-                )
-            elif move.action_type == move.POST_STORY:
-                PLAYER_MOVES[POST_STORY].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                PLAYER_POINTS[move.player.id] = POINTS[POST_STORY]
-                message = self.generate_new_message(
-                    move.POST_STORY, POINTS[POST_STORY], move.player.user.username
-                )
-                # decrement the number of stories the player has
-                game_player = GamePlayer.objects.get(
-                    user_id=move.player.user_id, game=self.game
-                )
-                game_player.stories = game_player.stories - 1
-                game_player.save()
-            elif move.action_type == move.GO_LIVE:
-                PLAYER_MOVES[GO_LIVE].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                PLAYER_POINTS[move.player.id] = POINTS[GO_LIVE]
-                message = self.generate_new_message(
-                    move.GO_LIVE, POINTS[GO_LIVE], move.player.user.username
-                )
-            elif move.action_type == move.LEAVE_COMMENT:
-                PLAYER_MOVES[LEAVE_COMMENT].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                message = self.generate_new_message(
-                    move.LEAVE_COMMENT,
-                    POINTS[LEAVE_COMMENT],
-                    move.player.user.username,
-                    move.victim.user.username,
-                )
-                VICTIMS[move.victim.id] += 1
-                PLAYER_POINTS[move.player.id] = 0
-            elif move.action_type == move.DONT_POST:
-                PLAYER_MOVES[DONT_POST].append(move.player.id)
-                PLAYERS_WHO_MOVED.append(move.player.id)
-                PLAYER_POINTS[move.player.id] = POINTS[DONT_POST]
-                message = self.generate_new_message(
-                    move.DONT_POST, POINTS[DONT_POST], move.player.user.username
-                )
-            Message.objects.create(
-                message=message,
-                message_type="round_recap",
-                username=move.player.user.username,
-                game=self.game,
-            )
-
-        # see if any of the players didnt move and add a no_move action
-        for player in self.game.game_players.all():
-            if player.id not in PLAYERS_WHO_MOVED:
-                PLAYER_MOVES[NO_MOVE].append(player.id)
-                PLAYER_POINTS[player.id] = POINTS[NO_MOVE]
-                Move.objects.create(round=self, action_type=NO_MOVE, player=player)
-                message = self.generate_new_message(
-                    NO_MOVE, -POINTS[NO_MOVE], player.user.username
-                )
-                Message.objects.create(
-                    message=message,
-                    message_type="round_recap",
-                    username=player.user.username,
-                    game=self.game,
-                )
-        # convert a group selfie into a regular selfie if there's just 1
-        if len(PLAYER_MOVES[POST_GROUP_SELFIE]) == 1:
-            # we need to update the message now
-            self.update_user_message(
-                PLAYER_MOVES[POST_GROUP_SELFIE][0],
-                "one_group_selfie",
-                POINTS[POST_SELFIE],
-            )
-            # update that players points to be the selfie points
-            PLAYER_POINTS[PLAYER_MOVES[POST_GROUP_SELFIE][0]] = 0
-            # add them to the post_selfie array
-            PLAYER_MOVES[POST_SELFIE].append(PLAYER_MOVES[POST_GROUP_SELFIE][0])
-            # update the post_group_selfie array
-            PLAYER_MOVES[POST_GROUP_SELFIE] = []
-
-        # calculate the points for go live
-        if len(PLAYER_MOVES[GO_LIVE]) == 1:
-            # delete the user from the array now that their action is resolved
-            girl_who_went_live = GamePlayer.objects.get(id=PLAYER_MOVES[GO_LIVE][0])
-            del PLAYER_MOVES[GO_LIVE][0]
-
-            # everyone loses 15 followers who posted a story
-            for user in PLAYER_MOVES[POST_STORY]:
-                # UPDATE their points
-                PLAYER_POINTS[user] = POINTS[GO_LIVE_DAMAGE]
-                self.update_user_message(
-                    id=user,
-                    action_type="go_live_damage",
-                    points=-PLAYER_POINTS[user],
-                    extra=girl_who_went_live.user.username,
-                )
-
-            # everyone loses 15 followers who posted a selfie
-            for user in PLAYER_MOVES[POST_SELFIE]:
-                # UPDATE their points
-                PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
-                self.update_user_message(
-                    user,
-                    "go_live_damage",
-                    -PLAYER_POINTS[user],
-                    girl_who_went_live.user.username,
-                )
-            # everyone loses 15 followers who posted a group selfie
-            for user in PLAYER_MOVES[POST_GROUP_SELFIE]:
-                # add points to existing total of 0
-                PLAYER_POINTS[user] += POINTS[GO_LIVE_DAMAGE]
-                self.update_user_message(
-                    user,
-                    "go_live_damage",
-                    -PLAYER_POINTS[user],
-                    girl_who_went_live.user.username,
-                )
-        elif len(PLAYER_MOVES[GO_LIVE]) > 1:
-            # if more than one player went live they all lose 20 points
-            for user in PLAYER_MOVES[GO_LIVE]:
-                # UPDATE their points
-                PLAYER_POINTS[user] = -POINTS[GO_LIVE]
-                self.update_user_message(user, "many_went_live", -PLAYER_POINTS[user])
-
-        # calculate the points lost by any victims
-        for v in VICTIMS:
-            if v in PLAYER_MOVES[POST_SELFIE]:
-                # VICTIMS[v] is how many people did the victimizing action
-                # POINTS[LEAVE_COMMENT] is -5
-                # Don't update points, subtract from existing points
-                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT] * VICTIMS[v]
-                self.update_user_message(
-                    v, "selfie_victim", -PLAYER_POINTS[v], VICTIMS[v]
-                )
-
-            if v in PLAYER_MOVES[NO_MOVE]:
-                # POINTS[LEAVE_COMMENT_NO_MOVE] is -10
-                # UPDATE their points
-                PLAYER_POINTS[v] = POINTS[LEAVE_COMMENT_NO_MOVE] * VICTIMS[v]
-                self.update_user_message(
-                    v, "no_move_victim", -PLAYER_POINTS[v], VICTIMS[v]
-                )
-
-            if v in PLAYER_MOVES[POST_GROUP_SELFIE]:
-                # POINTS[LEAVE_COMMENT_GROUP_SELFIE] is -15
-                # UPDATE their points
-                PLAYER_POINTS[v] += POINTS[LEAVE_COMMENT_GROUP_SELFIE] * VICTIMS[v]
-                self.update_user_message(
-                    v, "selfie_victim", -PLAYER_POINTS[v], VICTIMS[v]
-                )
-
-        # finally tabulate the post_selfies move
-        for user in PLAYER_MOVES[POST_SELFIE]:
-            if PLAYER_POINTS[user] == 0:
-                PLAYER_POINTS[user] = POINTS[POST_SELFIE]
-        for user in PLAYER_MOVES[POST_GROUP_SELFIE]:
-            if PLAYER_POINTS[user] == 0:
-                PLAYER_POINTS[user] = POINTS[POST_GROUP_SELFIE]
-        print(PLAYER_POINTS)
-        return PLAYER_POINTS
-
 
 class Move(models.Model):
     POST_SELFIE = "post_selfie"
