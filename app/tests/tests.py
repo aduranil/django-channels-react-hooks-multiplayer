@@ -29,57 +29,6 @@ def many_went_live(username, followers):
     return [message]
 
 
-def dont_post(username, followers):
-    message1 = "{} didn't post and lost {} followers. i dont know why since she had nothing better to do".format(
-        username, followers
-    )
-    message2 = "{} didn't have time to post for some reason. doesn't she know the internet is more important than IRL? she lost {} followers".format(
-        username, followers
-    )
-    return [message1, message2]
-
-
-def no_move(username, followers):
-    message = "{} was so lazy that she forgot to move. she lost {} followers".format(
-        username, followers
-    )
-    return [message]
-
-
-def post_group_selfie(username, followers):
-    message1 = "{} took a group selfie with some other girls! but are they really friends? the extra popularity gained her {} followers".format(
-        username, followers
-    )
-    message2 = "{} somehow finagled her way into being part of a group selfie. the girls didn't care but she leeched off {} followers anyway".format(
-        username, followers
-    )
-    return [message1, message2]
-
-
-def post_story(username, followers):
-    message1 = "{} posted a story for {} followers. i hope she got some views".format(
-        username, followers
-    )
-    message2 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
-        username, followers
-    )
-    return [message1, message2]
-
-
-def leave_comment(username, extra):
-    message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
-        username, extra
-    )
-    return [message]
-
-
-def one_group_selfie(username, followers):
-    message = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
-        username, followers
-    )
-    return [message]
-
-
 def go_live_damage(username, followers, extra):
     message = "{} tried to get attention but {} was live, capturing her followers attention. {} lost {} followers".format(
         username, extra, username, followers
@@ -92,21 +41,6 @@ def many_went_live(username, followers):
         username, followers
     )
     return [message]
-
-
-def selfie_victim(username, followers, extra):
-    message = "{} got teased relentlessly for her ugly selfie. {} girls teased her. how cruel! she lost {} followers this round".format(
-        username, extra, followers
-    )
-    return [message]
-
-
-def no_move_victim(username, followers):
-    message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(
-        username, followers
-    )
-    return [message]
-
 
 def message(game, username):
     return Message.objects.get(game=game, username=username).message
