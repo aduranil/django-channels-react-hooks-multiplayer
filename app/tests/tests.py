@@ -14,38 +14,6 @@ LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
 GO_LIVE_DAMAGE = "go_live_damage"
 LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
 
-@pytest.fixture()
-def game(game_factory):
-    return game_factory()
-
-@pytest.fixture()
-def rnd(game, round_factory):
-    return round_factory(game=game, started=True)
-
-@pytest.fixture()
-def p_1(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
-@pytest.fixture()
-def p_2(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
-@pytest.fixture()
-def p_3(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
-@pytest.fixture()
-def p_4(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
-@pytest.fixture()
-def p_5(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
-@pytest.fixture()
-def p_6(game, user_factory, game_player_factory):
-    return game_player_factory(game=game, user=user_factory(), started=True)
-
 def post_selfie(username, followers):
     message1 = "{} posted a selfie. how original. she gained {} followers".format(
         username, followers

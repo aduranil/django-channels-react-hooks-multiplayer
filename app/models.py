@@ -133,7 +133,8 @@ class GamePlayer(models.Model):
             id=self.id,
             winner=self.winner,
             followers=self.followers,
-            stories=self.stories,
+            selfies=self.selfies,
+            go_live=self.go_live,
             username=self.user.username,
             started=self.started,
         )
