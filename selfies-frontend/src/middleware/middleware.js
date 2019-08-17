@@ -1,5 +1,5 @@
 import * as actions from '../modules/websocket';
-import { updateGame, updateTimer } from '../modules/game';
+import { updateGame, updateTimer, updateGamePlayer } from '../modules/game';
 
 const socketMiddleware = () => {
   let socket = null;
@@ -16,12 +16,17 @@ const socketMiddleware = () => {
     const payload = JSON.parse(event.data);
     switch (payload.type) {
       case 'update_game_players':
-        store.dispatch(updateGame(payload.game, payload.current_player));
+        store.dispatch(updateGame(payload.game));
         break;
       case 'update_timer':
         store.dispatch(updateTimer(payload.time));
         break;
+      case 'update_game_player':
+        console.log(payload);
+        store.dispatch(updateGamePlayer(payload.current_player));
+        break;
       default:
+        console.log(payload);
         break;
     }
   };

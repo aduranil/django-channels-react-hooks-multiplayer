@@ -9,7 +9,6 @@ import GameBox from '../components/GameBox';
 import RoundHistory from '../components/RoundHistory';
 import Navigation from '../components/Navigation';
 import GameInfo from '../components/GameInfo';
-import { leaveGame } from '../modules/game';
 
 const HOST = process.env.REACT_APP_WS_HOST;
 const PREFIX = process.env.REACT_APP_PREFIX;
@@ -21,12 +20,15 @@ function Game({
 
   useEffect(() => dispatch(wsConnect(host)), [dispatch, host]);
 
-  useEffect(() => {
-    const exitGame = () => dispatch(leaveGame());
-    window.addEventListener('beforeunload', exitGame);
-
-    return () => window.removeEventListener('beforeunload', exitGame);
-  }, [dispatch]);
+  // useEffect(
+  //   () => {
+  //     const exitGame = () => dispatch(leaveGame());
+  //     window.addEventListener('beforeunload', exitGame);
+  //
+  //     return () => window.removeEventListener('beforeunload', exitGame);
+  //   },
+  //   [dispatch],
+  // );
 
   if (id && game) {
     return (
@@ -79,7 +81,7 @@ Game.propTypes = {
   currentPlayer: PropTypes.shape({
     id: PropTypes.number.isRequired,
     followers: PropTypes.number.isRequired,
-    stories: PropTypes.number.isRequired,
+    selfies: PropTypes.number.isRequired,
     username: PropTypes.string.isRequired,
     started: PropTypes.bool.isRequired,
   }),
@@ -93,7 +95,7 @@ Game.propTypes = {
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         followers: PropTypes.number.isRequired,
-        stories: PropTypes.number.isRequired,
+        selfies: PropTypes.number.isRequired,
         username: PropTypes.string.isRequired,
         started: PropTypes.bool.isRequired,
       }),
@@ -132,7 +134,7 @@ const s2p = (state, ownProps) => ({
   id: ownProps.match && ownProps.match.params.id,
   username: state.auth.username,
   game: state.games.game,
-  currentPlayer: state.games.currentPlayer,
+  currentPlayer: state.games.gamePlayer,
   time: state.games.time,
 });
 

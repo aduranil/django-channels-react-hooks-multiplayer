@@ -48,7 +48,7 @@ class GameConsumer(WebsocketConsumer):
     def leave_game(self, data=None):
         print("in leave game")
         game_player = GamePlayer.objects.get_or_none(user=self.user, game=self.game)
-        if self.game.game_players.all().count() <= 1:
+        if self.game.game_players.all().count() == 0:
             game_player.delete()
             self.game.delete()
         else:
@@ -61,9 +61,9 @@ class GameConsumer(WebsocketConsumer):
             game_player.delete()
             self.game.check_joinability()
             self.send_update_game_players()
-            async_to_sync(self.channel_layer.group_discard)(
-                self.room_group_name, self.channel_name
-            )
+        async_to_sync(self.channel_layer.group_discard)(
+            self.room_group_name, self.channel_name
+        )
 
     def new_message(self, data):
         Message.objects.create(
@@ -190,12 +190,12 @@ class GameConsumer(WebsocketConsumer):
         game = Game.objects.get(id=self.id)
         game_player = GamePlayer.objects.get_or_none(user=self.scope["user"], game=game)
         current_player = game_player.as_json() if game_player else None
+        self.update_game_players({'type': 'update_game_player', 'current_player': current_player})
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 "type": "update_game_players",
                 "game": game.as_json(),
-                "current_player": current_player,
             },
         )
 
@@ -206,11 +206,10 @@ class GameConsumer(WebsocketConsumer):
         )
 
     # SEND DATA ACTIONS
-    def update_game_players(self, username):
-        self.send(text_data=json.dumps(username))
+    def update_game_players(self, current_player):
+        self.send(text_data=json.dumps(current_player))
 
     def update_timer(self, timedata):
-        """send timer data to the frontend"""
         self.send(text_data=json.dumps(timedata))
 
     def receive(self, text_data):
@@ -219,7 +218,6 @@ class GameConsumer(WebsocketConsumer):
         self.commands[data["command"]](self, data)
 
     commands = {
-        "update_game_players": update_game_players,
         "update_timer": update_timer,
         "LEAVE_GAME": leave_game,
         "NEW_MESSAGE": new_message,

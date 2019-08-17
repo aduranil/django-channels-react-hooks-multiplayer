@@ -84,7 +84,7 @@ ChatBox.propTypes = {
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         followers: PropTypes.number.isRequired,
-        stories: PropTypes.number.isRequired,
+        selfies: PropTypes.number.isRequired,
         username: PropTypes.string.isRequired,
         started: PropTypes.bool.isRequired,
       }),

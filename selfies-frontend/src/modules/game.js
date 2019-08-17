@@ -1,11 +1,12 @@
 import * as Cookies from 'js-cookie';
 
 export const newMessage = msg => ({ type: 'NEW_MESSAGE', msg });
-export const updateGame = (json, player) => ({ type: 'SET_GAME', data: json, player });
+export const updateGame = json => ({ type: 'SET_GAME', data: json });
 export const leaveGame = () => ({ type: 'LEAVE_GAME' });
 export const startRound = () => ({ type: 'START_ROUND' });
 export const updateTimer = time => ({ type: 'UPDATE_TIMER', time });
 export const makeMove = move => ({ type: 'MAKE_MOVE', move });
+export const updateGamePlayer = player => ({ type: 'UPDATE_GAME_PLAYER', player });
 // const API_ROOT = 'https://selfies-2020.herokuapp.com';
 const API_ROOT = process.env.REACT_APP_HOST;
 
@@ -52,11 +53,13 @@ const gameInitialState = { time: null };
 export const gameReducer = (state = { ...gameInitialState }, action) => {
   switch (action.type) {
     case 'SET_GAME':
-      return { ...state, game: action.data, currentPlayer: action.player };
+      return { ...state, game: action.data };
     case 'SHOW_GAMES':
       return { ...state, games: action.data };
     case 'UPDATE_TIMER':
       return { ...state, time: action.time };
+    case 'UPDATE_GAME_PLAYER':
+      return { ...state, gamePlayer: action.player };
     default:
       return state;
   }

@@ -43,8 +43,8 @@ function GameBox({
               onClick={newMove}
               style={{ marginRight: '3px', marginBottom: '2px' }}
               disabled={
-                (item === 'post_selfie' && currentPlayer && currentPlayer.selfies === 0)
-                || (item === 'go_live' && currentPlayer && currentPlayer.go_live === 0)
+                (item === 'post_selfie' && currentPlayer.selfies === 0)
+                || (item === 'go_live' && currentPlayer.go_live === 0)
                 || !game.round_started
               }
             >
@@ -69,7 +69,7 @@ function GameBox({
                 {!game.round_started && (player.started ? '!' : ' ?')}
               </div>
               {['leave_comment', 'dislike', 'call_iphone'].map(item => (
-                <div style={{ marginBottom: '5px' }}>
+                <div key={item} style={{ marginBottom: '5px' }}>
                   <button
                     onClick={newMove}
                     id={player.id}
@@ -94,16 +94,21 @@ function GameBox({
                 {' '}
                 {player.followers === 1 ? 'follower' : 'followers'}
               </div>
-              <div style={{ marginBottom: '3px' }}>
-                {player.selfies}
-                {' '}
-                {player.selfies === 1 ? 'selfie' : 'selfies'}
-              </div>
-              <div style={{ marginBottom: '3px' }}>
-                {player.go_live}
-                {' '}
-                {player.go_live === 1 ? 'go live' : 'go lives'}
-              </div>
+              {currentPlayer
+                && currentPlayer.id === player.id && (
+                  <React.Fragment>
+                    <div style={{ marginBottom: '3px' }}>
+                      {player.selfies}
+                      {' '}
+                      {player.selfies === 1 ? 'selfie' : 'selfies'}
+                    </div>
+                    <div style={{ marginBottom: '3px' }}>
+                      {player.go_live}
+                      {' '}
+                      {player.go_live === 1 ? 'go live' : 'go lives'}
+                    </div>
+                  </React.Fragment>
+              )}
             </div>
           ))}
         </div>
@@ -124,7 +129,7 @@ GameBox.propTypes = {
       PropTypes.shape({
         id: PropTypes.number.isRequired,
         followers: PropTypes.number.isRequired,
-        stories: PropTypes.number.isRequired,
+        selfies: PropTypes.number.isRequired,
         username: PropTypes.string.isRequired,
         started: PropTypes.bool.isRequired,
       }),
