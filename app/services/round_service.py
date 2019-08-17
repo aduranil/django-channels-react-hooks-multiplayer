@@ -56,8 +56,8 @@ class RoundTabulation(object):
                 (POST_SELFIE, []),
                 (LEAVE_COMMENT, []),
                 (CALL_IPHONE, []),
-                (GO_LIVE, []),
                 (DISLIKE, []),
+                (GO_LIVE, []),
                 (DONT_POST, []),
                 (NO_MOVE, []),
             ]
@@ -65,7 +65,8 @@ class RoundTabulation(object):
         # see which players completed a move during a round
         self.players_who_moved = []
         # keep a running list of victims during the round
-        self.victims = defaultdict(lambda: 0)
+        # victims = { 1: {dislike: 1, call: 2}}
+        self.victims = {} # defaultdict(lambda: 0)
         # initialize an empty dict of player points to keep track of
         self.player_points = defaultdict(lambda: 0)
         self.round = round
@@ -74,12 +75,18 @@ class RoundTabulation(object):
         for move in self.round.moves.all():
             self.player_moves[move.action_type].append(move.player.id)
             self.players_who_moved.append(move.player.id)
-
+            if move.victim:
+                action = self.victims[str(move.victim.id)][move.action_type]
+                if action:
+                    action += 1
+                else:
+                    action = 1
         # see if any of the players didnt move and add a no_move action
         for player in self.round.game.game_players.all():
             if player.id not in self.players_who_moved:
                 self.player_moves[NO_MOVE].append(player.id)
                 Move.objects.create(round=self.round, action_type=NO_MOVE, player=player)
+        return self.victims
 
 
     def tabulate_round(self):

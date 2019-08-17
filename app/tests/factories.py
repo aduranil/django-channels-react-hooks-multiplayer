@@ -41,7 +41,7 @@ class GameFactory(factory.django.DjangoModelFactory):
 
 class GamePlayerFactory(factory.django.DjangoModelFactory):
     followers = 0
-    stories = 3
+    selfies = 3
     user = factory.SubFactory(UserFactory)
     started = False
     game = factory.SubFactory(GameFactory)
