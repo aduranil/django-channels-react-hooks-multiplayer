@@ -133,7 +133,7 @@ def test_post_selfie_success(rnd, p_1, move_factory):
     points array, they have one less story"""
     move = move_factory(round=rnd, action_type=POST_SELFIE, player=p_1, victim=None)
     tab = RoundTabulation(rnd).tabulate()
-    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move)
+    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move, POST_SELFIE_PTS)
     p_1 = GamePlayer.objects.get(id=p_1.id)
     assert p_1.selfies == 2
     assert tab[p_1.id] == POST_SELFIE_PTS
@@ -157,3 +157,13 @@ def test_post_selfie_comments(rnd, p_1, p_2, move_factory):
     move_factory(round=rnd, action_type=LEAVE_COMMENT, player=p_2, victim=p_1)
     tab = RoundTabulation(rnd).tabulate()
     assert tab[p_1.id] == POST_SELFIE_DM
+
+@pytest.mark.django_db
+def test_message_when_leave_comment_grabbed(rnd, p_1, p_2, p_3, move_factory):
+    """make sure the right message appears if the user was grabbed by someone else"""
+    move1 = move_factory(round=rnd, action_type=POST_SELFIE, player=p_1, victim=None)
+    move2 = move_factory(round=rnd, action_type=LEAVE_COMMENT, player=p_2, victim=p_1)
+    move_factory(round=rnd, action_type=CALL_IPHONE, player=p_3, victim=p_2)
+    tab = RoundTabulation(rnd).tabulate()
+    assert message(rnd.game, p_1.user.username) in message_service.post_selfie_msg(move1, 20)
+    assert message(rnd.game, p_2.user.username) in message_service.leave_comment_msg(move2, p_1.user.username, 0, True)

@@ -10,7 +10,7 @@ def no_move_msg(move, followers, comments=False):
     )
     messages = [message]
     if comments:
-        message = "{} didnt do anythng, but she still got flamed and lost {} followers".format(
+        message = "{} didnt do anything, but she still got flamed and lost {} followers".format(
             username, followers
         )
         messages = [message]
@@ -37,16 +37,21 @@ def iphone_msg(move, victim):
     return messages
 
 
-def leave_comment_msg(move, victim):
+def leave_comment_msg(move, victim, points, grabbed=False):
     username = move.player.user.username
-    message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem".format(
-        username, extra
+    message = "{} decided to be petty and left a mean comment, ruining {}'s self esteem. she got {} followers this round".format(
+        username, victim, points
     )
-    return [message]
+    messages = [message]
+    if grabbed:
+        message = "{} tried to leave a mean comment for {}, but she was blocked! she got {} followers this round".format(
+            username, victim, points
+        )
+        messages = [message]
     Message.objects.create(
         message=random.choice(messages),
         message_type="round_recap",
-        username=move.player.user.username,
+        username=username,
         game=move.round.game,
     )
     return messages
@@ -80,10 +85,10 @@ def post_selfie_msg(move, followers, called=False, comments=False):
     message1 = "{} posted a selfie. how original. here are {} new followers".format(username, followers)
     message2 = "{} posted a selfie for {} new followers. cool i guess".format(username, followers)
     message3 = "{} delighted her {} new followers with a beautiful selfie".format(username, followers)
-    message4 = "{} posted a story for {} followers. i hope she got some views".format(
+    message4 = "{} posted a selfie for {} followers. i hope she got some views".format(
         username, followers
     )
-    message5 = "{} posted a story, like we really care what she's up to. she got {} followers for effort though".format(
+    message5 = "{} posted a selfie, like we really care what she's up to. she got {} followers for effort though".format(
         username, followers
     )
     message6 = "{} tried to be part of a group selfie but no one wanted to join her. so its just her and the sad {} followers she gained".format(
