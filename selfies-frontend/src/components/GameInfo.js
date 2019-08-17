@@ -22,12 +22,13 @@ function GameInfo({ game, dispatch, time }) {
           START GAME!
         </button>
       )}
-      {game.round_started && (
-        <div style={{ textAlign: 'center' }}>
-          seconds left
-          <br />
-          <h1 className="entrance-title phone-time">{time}</h1>
-        </div>
+      {game.round_started
+        && game.game_status !== 'inactive' && (
+          <div style={{ textAlign: 'center' }}>
+            seconds left
+            <br />
+            <h1 className="entrance-title phone-time">{time}</h1>
+          </div>
       )}
     </div>
   );
