@@ -5,10 +5,12 @@ from app.models import Move
 
 # they dont lose any points if they don't post when you leave a comment
 LEAVE_COMMENT = "leave_comment" # equivalent to scratch, they lose 10 points.
+LEAVE_COMMENT_DM = -10
 
 # only works if two or more people do it. the target loses 20 points for each
 # girl that dislikes her.
 DISLIKE = "dislike"
+DISLIKE_DM = -20
 
 # if you call a girl it interrupts what she's going to do. she can't leave a
 # comment, dislike, or go live.
@@ -17,35 +19,20 @@ CALL_IPHONE = "call_iphone"
 
 POST_SELFIE = "post_selfie" # available 3 times per game. you gain back 20 points.
 # you are immune to go_live. if someone calls you or leaves a comment you lose 20 points
+POST_SELFIE_PTS = 20
+POST_SELFIE_DM = -20
 
 # two go live per game. everyone loses 30 points unless two girls go live at
 # the same time.
 GO_LIVE = "go_live"
+GO_LIVE_DM = -30
 
 DONT_POST = "dont_post" # you cant not post twice in a row. the second time you
 # don't post you lose 10 followers if it was for no reason.
+DONT_POST_DM = -10
 
 NO_MOVE = "no_move" # lose 10 points
-
-# damage
-GO_LIVE_DAMAGE = "go_live_damage"
-LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
-LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
-LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
-
-POINTS = dict(
-    [
-        (POST_SELFIE, 20),
-        (GO_LIVE, 20),
-        (LEAVE_COMMENT_SELF_POINTS, 0),
-        (LEAVE_COMMENT, -5),
-        (LEAVE_COMMENT_NO_MOVE, -10),
-        (LEAVE_COMMENT_GROUP_SELFIE, -15),
-        (DONT_POST, 0),
-        (NO_MOVE, -5),
-        (GO_LIVE_DAMAGE, -15),
-    ]
-)
+NO_MOVE_DM = -10
 
 class RoundTabulation(object):
     """tabulate the round"""
@@ -66,7 +53,7 @@ class RoundTabulation(object):
         self.players_who_moved = []
         # keep a running list of victims during the round
         # victims = { 1: {dislike: 1, call: 2}}
-        self.victims = {} # defaultdict(lambda: 0)
+        self.victims = {}
         # initialize an empty dict of player points to keep track of
         self.player_points = defaultdict(lambda: 0)
         self.round = round
@@ -75,18 +62,42 @@ class RoundTabulation(object):
         for move in self.round.moves.all():
             self.player_moves[move.action_type].append(move.player.id)
             self.players_who_moved.append(move.player.id)
-            if move.victim:
-                action = self.victims[str(move.victim.id)][move.action_type]
-                if action:
-                    action += 1
-                else:
-                    action = 1
+            self.player_points[move.player.id] = 0
+            self.victims[move.player.id] = {'dislike': 0, 'call_iphone': 0, 'leave_comment': 0}
+
         # see if any of the players didnt move and add a no_move action
+        self.determine_if_player_didnt_move()
+
+        for move in self.round.moves.all():
+            if move.victim:
+                self.victims[move.victim.id][move.action_type] += 1
+
+        return self.victims
+
+    def determine_if_player_didnt_move(self):
         for player in self.round.game.game_players.all():
             if player.id not in self.players_who_moved:
                 self.player_moves[NO_MOVE].append(player.id)
+                self.player_points[player.id] = 0
+                self.victims[player.id] = {'dislike': 0, 'call_iphone': 0, 'leave_comment': 0}
                 Move.objects.create(round=self.round, action_type=NO_MOVE, player=player)
-        return self.victims
+
+    def tabulate(self):
+        self.populate_arrays_with_player_moves()
+        for move in self.round.moves.all():
+            points = 0
+            if move.action_type == GO_LIVE:
+                move.player.go_live = move.player.go_live - 1
+                move.save()
+                if self.victims[move.victim.id][CALL_IPHONE] >= 1:
+                    points = 0
+                    self.iphone_msg(move.player.user.username)
+
+
+    def iphone_msg(self, player):
+        message1 = "{} tried to go live, but she was distracted by a phone call!".format(player)
+        return [message1]
+
 
 
     def tabulate_round(self):
