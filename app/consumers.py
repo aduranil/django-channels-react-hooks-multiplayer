@@ -6,7 +6,7 @@ import threading
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 
-from .models import Game, Message, GamePlayer, Round, Move
+from .models import Game, Message, GamePlayer, Round, Move, Winner
 from app.services.round_service import RoundTabulation
 
 
@@ -155,6 +155,9 @@ class GameConsumer(WebsocketConsumer):
                         game=self.game,
                         username=winner.user.username,
                     )
+                    influencer = Winner.objects.get(winner_id=winner.user.id)
+                    influencer.followers = 100
+                    influencer.save()
                 self.send_update_game_players()
                 async_to_sync(self.channel_layer.group_discard)(
                     self.room_group_name, self.channel_name

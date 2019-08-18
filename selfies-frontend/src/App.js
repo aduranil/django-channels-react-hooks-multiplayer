@@ -6,6 +6,7 @@ import Entrance from './pages/Entrance';
 import Games from './pages/Games';
 import Game from './pages/Game';
 import Rules from './pages/Rules';
+import Influencers from './pages/Leaderboard';
 
 const App = () => (
   <React.Fragment>
@@ -16,6 +17,7 @@ const App = () => (
       <Route exact path="/loginorsignup" component={LoginOrSignup} />
       <Route exact path="/signup" component={LoginOrSignup} />
       <Route exact path="/rules" component={Rules} />
+      <Route exact path="/influencers" component={Influencers} />
     </Switch>
   </React.Fragment>
 );

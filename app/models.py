@@ -58,6 +58,9 @@ class Game(models.Model):
             # the floor is zero
             if updated_points <= 0:
                 player.loser = True
+                loser = Winner.objects.get(winner_id=player.user.id)
+                loser.followers = 10
+                loser.save()
             else:
                 winners.append(player)
             player.followers = updated_points
@@ -210,4 +213,21 @@ class Move(models.Model):
             action_type=self.action_type,
             player=self.player.as_json() if self.player else None,
             victim=self.victim.as_json() if self.victim else None,
+        )
+
+
+class Winner(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    winner = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        primary_key=True,
+    )
+    followers = models.IntegerField(default=0)
+
+    def as_json(self):
+        return dict(
+            followers=self.followers,
+            username=self.winner.username,
         )

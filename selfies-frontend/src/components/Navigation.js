@@ -51,6 +51,14 @@ function Navigation({
           )}
         </div>
 
+        <div style={{ marginRight: '10px', display: 'inline-block' }}>
+          {path !== 'influencers' && (
+            <Link to="/influencers">
+              <span> Influencers </span>
+            </Link>
+          )}
+        </div>
+
         <div style={{ display: 'inline-block' }}>
           {loggedIn
             && path === 'rules' && (

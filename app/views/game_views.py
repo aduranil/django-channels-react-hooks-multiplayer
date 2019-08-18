@@ -4,7 +4,7 @@ from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from django.http import HttpResponse
 
-from app.models import Game
+from app.models import Game, Winner
 
 
 class GameCreateView(APIView):
@@ -33,3 +33,12 @@ class GameGetView(APIView):
     def get(self, request, id):
         game = Game.objects.get(id=id)
         return HttpResponse(json.dumps(game.as_json()))
+
+
+class WinnerListView(APIView):
+    permission_classes = (permissions.AllowAny,)
+
+    def get(self, request):
+        winner_objects = Winner.objects.all().order_by("-followers")
+        winners = [g.as_json() for g in winner_objects]
+        return HttpResponse(json.dumps(winners))

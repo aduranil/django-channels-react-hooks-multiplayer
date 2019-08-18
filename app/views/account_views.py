@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.db import IntegrityError
 
 from app.serializers import UserSerializer, LoginSerializer
+from app.models import Winner
 
 
 class LoginUser(ObtainAuthToken):
@@ -60,6 +61,7 @@ class CreateUser(ObtainAuthToken):
                     token = Token.objects.create(user=user)
                     response = serializer.data
                     response["token"] = token.key
+                    Winner.objects.create(winner=user)
                     return Response(response, status=status.HTTP_201_CREATED)
         except IntegrityError as e:
             raise serializers.ValidationError()
