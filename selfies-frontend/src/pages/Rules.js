@@ -14,60 +14,60 @@ function Rules() {
         <h1 style={{ textAlign: 'center' }}>Rules</h1>
         <h3> Gameplay</h3>
         <div className="rulespage">
-          The goal of the game is to get to 100 followers first. Use the chat to make strategic
-          partnerships. The game starts when everyone clicks the 'START GAME' button. Each round is
-          90 seconds but the counter goes down to 10 seconds once everyone moves. You can change
-          your move as many times as you want before the timer runs out. Three players are needed to
-          start the round.
+          The goal is to be one of the last two girls standing with followers left. Use the chat to
+          make strategic partnerships. The game starts when everyone clicks the 'START GAME' button.
+          Each round is 90 seconds but the counter goes down to 10 seconds once everyone moves. You
+          can change your move as many times as you want before the timer runs out. Three players
+          are needed to start the round. The last two players win.
         </div>
         <h3> Moves </h3>
         <div className="rulespage">
+          <b style={{ color: '#ff70a6' }}>Leave a Mean Comment.</b>
           {' '}
-          <b style={{ color: '#ff70a6' }}>Post a selfie</b>
-. Move that gains 10 followers. But if
-          someone leaves a mean comment when you post a selfie, you lose 5 followers. If two girls
-          leave a mean comment, you lose 10 followers, and so on.
+If you Leave a Mean Comment on
+          another girl's social media, she loses 10 followers. It doesn't work if she selected
+          "Don't Post" that round though.
+        </div>
+        <div className="rulespage">
+          <b style={{ color: '#ff70a6' }}>Dislike.</b>
+          {' '}
+When you Dislike a girl's social media, she
+          loses 20 followers per disliker. But it only works if two or more girls both Dislike the
+          same girl. If one girl does it, no damage occurs to the target.
+        </div>
+        <div className="rulespage">
+          <b style={{ color: '#ff70a6' }}>Call iPhone.</b>
+          Blocks what another girl was going to do that turn. She cannot Dislike, Leave a Mean
+          Comment, or Go Live because you're distracting her.
+        </div>
+        <div className="rulespage">
+          <b style={{ color: '#ff70a6' }}>Go Live.</b>
+          {' '}
+All girls will lose 30 points when you Go
+          Live. But if two girl's Go Live at the same time, they both lose 30 points. You get to Go
+          Live twice per game.
+        </div>
+        <div className="rulespage">
+          <b style={{ color: '#ff70a6' }}>Don't Post.</b>
+          {' '}
+Nothing happens to you. Defense against Go
+          Live and Mean Comments. If you Don't Post twice in a row though, the second time you lose
+          10 followers if no one attacked you or went live.
+        </div>
+        <div className="rulespage">
+          {' '}
+          <b style={{ color: '#ff70a6' }}>Post a Selfie.</b>
+          {' '}
+Gives you twenty followers back. If you
+          Post a Selfie while someone is Going Live, there is no damage done to you. You get three
+          selfies per game. It doesn't work if someone Calls your iPhone or Leaves a Mean Comment
+          though, in which case you lose 20 followers for a mean comment or 0 followers if your
+          iPhone is called. Either action will make you susceptible to Go Live damage.
         </div>
         {' '}
         <div className="rulespage">
-          <b style={{ color: '#ff70a6' }}>Post a group selfie.</b>
-          {' '}
-If at least two people do a group
-          photo, they both get 20 followers. But if someone leaves a sarcastic comment on their
-          group photo, the girl who gets the sarcastic comment loses 15 followers. If you do a group
-          selfie alone, its like a regular selfie.
-        </div>
-        <div className="rulespage">
-          <b style={{ color: '#ff70a6' }}>Post a story.</b>
-          {' '}
-Defensive move that can only be done 3
-          times. You gain 10 followers. People can’t post mean comments but if anyone went live
-          while you posted a story, you dont get any followers because no one will see it and you
-          wasted your story.
-        </div>
-        <div className="rulespage">
-          <b style={{ color: '#ff70a6' }}>Go live.</b>
-          {' '}
-If you go live, every girl that posted a
-          photo or story while you were live loses 15 followers. If two or more girls go live at the
-          same time, they both lose 20 followers. The person going live gains 20.
-        </div>
-        <div className="rulespage">
-          <b style={{ color: '#ff70a6' }}>Leave a sarcastic comment.</b>
-          {' '}
-If you leave a mean comment
-          on another girl’s photo, she loses 5 followers. Click on any girl's iPhone to leave a mean
-          comment.
-        </div>
-        <div className="rulespage">
-          <b style={{ color: '#ff70a6' }}>Dont post.</b>
-          {' '}
-Nothing happens to you. Defense against Go
-          Live and sarcastic comments.
-        </div>
-        <div className="rulespage">
-          If you don't move during a game, you automatically lose 5 followers. You lose an
-          additional 10 followers if anyone leaves a mean comment while you do nothing.
+          If you don't move during a game, you automatically lose 10 followers and are open to all
+          attacks.
         </div>
         <h3>Support</h3>
         <div className="rulespage">
@@ -77,7 +77,12 @@ Nothing happens to you. Defense against Go
             github.
           </a>
           {' '}
-          Email lina.rudashevski@gmail.com with any questions or comments.
+          Email lina.rudashevski@gmail.com with any questions or comments. This game was inspired by
+          {' '}
+          <a style={{ color: '#44ffd1' }} href="http://play.sissyfight.com/main">
+            {' '}
+            sissyfight.
+          </a>
         </div>
       </div>
     </React.Fragment>
