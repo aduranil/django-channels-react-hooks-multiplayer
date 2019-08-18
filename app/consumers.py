@@ -156,7 +156,7 @@ class GameConsumer(WebsocketConsumer):
                         username=winner.user.username,
                     )
                     influencer = Winner.objects.get(winner_id=winner.user.id)
-                    influencer.followers = 100
+                    influencer.followers = influencer.followers + 100
                     influencer.save()
                 self.send_update_game_players()
                 async_to_sync(self.channel_layer.group_discard)(

@@ -217,7 +217,7 @@ class RoundTabulation(object):
         else:
             # otherwise check if they called someone who went live and
             # remove them from the array so later we can see how many points
-            victim_move = Move.objects.filter(player=move.victim).latest(                "created_at")
+            victim_move = Move.objects.filter(player=move.victim).latest("created_at")
             message_service.iphone_msg(
                 move, move.victim.user.username, victim_move.action_type
             )

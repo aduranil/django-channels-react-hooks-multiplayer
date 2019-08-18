@@ -1,6 +1,11 @@
 # chat/urls.py
 from django.urls import path
-from app.views.game_views import GameCreateView, GameListView, GameGetView, WinnerListView
+from app.views.game_views import (
+    GameCreateView,
+    GameListView,
+    GameGetView,
+    WinnerListView,
+)
 from app.views.account_views import CreateUser, GetUser, LoginUser
 
 urlpatterns = [
