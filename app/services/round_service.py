@@ -1,7 +1,7 @@
 from collections import defaultdict
 import random
 
-from app.models import Move
+from app.models import Move, Message
 from app.services import message_service
 
 # moves
@@ -111,15 +111,19 @@ class RoundTabulation(object):
         dislikes = self.victims[move.player.id][DISLIKE]
         move.player.go_live = move.player.go_live - 1
         move.player.save()
-
+        go_live_success = True
+        called = False
         # see if they're still in the player moves array cause they could have been called
         if move.player.id in self.player_moves[GO_LIVE]:
             if len(self.player_moves[GO_LIVE]) > 1:
                 points += GO_LIVE_DM
+                go_live_success = False
         else:
             # if they're not in the player moves array
             if len(self.player_moves[GO_LIVE]) == 1:
                 points += GO_LIVE_DM
+                called = True
+                go_live_success = False
 
         # determine any damage from any mean comments
         points += len(comments) * LEAVE_COMMENT_DM
@@ -128,6 +132,7 @@ class RoundTabulation(object):
             points += len(dislikes) * DISLIKE_DM
 
         self.player_points[move.player.id] = points
+        message_service.go_live_message(move, points, go_live_success, called)
 
     def tabulate_dont_post(self, move):
         points = 0
@@ -140,9 +145,11 @@ class RoundTabulation(object):
         if len(dislikes) > 1:
             points += len(dislikes) * DISLIKE_DM
 
-        no_post_last_round = Move.objects.get_or_none(
-            id=move.id - 1, action_type=DONT_POST, player=move.player
-        )
+        no_post_last_round = False
+        moves = Move.objects.all().filter(player=move.player).order_by("-created_at")
+        if len(moves) >= 2 and moves[1].action_type == DONT_POST:
+            no_post_last_round = True
+
         if no_post_last_round:
             if not (
                 len(dislikes) > 1
@@ -190,8 +197,15 @@ class RoundTabulation(object):
         calls = self.victims[move.player.id][CALL_IPHONE]
         # someone can call the player, which can prevent them from doing something
         if len(calls) >= 1:
-            # if someone calls the player remove them from the array where they did
-            # something to someone else
+            message = "{} tried to call {}, but she was blocked".format(
+                move.player.user.username, move.victim.user.username
+            )
+            Message.objects.create(
+                message=message,
+                message_type="round_recap",
+                username=move.player.user.username,
+                game=move.round.game,
+            )
             if move.player.user.username in self.victims[move.victim.id][CALL_IPHONE]:
                 self.victims[move.victim.id][CALL_IPHONE].remove(
                     move.player.user.username
@@ -203,8 +217,10 @@ class RoundTabulation(object):
         else:
             # otherwise check if they called someone who went live and
             # remove them from the array so later we can see how many points
+            message_service.iphone_msg(
+                move, move.victim.user.username, move.victim.action_type
+            )
             if move.victim.id in self.player_moves[GO_LIVE]:
-                message_service.iphone_msg(move, move.victim.user.username)
                 self.player_moves[GO_LIVE].remove(move.victim.id)
 
             if move.victim.id in self.player_moves[LEAVE_COMMENT]:
@@ -249,18 +265,18 @@ class RoundTabulation(object):
 
         if len(dislikes) > 1:
             points += len(dislikes) * DISLIKE_DM
-            messages = message_service.no_move_msg(move, points, comments=True)
+            messages = message_service.no_move_msg(move, comments=True)
 
         if len(comments) >= 1:
             points += len(comments) * LEAVE_COMMENT_DM
             if not messages:
-                messages = message_service.no_move_msg(move, points, comments=True)
+                messages = message_service.no_move_msg(move, comments=True)
 
         if len(go_live) == 1:
             points += GO_LIVE_DM
 
         if not messages:
-            message_service.no_move_msg(move, points)
+            message_service.no_move_msg(move)
 
         self.player_points[move.player.id] = points
 
@@ -285,7 +301,7 @@ class RoundTabulation(object):
             grabbed = True
             # they werent grabbed from doing the action
         message_service.leave_comment_msg(
-            move, move.victim.user.username, points, grabbed=grabbed
+            move, move.victim.user.username, grabbed=grabbed
         )
 
         self.player_points[move.player.id] = points
@@ -309,9 +325,13 @@ class RoundTabulation(object):
         grabbed = False
         if move.player.id not in self.player_moves[DISLIKE]:
             grabbed = True
-            # they werent grabbed from doing the action
+
+        multiple_dislikes = False
+        if len(self.victims[move.victim.id][DISLIKE]) >= 2:
+            multiple_dislikes = True
+
         message_service.dislike_msg(
-            move, move.victim.user.username, points, grabbed=grabbed
+            move, move.victim.user.username, points, grabbed, multiple_dislikes
         )
 
         self.player_points[move.player.id] = points

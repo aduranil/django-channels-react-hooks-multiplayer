@@ -7,34 +7,6 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.contrib.auth.models import User
 
-POST_SELFIE = "post_selfie"
-POST_GROUP_SELFIE = "post_group_selfie"
-POST_STORY = "post_story"
-GO_LIVE = "go_live"
-LEAVE_COMMENT = "leave_comment"
-DONT_POST = "dont_post"
-NO_MOVE = "no_move"
-GO_LIVE_DAMAGE = "go_live_damage"
-LEAVE_COMMENT_SELF_POINTS = "leave_comment_self_points"
-LEAVE_COMMENT_NO_MOVE = "leave_comment_no_move"
-LEAVE_COMMENT_GROUP_SELFIE = "leave_comment_group_selfie"
-
-POINTS = dict(
-    [
-        (POST_SELFIE, 10),
-        (POST_GROUP_SELFIE, 20),
-        (POST_STORY, 10),
-        (GO_LIVE, 20),
-        (LEAVE_COMMENT_SELF_POINTS, 0),
-        (LEAVE_COMMENT, -5),
-        (LEAVE_COMMENT_NO_MOVE, -10),
-        (LEAVE_COMMENT_GROUP_SELFIE, -15),
-        (DONT_POST, 0),
-        (NO_MOVE, -5),
-        (GO_LIVE_DAMAGE, -15),
-    ]
-)
-
 
 class GetOrNoneManager(models.Manager):
     """Adds get_or_none method to objects"""
@@ -216,28 +188,8 @@ class Round(models.Model):
 
 
 class Move(models.Model):
-    POST_SELFIE = "post_selfie"
-    POST_GROUP_SELFIE = "post_group_selfie"
-    POST_STORY = "post_story"
-    GO_LIVE = "go_live"
-    LEAVE_COMMENT = "leave_comment"
-    DONT_POST = "dont_post"
-    NO_MOVE = "no_move"
-
-    ACTION_TYPES = (
-        (POST_SELFIE, "Post a selfie"),
-        (POST_GROUP_SELFIE, "Post group selfie"),
-        (POST_STORY, "Post a story"),
-        (GO_LIVE, "Go live"),
-        (LEAVE_COMMENT, "Leave a comment"),
-        (DONT_POST, "Don't post"),
-        (NO_MOVE, "No move"),
-    )
-
     round = models.ForeignKey(Round, related_name="moves", on_delete=models.CASCADE)
-    action_type = models.CharField(
-        max_length=200, choices=ACTION_TYPES, default=DONT_POST
-    )
+    action_type = models.CharField(max_length=200, default="no_move")
     player = models.ForeignKey(
         GamePlayer, related_name="game_player", on_delete=models.CASCADE
     )

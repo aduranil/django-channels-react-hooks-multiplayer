@@ -162,7 +162,12 @@ class GameConsumer(WebsocketConsumer):
 
     def make_move(self, data):
         user = self.scope["user"]
-        round = Round.objects.get(game=self.game, started=True)
+        try:
+            round = Round.objects.get_or_none(game=self.game, started=True)
+        except Exception:
+            round = Round.objects.filter(game=self.game, started=True).latest(
+                "created_at"
+            )
 
         game_player = GamePlayer.objects.get_or_none(user=user, game=self.game)
         try:
@@ -190,13 +195,13 @@ class GameConsumer(WebsocketConsumer):
         game = Game.objects.get(id=self.id)
         game_player = GamePlayer.objects.get_or_none(user=self.scope["user"], game=game)
         current_player = game_player.as_json() if game_player else None
-        self.update_game_players({'type': 'update_game_player', 'current_player': current_player})
+        if current_player:
+            self.update_game_players(
+                {"type": "update_game_player", "current_player": current_player}
+            )
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
-            {
-                "type": "update_game_players",
-                "game": game.as_json(),
-            },
+            {"type": "update_game_players", "game": game.as_json()},
         )
 
     def send_time(self, time):

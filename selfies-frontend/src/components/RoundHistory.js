@@ -32,21 +32,21 @@ function RoundHistory({ game }) {
             <div key="instruction">
               <span style={{ color: 'white' }}>
                 {' '}
-                -Click on any girl's iPhone to leave her a mean comment
+                ◆ Click on any girl's iPhone to leave her a mean comment 💅🏻
               </span>
             </div>
             {' '}
             <div key="exclamation">
               <span style={{ color: 'white' }}>
                 {' '}
-                -When the ? turns to !, that means the player has started
+                ◆ When the ? turns to !, that means the player has started 👸🏾
               </span>
             </div>
             <div key="time">
               <span style={{ color: 'white' }}>
                 {' '}
-                -There are 90 seconds per round. The timer goes down to 10 seconds once everyone has
-                moved
+                ◆ There are 90 seconds per round. The timer goes down to 10 seconds once everyone
+                has moved 👠
               </span>
             </div>
           </React.Fragment>
