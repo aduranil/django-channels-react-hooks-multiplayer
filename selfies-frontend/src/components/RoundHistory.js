@@ -29,12 +29,6 @@ function RoundHistory({ game }) {
       >
         {!game.round_started && (
           <React.Fragment>
-            <div key="instruction">
-              <span style={{ color: 'white' }}>
-                {' '}
-                ◆ Click on any girl's iPhone to leave her a mean comment 💅🏻
-              </span>
-            </div>
             {' '}
             <div key="exclamation">
               <span style={{ color: 'white' }}>

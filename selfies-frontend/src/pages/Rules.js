@@ -18,7 +18,8 @@ function Rules() {
           make strategic partnerships. The game starts when everyone clicks the 'START GAME' button.
           Each round is 90 seconds but the counter goes down to 10 seconds once everyone moves. You
           can change your move as many times as you want before the timer runs out. Three players
-          are needed to start the round. The last two players win.
+          are needed to start the round. The last two players win and get 100 followers. Each girl
+          gets 10 followers for playing.
         </div>
         <h3> Moves </h3>
         <div className="rulespage">
@@ -26,43 +27,44 @@ function Rules() {
           {' '}
 If you Leave a Mean Comment on
           another girl's social media, she loses 10 followers. It doesn't work if she selected
-          "Don't Post" that round though.
+          "Don't Post" that round.
         </div>
         <div className="rulespage">
           <b style={{ color: '#ff70a6' }}>Dislike.</b>
           {' '}
 When you Dislike a girl's social media, she
-          loses 20 followers per disliker. But it only works if two or more girls both Dislike the
-          same girl. If one girl does it, no damage occurs to the target.
+          loses 20 followers per disliker. It only works if two or more girls both Dislike the same
+          girl. If one girl Dislikes, no damage occurs to the target.
         </div>
         <div className="rulespage">
           <b style={{ color: '#ff70a6' }}>Call iPhone.</b>
-          Blocks what another girl was going to do that turn. She cannot Dislike, Leave a Mean
-          Comment, or Go Live because you're distracting her.
+          {' '}
+Blocks what another girl tried to do that
+          turn. She cannot Dislike, Leave a Mean Comment, or Go Live because you're distracting her.
         </div>
         <div className="rulespage">
           <b style={{ color: '#ff70a6' }}>Go Live.</b>
           {' '}
 All girls will lose 30 points when you Go
-          Live. But if two girl's Go Live at the same time, they both lose 30 points. You get to Go
-          Live twice per game.
+          Live. If two girl's Go Live at the same time, they both lose 30 points. You get two Go
+          Live's per game.
         </div>
         <div className="rulespage">
           <b style={{ color: '#ff70a6' }}>Don't Post.</b>
           {' '}
 Nothing happens to you. Defense against Go
-          Live and Mean Comments. If you Don't Post twice in a row though, the second time you lose
-          10 followers if no one attacked you or went live.
+          Live and Mean Comments. If you Don't Post twice in a row, the second time you lose 10
+          followers if no one attacked you or went live.
         </div>
         <div className="rulespage">
           {' '}
           <b style={{ color: '#ff70a6' }}>Post a Selfie.</b>
           {' '}
-Gives you twenty followers back. If you
-          Post a Selfie while someone is Going Live, there is no damage done to you. You get three
+Gives you twenty followers. If you Post
+          a Selfie while someone is Going Live, there is no damage done to you. You get three
           selfies per game. It doesn't work if someone Calls your iPhone or Leaves a Mean Comment
-          though, in which case you lose 20 followers for a mean comment or 0 followers if your
-          iPhone is called. Either action will make you susceptible to Go Live damage.
+          though, in which case you lose 0 and 20 followers, respectively, and are susceptible to Go
+          Live damage.
         </div>
         {' '}
         <div className="rulespage">

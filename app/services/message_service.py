@@ -6,13 +6,13 @@ from app.models import Message
 def no_move_msg(move, comments=False):
     username = move.player.user.username
     message = "◆ {} was so lazy that she forgot to move 👀".format(username)
-    message1 = "◆ {} was getting fillers so she forgot to move. I hope it was worth it!".format(
+    message1 = "◆ {} was getting fillers so she forgot to move. I hope it was worth it! 💅".format(
         username
     )
     messages = [message, message1]
     if comments:
-        message = "◆ {} didnt do anything, but she still got flamed".format(username)
-        message1 = "◆ {} got absolutely destroyed on social media for not posting this round. Her followers are finally done with her sorry ass!".format(
+        message = "◆ {} didnt do anything, but she still got flamed 💅".format(username)
+        message1 = "◆ {} got absolutely destroyed on social media for not posting this round. Her followers are finally done with her sorry ass! 💅".format(
             username
         )
         messages = [message]
@@ -28,11 +28,12 @@ def no_move_msg(move, comments=False):
 def iphone_msg(move, victim, action_type):
     username = move.player.user.username
 
-    message1 = "◆ {} tried to {}, but she was distracted by a phone call from {}".format(
+    message1 = "◆ {} tried to {}, but she was distracted by a phone call from {} 💅😂".format(
         victim, action_type, username
     )
+    message2 = "◆ I feel bad for {} who tried to {} but couldn't because {} kept blowing up her phone! 💅😂".format(victim, action_type, username)
 
-    messages = [message1]
+    messages = [message1, message2]
     Message.objects.create(
         message=random.choice(messages),
         message_type="round_recap",
@@ -56,10 +57,10 @@ def go_live_message(move, followers, go_live_success, called):
         messages = [message1, message2, message3, message4]
     else:
         if not called:
-            message1 = "◆ {} went live at the same time as other girls! how dumb was that? she lost {} followers".format(
+            message1 = "◆ {} went live at the same time as other girls! how dumb was that? she lost {} followers 📱😩".format(
                 username, followers
             )
-            message2 = "◆ {} went live! she timed it poorly though and lost {} followers".format(
+            message2 = "◆ {} went live! she timed it poorly though and lost {} followers 📱😂".format(
                 username, followers
             )
             messages = [message1, message2]
@@ -101,9 +102,10 @@ def leave_comment_msg(move, victim, grabbed=False):
 
 def dislike_msg(move, victim, points, grabbed, multiple_dislikes):
     username = move.player.user.username
+    points = -points
     if multiple_dislikes:
-        message = "◆ {} decided to dislike, ruining {}'s self esteem. She got {} followers this round 😈🤳".format(
-            username, victim, points
+        message = "◆ {} decided to dislike, ruining {}'s self esteem. 😈🤳".format(
+            username, victim
         )
         messages = [message]
     else:
@@ -113,8 +115,8 @@ def dislike_msg(move, victim, points, grabbed, multiple_dislikes):
         messages = [message]
 
     if grabbed:
-        message1 = "◆ {} tried to dislike {}, but she was blocked! She got {} followers this round 🤳😩😩😩".format(
-            username, victim, points
+        message1 = "◆ {} tried to dislike {}, but she was blocked! 🤳😩😩😩".format(
+            username, victim
         )
         messages = [message1]
     Message.objects.create(
@@ -134,10 +136,10 @@ def dont_post_msg(move, repeat=False):
         messages = [message1]
 
     else:
-        message1 = "◆ {} didn't post. I dont know why since she had nothing better to do".format(
+        message1 = "◆ {} didn't post. I dont know why since she had nothing better to do 💄".format(
             username
         )
-        message2 = "◆ {} didn't have time to post for some reason. Doesn't she know the internet is more important than IRL?".format(
+        message2 = "◆ {} didn't have time to post for some reason. Doesn't she know the internet is more important than IRL?💄".format(
             username
         )
         messages = [message1, message2]

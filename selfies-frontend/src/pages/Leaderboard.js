@@ -54,7 +54,7 @@ function Influencers() {
             </div>
             <div>
               {' '}
-              <h3>Followers </h3>
+              <h3>Followers</h3>
             </div>
           </div>
           {influencers
