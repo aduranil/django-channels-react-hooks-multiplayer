@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as Cookies from 'js-cookie';
 import HalfRectangle from '../images/Rectangle';
 import { getCurrentUser } from '../modules/account';
+import Navigation from '../components/Navigation';
 
 const Image = () => (
   <img
@@ -22,6 +23,7 @@ const Entrance = ({ dispatch, loggedIn }) => {
   return (
     <div style={{ overflow: 'hidden' }}>
       <HalfRectangle color="#70D6FF" />
+      <Navigation path="entrance" />
       <div style={{ textAlign: 'center' }}>
         <span className="entrance-title">Selfies 2020</span>
       </div>
