@@ -64,6 +64,11 @@ def go_live_message(move, followers, go_live_success, called):
                 username, followers
             )
             messages = [message1, message2]
+        else:
+            message1 = "◆ {} tried to go live but she was called! 📱😩".format(
+                username, followers
+            )
+            messages = [message1]
 
     Message.objects.create(
         message=random.choice(messages),

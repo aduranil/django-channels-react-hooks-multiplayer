@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import CurrentMoveUpdate from '../hooks/CurrentMove';
+import useMoveUpdate from '../hooks/CurrentMove';
 
 const Phone = () => (
   <img
@@ -14,7 +14,7 @@ const Phone = () => (
 function GameBox({
   game, dispatch, time, currentPlayer,
 }) {
-  const [currentMove, newMove] = CurrentMoveUpdate(dispatch, time);
+  const [currentMove, newMove] = useMoveUpdate(dispatch, time);
 
   return (
     <React.Fragment>
@@ -94,20 +94,19 @@ function GameBox({
                 {' '}
                 {player.followers === 1 ? 'follower' : 'followers'}
               </div>
-              {currentPlayer
-                && currentPlayer.id === player.id && (
-                  <React.Fragment>
-                    <div style={{ marginBottom: '3px' }}>
-                      {player.selfies}
-                      {' '}
-                      {player.selfies === 1 ? 'selfie' : 'selfies'}
-                    </div>
-                    <div style={{ marginBottom: '3px' }}>
-                      {player.go_live}
-                      {' '}
-                      {player.go_live === 1 ? 'go live' : 'go lives'}
-                    </div>
-                  </React.Fragment>
+              {currentPlayer && currentPlayer.id === player.id && (
+                <React.Fragment>
+                  <div style={{ marginBottom: '3px' }}>
+                    {player.selfies}
+                    {' '}
+                    {player.selfies === 1 ? 'selfie' : 'selfies'}
+                  </div>
+                  <div style={{ marginBottom: '3px' }}>
+                    {player.go_live}
+                    {' '}
+                    {player.go_live === 1 ? 'go live' : 'go lives'}
+                  </div>
+                </React.Fragment>
               )}
             </div>
           ))}

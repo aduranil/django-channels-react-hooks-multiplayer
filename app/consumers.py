@@ -88,11 +88,14 @@ class GameConsumer(WebsocketConsumer):
             self.start_round_and_timer()
 
     def start_round_and_timer(self):
+        """start timer in a new thread, continue to send game actions"""
+
         threading.Thread(target=self.update_timer_data).start()
         self.send_update_game_players()
 
     def update_timer_data(self):
         """countdown the timer for the game"""
+
         i = 90
         while i > 0:
             time.sleep(1)

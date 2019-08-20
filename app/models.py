@@ -61,6 +61,7 @@ class Game(models.Model):
                 loser = Winner.objects.get(winner_id=player.user.id)
                 loser.followers = loser.followers + 10
                 loser.save()
+                Message.objects.create(message="{} lost".format(player.user.username), message_type="round_recap", username=player.user.username, game=self)
             else:
                 winners.append(player)
             player.followers = updated_points

@@ -1,16 +1,13 @@
 import { useState, useEffect } from 'react';
 import { makeMove } from '../modules/game';
 
-function CurrentMoveUpdate(dispatch, time) {
+function useMoveUpdate(dispatch, time) {
   const [currentMove, setCurrentMove] = useState('');
-  useEffect(
-    () => {
-      if (time === '90') {
-        setCurrentMove(null);
-      }
-    },
-    [time],
-  );
+  useEffect(() => {
+    if (time === '90') {
+      setCurrentMove(null);
+    }
+  }, [time]);
 
   const newMove = (event) => {
     event.preventDefault();
@@ -40,4 +37,4 @@ function CurrentMoveUpdate(dispatch, time) {
   return [currentMove, newMove];
 }
 
-export default CurrentMoveUpdate;
+export default useMoveUpdate;
