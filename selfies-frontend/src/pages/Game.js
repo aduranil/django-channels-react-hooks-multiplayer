@@ -157,4 +157,4 @@ const s2p = (state, ownProps) => ({
   time: state.games.time,
 });
 
-export default connect(s2p)(Game);
+export default WithAuth(connect(s2p)(Game));
