@@ -197,7 +197,7 @@ class RoundTabulation(object):
         calls = self.victims[move.player.id][CALL_IPHONE]
         # someone can call the player, which can prevent them from doing something
         if len(calls) >= 1:
-            message = "{} tried to call {}, but she was blocked".format(
+            message = "◆ {} tried to call {}, but she was blocked 😤".format(
                 move.player.user.username, move.victim.user.username
             )
             Message.objects.create(
