@@ -4,6 +4,9 @@ from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from django.http import HttpResponse
 
+from django.utils import timezone
+from datetime import timedelta
+
 from app.models import Game, Winner
 
 
@@ -21,6 +24,14 @@ class GameListView(APIView):
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
+        game_objects = Game.objects.all().filter(game_status="active")
+
+        # this/very bad practice but im not creating a jenkins command
+        time_threshold = timezone.now() - timedelta(hours=2)
+        for game in game_objects:
+            if game.created_at < time_threshold:
+                game.delete()
+
         game_objects = Game.objects.all().filter(game_status="active")
         games = [g.as_json() for g in game_objects]
         return HttpResponse(json.dumps(games))

@@ -31,7 +31,9 @@ def iphone_msg(move, victim, action_type):
     message1 = "◆ {} tried to {}, but she was distracted by a phone call from {} 💅😂".format(
         victim, action_type, username
     )
-    message2 = "◆ I feel bad for {} who tried to {} but couldn't because {} kept blowing up her phone! 💅😂".format(victim, action_type, username)
+    message2 = "◆ I feel bad for {} who tried to {} but couldn't because {} kept blowing up her phone! 💅😂".format(
+        victim, action_type, username
+    )
 
     messages = [message1, message2]
     Message.objects.create(

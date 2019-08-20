@@ -61,7 +61,12 @@ class Game(models.Model):
                 loser = Winner.objects.get(winner_id=player.user.id)
                 loser.followers = loser.followers + 10
                 loser.save()
-                Message.objects.create(message="{} lost".format(player.user.username), message_type="round_recap", username=player.user.username, game=self)
+                Message.objects.create(
+                    message="{} lost".format(player.user.username),
+                    message_type="round_recap",
+                    username=player.user.username,
+                    game=self,
+                )
             else:
                 winners.append(player)
             player.followers = updated_points
@@ -176,7 +181,10 @@ class Round(models.Model):
 
     def everyone_moved(self):
         "use this function to know if we need to update the clock"
-        if self.moves.all().count() == self.game.game_players.all().filter(loser=False).count():
+        if (
+            self.moves.all().count()
+            == self.game.game_players.all().filter(loser=False).count()
+        ):
             return True
         return False
 
