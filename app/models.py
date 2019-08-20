@@ -176,7 +176,7 @@ class Round(models.Model):
 
     def everyone_moved(self):
         "use this function to know if we need to update the clock"
-        if self.moves.all().count() == self.game.game_players.all().count():
+        if self.moves.all().count() == self.game.game_players.all().filter(loser=False).count():
             return True
         return False
 

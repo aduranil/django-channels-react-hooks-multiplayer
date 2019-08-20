@@ -46,6 +46,7 @@ function GameBox({
                 (item === 'post_selfie' && currentPlayer && currentPlayer.selfies === 0)
                 || (item === 'go_live' && currentPlayer && currentPlayer.go_live === 0)
                 || !game.round_started
+                || (currentPlayer && currentPlayer.loser === true)
               }
             >
               {item.replace(/_/g, ' ')}
@@ -74,7 +75,9 @@ function GameBox({
                     onClick={newMove}
                     id={player.id}
                     style={{ width: '100%' }}
-                    disabled={!game.round_started}
+                    disabled={
+                      !game.round_started || player.loser || (currentPlayer && currentPlayer.loser)
+                    }
                     value={`${item}_${player.id}`}
                     className={
                       currentMove === `${item}_${player.id}` ? 'button-color' : 'gamebutton'
@@ -89,11 +92,13 @@ function GameBox({
 
               <Phone />
 
-              <div>
-                {player.followers}
-                {' '}
-                {player.followers === 1 ? 'follower' : 'followers'}
-              </div>
+              {!player.loser && (
+                <div>
+                  {player.followers}
+                  {' '}
+                  {player.followers === 1 ? 'follower' : 'followers'}
+                </div>
+              )}
               {currentPlayer && currentPlayer.id === player.id && (
                 <React.Fragment>
                   <div style={{ marginBottom: '3px' }}>
