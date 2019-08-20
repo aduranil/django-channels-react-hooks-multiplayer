@@ -29,8 +29,9 @@ function Games({
     });
   };
 
-  const onJoin = async (e) => {
-    await history.push(`/game/${e.target.value}`);
+  const onJoin = (e) => {
+    e.preventDefault();
+    history.push(`/game/${e.target.value}`);
   };
 
   return (
