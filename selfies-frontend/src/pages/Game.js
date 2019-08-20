@@ -69,7 +69,26 @@ function Game({
       </div>
     );
   }
-  return `${<span> LOADING </span>}`;
+  return (
+    <React.Fragment>
+      <h1
+        className="animated infinite bounce"
+        style={{
+          textAlign: 'center',
+          margin: 'auto',
+          position: 'absolute',
+          height: '100px',
+          width: '100px',
+          top: '0px',
+          bottom: '0px',
+          left: '0px',
+          right: '0px',
+        }}
+      >
+        Loading
+      </h1>
+    </React.Fragment>
+  );
 }
 
 Game.propTypes = {
@@ -138,4 +157,4 @@ const s2p = (state, ownProps) => ({
   time: state.games.time,
 });
 
-export default WithAuth(connect(s2p)(Game));
+export default connect(s2p)(Game);
